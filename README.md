@@ -1,25 +1,19 @@
-<div align="center">
+# QuantumRoute ⚛️
+### Noise-Aware Quantum Communication & Entanglement-Based Teleportation
 
-# Quantum D Clan
+**Quantum D Clan** · `VTU-QFF-HC-0126` · **Tier: Both**  
+VTU-Qiskit Fall Fest 2026 Hackathon · VTU Belagavi
 
-**VTU-QFF-HC-0126** &nbsp;|&nbsp; Tier: **Both**
-
-</div>
-
----
-
-<div align="center">
-
-| | |
-| :--- | :--- |
-| **Team** | Quantum D Clan |
-| **Team ID** | VTU-QFF-HC-0126 |
-| **Tier** | Both |
-| **Repository** | [vtu-hc-quantum-d-clan](https://github.com/vtu-qiskit-fall-fest-2026/vtu-hc-quantum-d-clan.git) |
-| **Organisation** | [vtu-qiskit-fall-fest-2026](https://github.com/vtu-qiskit-fall-fest-2026) |
-| **Event** | VTU-QFF Hackathon — VTU-Qiskit Fall Fest 2026 |
-
-</div>
+| Detail | Information |
+|---|---|
+| Team | Quantum D Clan |
+| Team ID | VTU-QFF-HC-0126 |
+| Track | Quantum Communication & Networking |
+| Repository | `vtu-hc-quantum-d-clan` |
+| Organisation | `vtu-qiskit-fall-fest-2026` |
+| Project | QuantumRoute |
+| Status | 🚧 In Development |
+| Core Technology | Python, Qiskit, Qiskit Aer |
 
 ---
 
@@ -29,7 +23,7 @@
 - [Problem Statement](#-problem-statement)
 - [Proposed Solution](#-proposed-solution)
 - [Approach & Architecture](#-approach--architecture)
-- [Tech Stack](#-tech-stack)
+- [Tech Stack](#️-tech-stack)
 - [Project Structure](#-project-structure)
 - [How to Run](#-how-to-run)
 - [How to Push Code](#-how-to-push-code)
@@ -41,121 +35,232 @@
 
 ## 👥 Team Members (GitHub IDs)
 
-> Members are added to this repository as **collaborators** and must accept the
-> GitHub invitation before they can push. Add your GitHub username below.
+Team members must accept their GitHub repository invitations before contributing.
 
 | # | Name | GitHub Username | Role |
-| :-- | :--- | :--- | :--- |
-| 1 | _Add your name_ | _your-github-username_ | _Team Lead_ |
-| 2 | _Add your name_ | _your-github-username_ | _Developer_ |
-| 3 | _Add your name_ | _your-github-username_ | _Developer_ |
-
-<!--
-Optional: add a plain list instead of the table above.
-- @username1
-- @username2
--->
+|---|---|---|---|
+| 1 | Yuvaraj B Sutar | YUVA56-gomu | Team Lead |
+| 2 | Srijan Rastogi | SrijanRastogi | Developer |
+| 3 | Veeresh M A | Veeresh23-06 | Developer |
 
 ---
 
 ## ❓ Problem Statement
 
-<!--
-State the problem you are solving. Be specific: what is broken or missing,
-who experiences it, and why does it matter. Link to the official problem
-statement from the brief if one applies.
--->
+**Problem:** Reliable quantum communication requires the transfer of quantum information while preserving the properties of quantum states. Noise affecting distributed entangled states can reduce teleportation fidelity, while selecting a communication path based only on hop count may overlook differences in link quality.
 
-**Problem:** _Describe the problem in 2–3 sentences._
+**Why it matters:** Understanding how noise and entanglement quality influence end-to-end communication is important when studying future quantum networks. A simulator can help users investigate these effects before attempting more complex network implementations.
 
-**Why it matters:** _Explain the impact or opportunity._
-
-**Track / Category:** _Online / Offline · Track 1 / Track 2 · <domain>_
+**Track / Category:** Quantum Communication & Networking — VTU-Qiskit Fall Fest 2026.
 
 ---
 
 ## 💡 Proposed Solution
 
-<!--
-Describe your solution. Keep it concrete: the core idea, the user flow, and
-the quantum/ML technique you are applying.
--->
+**Solution:** QuantumRoute is a Qiskit-based simulator designed to investigate noise-aware quantum communication using entanglement-based teleportation. It will compare ideal and noisy teleportation, model entanglement distribution across small network topologies, and compare shortest-hop routing with quality-aware routing.
 
-**Solution:** _In 2–3 sentences, describe what you built._
+**Key idea:** Combine Qiskit circuit simulation with an analytical Werner-state network model, then validate the model against circuit-based results where the assumptions permit.
 
-**Key idea:** _The one-line technical summary of your approach._
+**Why this works:** The project connects quantum circuit behaviour with network-level decisions. By measuring teleportation fidelity under controlled noise and evaluating alternative routes, QuantumRoute aims to demonstrate how link quality can influence simulated end-to-end communication reliability.
 
-**Why this works:** _How your approach addresses the problem statement._
+### Planned capabilities
+
+- **Quantum teleportation:** Construct and validate an ideal single-qubit teleportation circuit.
+- **Noise experiments:** Investigate the effects of depolarizing noise on teleportation fidelity.
+- **Entanglement distribution:** Model multi-link paths and entanglement swapping under explicitly stated assumptions.
+- **Quality-aware routing:** Compare shortest-hop paths against routes selected using link-quality parameters.
+- **Model validation:** Compare analytical predictions with circuit-simulation results.
+- **Interactive exploration:** Provide a dashboard for experimenting with network configurations and visualizing results.
+
+*These are planned capabilities, not claims of completed implementation. Features will be marked complete only after implementation and verification.*
 
 ---
 
 ## 🧩 Approach & Architecture
 
-<!--
-Walk through how it works. A simple pipeline diagram in text or Mermaid is ideal.
--->
+QuantumRoute is designed as a small, local-first Python application. The initial implementation prioritizes scientific correctness and reproducible experiments before dashboard polish.
 
-```mermaid
-flowchart LR
-    A[Input Data] --> B[Preprocessing]
-    B --> C[Quantum Circuit / Model]
-    C --> D[Post-processing]
-    D --> E[Output]
+### 1. Input
+
+Users will configure:
+
+- A quantum input state.
+- Network topology and candidate communication paths.
+- Link-quality parameters for the selected network model.
+- Noise parameters for controlled experiments.
+
+### 2. Quantum circuit simulation
+
+Qiskit will be used to construct the single-link teleportation circuit. Qiskit Aer and Qiskit's quantum-information tools will support simulation and fidelity calculations.
+
+The initial validation sequence is:
+
+1. Verify ideal teleportation.
+2. Introduce depolarizing noise.
+3. Measure output-state fidelity.
+4. Compare simulated results with the relevant analytical prediction.
+
+### 3. Network modelling
+
+The network model will represent links using Werner-state parameters under explicitly documented assumptions.
+
+For a link with Werner parameter \(w\), its Bell-state fidelity is
+
+\[
+F_e=\frac{1+3w}{4}
+\]
+
+For a path of independent Werner-state links with idealized entanglement swapping, the planned analytical model uses
+
+\[
+w_{\text{path}}=\prod_{e\in\text{path}}w_e
+\]
+
+and estimates the end-to-end Bell-state fidelity as
+
+\[
+F_{e,\text{path}}=\frac{1+3w_{\text{path}}}{4}
+\]
+
+The corresponding average teleportation fidelity for the resulting two-qubit resource state is
+
+\[
+F_{\text{tel,avg}}=\frac{2F_{e,\text{path}}+1}{3}
+\]
+
+These expressions depend on the model assumptions, including Werner-state links and idealized swapping operations. They are not universal formulas for arbitrary noisy quantum networks.
+
+### 4. Routing
+
+QuantumRoute plans to compare two strategies:
+
+- **Shortest-hop routing:** Select a route with the fewest links.
+- **Quality-aware routing:** Minimize an additive path cost based on the Werner parameters:
+
+\[
+c_e=-\ln(w_e),\qquad w_e>0
+\]
+
+Dijkstra's algorithm can minimize the total cost, which is equivalent to maximizing the product of positive link parameters under this model.
+
+The implementation will validate the routing results against small-network reference cases before claiming correctness.
+
+### 5. Output and visualization
+
+The planned dashboard will display:
+
+- Network topology and selected routes.
+- Link-quality and noise settings.
+- Teleportation fidelity.
+- Analytical predictions versus simulated results.
+- Route hop count and model-based quality metrics.
+
+### Architecture overview
+
+```text
+User Configuration
+        |
+        v
+Network & Experiment Setup
+        |
+        +----------------------+
+        |                      |
+        v                      v
+Quantum Teleportation     Network Model
+Circuit & Noise           Werner Links
+        |                 & Entanglement
+        |                 Swapping Model
+        v                      |
+State Fidelity                v
+Calculation              Routing Engine
+        |                      |
+        +-----------+----------+
+                    |
+                    v
+           Validation & Metrics
+                    |
+                    v
+          Interactive Dashboard
 ```
 
-1. **Input** — _what data goes in and in what format_
-2. **Preprocessing** — _cleaning, feature extraction, encoding_
-3. **Quantum core** — _the circuit, ansatz, or algorithm used_
-4. **Post-processing** — _decoding, measurement, scoring_
-5. **Output** — _what the user finally gets_
+**Scientific scope:** The MVP is a simulator and analytical study. It does not claim to model all real-world fibre loss, quantum-memory decoherence, noisy repeater operations, purification protocols, or physical quantum hardware.
 
 ---
 
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
-| :--- | :--- |
-| Language | Python 3.11+ |
-| Quantum SDK | Qiskit `>=1.0`, Qiskit Aer, Qiskit Runtime |
-| Optimisation | Qiskit Optimization / COBYLA / SPSA |
-| Simulation | AerSimulator (statevector / noisemodel) |
-| Environment | JupyterLab / VS Code, `venv` |
-| Version control | Git + GitHub |
+|---|---|
+| Language | Python |
+| Quantum SDK | Qiskit |
+| Quantum simulation | Qiskit Aer |
+| Quantum-state analysis | `qiskit.quantum_info` |
+| Network modelling | NetworkX |
+| Numerical computation | NumPy |
+| Interactive dashboard | Streamlit |
+| Visualization | Plotly and/or Matplotlib |
+| Testing | pytest |
+| Environment | Python virtual environment, VS Code |
+| Version control | Git and GitHub |
+
+*Dependency versions will be pinned after the supported Python environment and package installation are verified. Additional libraries will be introduced only when required.*
 
 ---
 
 ## 📁 Project Structure
 
+The following is the planned structure. Files and features may remain pending until their corresponding implementation tasks are completed.
+
 ```text
 vtu-hc-quantum-d-clan/
-├── README.md              # This file
-├── requirements.txt       # Python dependencies
-├── pyproject.toml         # Project metadata (optional)
+├── README.md
+├── PLAN.md
+├── AGENTS.md
+├── ARCHITECTURE.md
+├── DECISIONS.md
+├── TASKS.md
+├── TESTING.md
+├── requirements.txt
 ├── .gitignore
-├── notebooks/             # Jupyter notebooks for experiments
-│   └── exploration.ipynb
+├── LICENSE
 ├── src/
-│   ├── __init__.py
-│   ├── circuit.py         # Quantum circuit construction
-│   ├── optimizer.py       # Optimization loop
-│   └── main.py            # Entry point
-├── data/                  # Datasets (use Git LFS for large files)
-├── tests/                 # Unit tests
-│   └── test_circuit.py
-└── docs/                  # Notes, diagrams, reports
+│   └── quantumroute/
+│       ├── __init__.py
+│       ├── teleport.py       # Teleportation circuit
+│       ├── noise.py          # Noise configuration
+│       ├── network.py        # Network and Werner model
+│       ├── swapping.py       # Entanglement-swapping logic
+│       ├── routing.py        # Route selection algorithms
+│       ├── validate.py       # Model and circuit validation
+│       └── app.py            # Streamlit dashboard
+├── tests/
+│   ├── test_teleport.py
+│   ├── test_noise.py
+│   ├── test_network.py
+│   ├── test_routing.py
+│   └── test_validate.py
+├── notebooks/
+│   └── exploration.ipynb
+└── docs/
+    └── experiments.md
 ```
+
+Large generated datasets and environment-specific files should not be committed unnecessarily. The structure may be adjusted when implementation demonstrates a concrete need.
 
 ---
 
 ## 🚀 How to Run
 
+**Status: Setup and execution instructions are pending environment verification and initial implementation.**
+
 ### Prerequisites
 
-- Python 3.11 or newer
-- [Git](https://git-scm.com/downloads)
-- A GitHub account (you need collaborator access to this repo)
+- Python 3.11 or 3.12 recommended for initial compatibility testing.
+- Git.
+- Access to the official team repository.
+- A working installation of Qiskit and Qiskit Aer.
 
-### 1. Clone the repository
+### 1. Clone the official repository
 
 ```bash
 git clone https://github.com/vtu-qiskit-fall-fest-2026/vtu-hc-quantum-d-clan.git
@@ -164,149 +269,174 @@ cd vtu-hc-quantum-d-clan
 
 ### 2. Create a virtual environment
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate        # Linux / macOS
-# .venv\Scripts\activate         # Windows (PowerShell)
+**Windows PowerShell**
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
+
+**Linux / macOS**
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+```
+
+If Python 3.12 is not installed, install a supported Python version before continuing.
 
 ### 3. Install dependencies
 
 ```bash
-pip install --upgrade pip
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Run
+### 4. Run the application
+
+The final application entry point and run command will be documented after implementation and testing. The planned dashboard entry point is:
 
 ```bash
-python -m src.main
+streamlit run src/quantumroute/app.py
 ```
 
-Or launch the notebook workflow:
+### 5. Run tests
 
 ```bash
-jupyter lab
+python -m pytest -q
 ```
 
-### 5. Run the tests
-
-```bash
-pytest -q
-```
+*Do not interpret these commands as evidence that the current project already runs. Verify installation, implementation, and test results in a clean environment before marking this section as validated.*
 
 ---
 
 ## 🔁 How to Push Code
 
-> Full walkthrough: **[Git & Collaboration Handbook](../vtu-hc-guide-git-and-collaboration)** — collaboration
-> workflow, branches, pull requests, reviews and conflict resolution.
+Follow the organizers' Git & Collaboration Handbook and any additional instructions provided to the team.
 
-### Configure Git (first time only)
+### Configure Git
+
+Run once if Git identity is not already configured:
 
 ```bash
-git config --global user.name  "Your Name"
+git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 ```
 
+Use the email associated with your GitHub account or another appropriate Git commit email.
+
 ### Everyday workflow
 
+Check your current state before making changes:
+
 ```bash
-# 1. Get the latest changes
-git checkout main
-git pull origin main
-
-# 2. Create a branch for your work
-git checkout -b feature/my-task
-
-# 3. Commit your work
-git add .
-git commit -m "feat: add variational circuit for the search problem"
-
-# 4. Push the branch
-git push -u origin feature/my-task
-
-# 5. Open a Pull Request on GitHub and request a review
-#    https://github.com/vtu-qiskit-fall-fest-2026/vtu-hc-quantum-d-clan/compare/main...feature/my-task
-
-# 6. After approval, merge into main
-git checkout main
-git pull origin main
-git branch -d feature/my-task
+git status
+git branch --show-current
+git remote -v
 ```
+
+After the official repository has been cloned and the correct remote verified, create a branch for your task:
+
+```bash
+git switch main
+git pull --ff-only origin main
+git switch -c feature/your-task
+```
+
+Review and test your changes before committing:
+
+```bash
+git diff
+python -m pytest -q
+git add README.md
+git commit -m "docs: update QuantumRoute README"
+git push -u origin feature/your-task
+```
+
+Open a Pull Request on GitHub and follow the team's review process.
+
+**Important:** Do not push directly to `main` unless the organizers explicitly authorize it. Confirm the required branching and review workflow with the organizers, especially because the official submission deadline is strict.
 
 ### Commit message convention
 
 | Prefix | Meaning |
-| :--- | :--- |
+|---|---|
 | `feat:` | New feature |
 | `fix:` | Bug fix |
-| `docs:` | Documentation only |
-| `test:` | Adding or fixing tests |
-| `refactor:` | Code restructure, no behaviour change |
-| `chore:` | Build/config/dependency changes |
+| `docs:` | Documentation |
+| `test:` | Tests added or fixed |
+| `refactor:` | Code restructuring |
+| `chore:` | Configuration or dependency maintenance |
 
-### Useful commands
+### Collaboration guidelines
 
-```bash
-git status              # what changed
-git log --oneline -10   # recent commits
-git diff                # review changes before committing
-git stash               # shelve changes temporarily
-git pull --rebase       # update your branch on top of main
-```
-
-### Collaborating on the same repo
-
-- **Never push directly to `main`** — open a Pull Request.
-- **Pull before you push** to avoid rejected commits.
-- **Commit often** with clear messages.
-- **Resolve conflicts** locally: `git pull --rebase`, fix the files, then `git add` + `git rebase --continue`.
-- **Ask for a review** before merging — a second pair of eyes catches bugs fast.
+- Pull or otherwise synchronize with the official repository before starting work.
+- Work on clearly assigned tasks and use branches when required.
+- Commit small, meaningful changes.
+- Review diffs before committing.
+- Never commit credentials, tokens, or local environment files.
+- Never report tests as passing unless they have actually run.
+- Keep scientific assumptions and implementation documentation synchronized.
+- Follow the organizers' repository and submission rules over generic GitHub workflow advice.
 
 ---
 
 ## ✅ Submission Checklist
 
-- [ ] Repository created and **public**
-- [ ] All team members added as **collaborators** and invitations accepted
-- [ ] `README.md` updated with project details, problem statement and solution
-- [ ] Team members listed under [Team Members](#-team-members-github-ids)
-- [ ] `requirements.txt` committed and project runs from a clean clone
-- [ ] Code pushed to `main` and the latest `main` builds successfully
-- [ ] Notebooks committed with **cleared outputs** (or use `nbstrip`)
-- [ ] `README` includes a demo screenshot / video link
-- [ ] Short project summary submitted on the hackathon portal
+### Project and repository
+
+- [#] README updated with the final project details.
+- [#] All team members and GitHub usernames listed.
+- [#] Official track and problem statement confirmed.
+- [#] Dependencies verified in a clean environment.
+- [ ] Quantum teleportation circuit implemented and tested.
+- [ ] Noise experiments implemented and validated.
+- [ ] Network model and routing algorithms tested.
+- [ ] Analytical predictions compared with simulated results.
+- [ ] Final source code committed to the official team repository.
+- [ ] Latest implementation and tests verified.
+- [ ] Demo screenshot or video linked in the README.
+- [ ] Required project summary submitted through the hackathon portal.
+- [ ] Final presentation and demonstration prepared.
+
+### Final submission
+
+- [ ] Working prototype demonstrated.
+- [ ] GitHub repository link included in the presentation.
+- [ ] Quantum algorithm and circuit details explained.
+- [ ] Results and limitations clearly presented.
+- [ ] Team details included.
+- [ ] Required YouTube demo video submitted.
+- [ ] Submission deadlines and portal requirements confirmed.
+
+**Repository visibility:** The organizers' repository is currently the official team repository. Do not make it public or change its access settings unless the organizers explicitly require and authorize that change. Confirm the final visibility requirement before submission.
+
+*All checklist items remain pending until individually completed and verified.*
 
 ---
 
 ## 📚 Resources
 
 | Resource | Link |
-| :--- | :--- |
-| 🔁 Git & collaboration handbook | [Git & Collaboration Handbook](../vtu-hc-guide-git-and-collaboration) |
-| ❓ Problem statements, solutions & terms | [Problem Statements, Solutions & Terms](../vtu-hc-guide-problem-and-solution) |
-| 📄 README writing guide | [README Guide & Template](../vtu-hc-guide-readme-template) |
-| ⚛️ Qiskit documentation | https://docs.quantum.ibm.com/ |
-| ⚛️ Qiskit Runtime & primitives | https://quantum.cloud.ibm.com/docs/ |
-| 🧪 Qiskit Aer simulator | https://docs.quantum.ibm.com/guides/simulator |
-| 💻 IBM Quantum Platform | https://quantum.cloud.ibm.com/ |
-| 🎓 Qiskit textbook | https://qiskit.qotlabs.org/learning/ |
-| 📋 GitHub Docs | https://docs.github.com/ |
+|---|---|
+| Qiskit documentation | https://docs.quantum.ibm.com/ |
+| Qiskit Runtime documentation | https://quantum.cloud.ibm.com/docs/ |
+| Qiskit Aer simulator guide | https://docs.quantum.ibm.com/guides/simulator |
+| IBM Quantum Platform | https://quantum.cloud.ibm.com/ |
+| Qiskit learning resources | https://qiskit.qotlabs.org/learning/ |
+| GitHub documentation | https://docs.github.com/ |
+
+Use these resources to verify API behaviour, circuit construction, simulation options, and installation requirements. Cite external references in project documentation when they materially support technical claims.
 
 ---
 
 ## 📄 License
 
-Released under the [MIT License](LICENSE). See `LICENSE` for details.
+Released under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-<div align="center">
+**Quantum D Clan** · Team ID `VTU-QFF-HC-0126` · Tier Both  
+Built with ⚛️ Qiskit for the VTU-Qiskit Fall Fest 2026 Hackathon.
 
-**Quantum D Clan** · Team ID `VTU-QFF-HC-0126` · Tier `Both`
-· Built with ⚛️ Qiskit for the VTU-QFF Hackathon
-
-[⬆ Back to Top](#quantum-d-clan)
-
-</div>
+[⬆ Back to Top](#quantumroute-)
