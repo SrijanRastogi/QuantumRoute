@@ -70,7 +70,7 @@ def test_three_hop_swapping_chain():
 
 
 def test_swapping_parameter_validation():
-    """Verify that invalid inputs to swapping simulation raise ValueError."""
+    """Verify that invalid inputs to swapping simulation raise ValueError or TypeError."""
     with pytest.raises(ValueError):
         simulate_swapping_chain([])
 
@@ -79,3 +79,9 @@ def test_swapping_parameter_validation():
 
     with pytest.raises(ValueError):
         simulate_swapping_chain([1.2])
+
+    with pytest.raises(TypeError):
+        simulate_swapping_chain([True])
+
+    with pytest.raises(TypeError):
+        create_werner_density_matrix(False)

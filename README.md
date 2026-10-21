@@ -69,9 +69,9 @@ VTU-Qiskit Fall Fest 2026 Hackathon · VTU Belagavi
 - [x] **Noise experiments (QR-002):** Implemented and verified depolarizing noise channel on distributed link qubit (`src/quantumroute/noise.py`, `src/quantumroute/experiments.py`). Validated theoretical curve $F = 1 - p/2$ across 21 points in $p \in [0, 1]$ ($\Delta < 1.3 \times 10^{-15}$).
 - [x] **Quantum network model (QR-003):** Implemented and verified Werner-state link mechanics and path composition product rule ($w_{\text{path}} = \prod w_e$, $F_{e,\text{path}} = (1+3w_{\text{path}})/4$, $F_{\text{tel,avg}} = (2F_{e,\text{path}}+1)/3$) on a standard 7-node benchmark topology (`src/quantumroute/network.py`). Verified that Bell fidelities must never be directly multiplied.
 - [x] **Quality-aware routing (QR-004):** Implemented and verified BFS shortest-hop and Dijkstra quality-aware ($-\ln(w_e)$) routing algorithms (`src/quantumroute/routing.py`). Proved Dijkstra matches brute-force exhaustive simple-path enumeration across all 21 node pairs. Verified benchmark divergence cases ('A'->'D' and 'A'->'G') where Dijkstra selects longer paths with substantially higher Werner parameter and state fidelity.
-- [ ] **Circuit-level entanglement swapping (QR-005):** Multi-hop quantum circuit simulation (*Pending Milestone 3B*).
-- [ ] **Model validation harness (QR-006):** Analytical vs. circuit-simulated validation (*Pending Milestone 4B*).
-- [ ] **Interactive dashboard (QR-007):** Streamlit UI demonstration (*Pending Milestone 5*).
+- [x] **Circuit-level entanglement swapping (QR-005):** Implemented and verified multi-hop quantum circuit simulation with Werner pairs and coherent feedforward corrections (`src/quantumroute/swapping.py`).
+- [x] **Model validation harness (QR-006):** Analytical predictions vs. circuit-simulated validation harness (`src/quantumroute/validate.py`).
+- [x] **Interactive dashboard (QR-007):** Streamlit interactive UI application (`src/quantumroute/app.py`).
 
 ---
 
@@ -294,13 +294,13 @@ pip install -r requirements.txt
 
 ### 4. Run tests
 
-Execute the complete automated test suite (verifying QR-000, QR-001, QR-002):
+Execute the complete automated test suite (verifying QR-000 through QR-006):
 
 ```bash
 pytest -v
 ```
 
-All 18 tests execute in ~2.4 seconds with 100% pass rate.
+All 56 tests execute in ~2.6 seconds with 100% pass rate.
 
 ### 5. Run the application (Planned)
 

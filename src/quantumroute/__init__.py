@@ -40,6 +40,11 @@ from quantumroute.routing import (
     compare_routes,
     exhaustive_quality_route,
 )
+from quantumroute.swapping import (
+    create_werner_density_matrix,
+    simulate_swapping_chain,
+    calculate_end_to_end_bell_fidelity,
+)
 from quantumroute.validate import (
     ValidationResult,
     compare_model_and_simulation,
@@ -82,6 +87,10 @@ __all__ = [
     "quality_aware_path",
     "compare_routes",
     "exhaustive_quality_route",
+    # Entanglement swapping simulation
+    "create_werner_density_matrix",
+    "simulate_swapping_chain",
+    "calculate_end_to_end_bell_fidelity",
     # Validation harness
     "ValidationResult",
     "compare_model_and_simulation",

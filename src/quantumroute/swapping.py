@@ -11,8 +11,11 @@ def create_werner_density_matrix(w: float) -> DensityMatrix:
 
     ρ_W(w) = w |Φ+⟩⟨Φ+| + (1 - w) (I_4 / 4)
     """
-    if not (0.0 <= w <= 1.0):
+    if isinstance(w, bool) or not isinstance(w, (int, float)):
+        raise TypeError(f"Werner parameter w must be a real number, got {type(w).__name__}")
+    if not (0.0 <= float(w) <= 1.0):
         raise ValueError(f"Werner parameter w must be in [0.0, 1.0], got {w}")
+    w = float(w)
 
     # Canonical Bell state |Φ+⟩ = (|00⟩ + |11⟩) / √2
     bell_state = np.zeros(4, dtype=complex)
@@ -46,9 +49,15 @@ def simulate_swapping_chain(
     if num_links == 0:
         raise ValueError("Must provide at least one link parameter.")
 
+    validated_links = []
     for w in link_parameters:
-        if not (0.0 <= w <= 1.0):
+        if isinstance(w, bool) or not isinstance(w, (int, float)):
+            raise TypeError(f"Invalid link parameter type: {type(w).__name__}")
+        w_float = float(w)
+        if not (0.0 <= w_float <= 1.0):
             raise ValueError(f"Invalid Werner parameter: {w}")
+        validated_links.append(w_float)
+    link_parameters = validated_links
 
     # 1 Hop: Single Bell pair between endpoints
     if num_links == 1:
