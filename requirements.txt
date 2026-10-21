@@ -1,9 +1,9 @@
 # Core quantum SDK
-qiskit>=1.0,<2.0
+qiskit>=1.0,<2.0  # Verified: 1.4.6 in Python 3.12 (.venv)
 qiskit-ibm-runtime>=0.30
 
 # Local simulator
-qiskit-aer>=0.15
+qiskit-aer>=0.15  # Verified: 0.18.0 in Python 3.12 (.venv)
 
 # Optional add-ons -- remove the ones you do not use
 qiskit-algorithms>=0.3
@@ -11,11 +11,13 @@ qiskit-optimization>=0.6
 qiskit-nature>=0.7
 
 # Numerics, data and plotting
-numpy>=1.26
-scipy>=1.11
+numpy>=1.26  # Verified: 2.5.4 in Python 3.12 (.venv)
+scipy>=1.11  # Verified: 1.18.1 in Python 3.12 (.venv)
+networkx>=3.0  # Verified: 3.7 in Python 3.12 (.venv)
 pandas>=2.1
 matplotlib>=3.8
 scikit-learn>=1.4
 
 # Testing
-pytest>=8.0
+pytest>=8.0  # Verified: 9.1.1 in Python 3.12 (.venv)
+

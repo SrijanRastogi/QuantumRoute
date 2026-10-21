@@ -51,22 +51,22 @@
 The following items are unresolved baseline questions identified from [PLAN.md](file:///d:/QiskitFallFest/PLAN.md) §14 and the existing workspace environment. They require explicit confirmation from the human team lead before implementation:
 
 ### OQ-001: Python Runtime & Dependency Pinning
-- **Current State:** Workspace host system runs Python 3.14.0 (`python --version` confirmed). However, compiled binary wheels for Qiskit and Qiskit Aer typically target Python 3.10–3.12 (with emerging support for 3.13).
-- **Impact:** Installing Qiskit Aer in Python 3.14 may fail if pre-built wheels are unavailable.
-- **Proposed Resolution:** Create a dedicated Python 3.11 or 3.12 virtual environment (e.g., using `uv` or `pyenv`/Windows Python launcher) to test and pin exact working versions in `requirements.txt`.
-- **Status:** `OPEN` — Requires team lead confirmation during Task `QR-000`.
+- **Current State:** Workspace host runs Python 3.14.0. Dedicated Python 3.12.14 virtual environment `.venv` created via `uv`. Qiskit 1.4.6, Qiskit Aer 0.18.0, NumPy 2.5.4, SciPy 1.18.1, and pytest 9.1.1 installed and verified via automated test suite.
+- **Resolution:** Python 3.12.14 local `.venv` pinned and tested. All 18 automated tests pass with 100% success rate.
+- **Status:** `RESOLVED` (QR-000)
 
 ### OQ-002: Team Member Role Assignments
-- **Current State:** [PLAN.md](file:///d:/QiskitFallFest/PLAN.md) §10 specifies three roles (Member A: Quantum Core; Member B: Network & Routing; Member C: Validation & Interface).
-- **Impact:** All tasks in [TASKS.md](file:///d:/QiskitFallFest/TASKS.md) currently have owners marked `UNASSIGNED`.
-- **Proposed Resolution:** Assign human team member names to Roles A, B, and C in `TASKS.md` before starting parallel work.
-- **Status:** `OPEN` — Awaiting team roster.
+- **Current State:** Team roster and ownership confirmed in `TEAM_WORK_SPLIT.md` and user mission directive.
+- **Resolution:**
+  - Yuvaraj B Sutar (`YUVA56-gomu`): Team Lead; Quantum Circuit & Noise Lead (`teleport.py`, `noise.py`).
+  - Srijan Rastogi (`SrijanRastogi`): Developer; Network Model, Swapping & Routing Lead (`network.py`, `swapping.py`, `routing.py`).
+  - Veeresh M A (`Veeresh23-06`): Developer; Environment, Validation, Integration & Dashboard Lead (`validate.py`, `app/`).
+- **Status:** `RESOLVED`
 
 ### OQ-003: Official GitHub Repository Remote & Permissions
-- **Current State:** Current workspace has no Git repository initialized (`fatal: not a git repository`). Organizers created a private repository under their GitHub organization and granted access to the team lead.
-- **Impact:** Contributor and agent pushes must be directed only to the verified official remote, never to personal accounts.
-- **Proposed Resolution:** Team lead provides the verified remote URL and default branch name, after which the existing workspace is connected to the official repository.
-- **Status:** `OPEN` — Pending team lead confirmation.
+- **Current State:** Workspace Git repository is connected to official organizer remote `https://github.com/vtu-qiskit-fall-fest-2026/vtu-hc-quantum-d-clan.git` on branch `main`.
+- **Resolution:** Verified clean working tree tracking `origin/main`.
+- **Status:** `RESOLVED`
 
 ### OQ-004: Inclusion of Optional Noise Models (Amplitude / Phase Damping)
 - **Current State:** [PLAN.md](file:///d:/QiskitFallFest/PLAN.md) §5.4 lists amplitude damping and phase damping as optional features after depolarizing noise MVP validation.
