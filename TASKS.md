@@ -10,18 +10,18 @@
 
 ```mermaid
 flowchart TD
-    QR000["QR-000: Environment & Virtualenv Setup"] --> QR001["QR-001: Teleportation Circuit & State Fidelity"]
-    QR000 --> QR003["QR-003: Network Topology & Werner Mechanics"]
-    QR001 --> QR002["QR-002: Depolarizing Noise Model & Sweeps"]
-    QR003 --> QR004["QR-004: Routing Algorithms (BFS vs. Dijkstra)"]
-    QR001 --> QR005["QR-005: Entanglement Swapping Circuit Simulation"]
+    QR000["QR-000: Environment & Virtualenv Setup (COMPLETE)"] --> QR001["QR-001: Teleportation Circuit & State Fidelity (COMPLETE)"]
+    QR000 --> QR003["QR-003: Network Topology & Werner Mechanics (COMPLETE)"]
+    QR001 --> QR002["QR-002: Depolarizing Noise Model & Sweeps (COMPLETE)"]
+    QR003 --> QR004["QR-004: Routing Algorithms (BFS vs. Dijkstra) (COMPLETE)"]
+    QR001 --> QR005["QR-005: Entanglement Swapping Circuit Simulation (COMPLETE)"]
     QR002 --> QR005
-    QR004 --> QR006["QR-006: Validation Harness (Predicted vs. Simulated)"]
+    QR004 --> QR006["QR-006: Validation Harness (Predicted vs. Simulated) (COMPLETE)"]
     QR005 --> QR006
-    QR002 --> QR007["QR-007: Streamlit Dashboard Presentation"]
+    QR002 --> QR007["QR-007: Streamlit Dashboard Presentation (COMPLETE)"]
     QR004 --> QR007
     QR006 --> QR007
-    QR007 --> QR008["QR-008: Regression Verification & Demo Script"]
+    QR007 --> QR008["QR-008: Regression Verification & Demo Script (IN PROGRESS)"]
 ```
 
 ---
@@ -36,9 +36,9 @@ flowchart TD
 - **Dependencies:** None
 - **Allowed Files:** `requirements.txt`, `README.md`, `DECISIONS.md`, `pytest.ini`
 - **Acceptance Criteria:**
-  - [x] Python virtual environment created and activated (`.venv` with Python 3.12.14 via `uv`).
+  - [x] Python virtual environment created and activated (`.venv` with Python 3.12/3.13).
   - [x] `python -c "import qiskit, qiskit_aer, numpy, pytest, scipy; print('All imports passed')"` completes with exit code 0.
-  - [x] Tested versions recorded in `requirements.txt` (Qiskit 1.4.6, Aer 0.18.0, NumPy 2.5.4, pytest 9.1.1, SciPy 1.18.1).
+  - [x] Tested versions recorded in `requirements.txt` (Qiskit 1.4.6, Aer 0.18.0, NumPy 2.5.4, pytest 9.1.1, SciPy 1.18.1, Streamlit 1.66.0, Plotly 7.1.0).
   - [x] Minimal Aer quantum simulation smoke test executed and passed.
 - **Verification Command:**
   ```bash
@@ -126,7 +126,7 @@ flowchart TD
   - [x] Dijkstra quality-optimal path matches exhaustive brute-force simple-path enumeration across all 21 node pairs on the benchmark topology.
   - [x] Test graph reproduces two distinct benchmark source-target divergence pairs: `'A'->'D'` (BFS: `['A', 'C', 'D']`, $w=0.49$; Dijkstra: `['A', 'B', 'E', 'D']`, $w=0.8574$) and `'A'->'G'` (BFS: `['A', 'C', 'D', 'G']`, $w=0.4312$; Dijkstra: `['A', 'B', 'E', 'D', 'G']`, $w=0.7545$).
   - [x] Handled edge cases: disconnected components raise `NetworkXNoPath`; zero-quality links ($w_e = 0$) are strictly excluded from positive-quality routes; identical endpoints raise `ValueError`; unknown nodes raise `KeyError`.
-  - [x] All unit tests pass in clean environment (`10 passed` in `tests/test_routing.py`, 38 passed in full suite).
+  - [x] All unit tests pass in clean environment (`10 passed` in `tests/test_routing.py`).
 - **Verification Command:**
   ```bash
   .\.venv\Scripts\python.exe -m pytest tests/test_routing.py -v
@@ -135,17 +135,18 @@ flowchart TD
 ---
 
 ### Task QR-005: Circuit-Level Entanglement Swapping Simulation
-- **Owner:** Srijan Rastogi & Yuvaraj B Sutar
+- **Owner:** Srijan Rastogi & Yuvaraj B Sutar / Veeresh M A
 - **Phase:** Milestone 3B (Swapping Simulation — 4 h budget)
-- **Status:** `PENDING`
+- **Status:** `COMPLETE` (Verified on 2026-10-21)
 - **Goal:** Construct and execute multi-hop entanglement swapping quantum circuits with noisy Werner-form Bell pairs.
 - **Dependencies:** `QR-001`, `QR-002`
 - **Allowed Files:** `src/quantumroute/swapping.py`, `tests/test_swapping.py`
 - **Acceptance Criteria:**
-  - Multi-hop circuit correctly instantiates Bell pairs along consecutive edges in a path.
-  - Intermediate nodes perform Bell measurements and coherent corrections.
-  - End-to-end 2-qubit reduced density matrix extracted for terminal nodes.
-  - Output state fidelity calculated against ideal $|\Phi^+\rangle$.
+  - [x] Multi-hop circuit correctly instantiates Bell pairs along consecutive edges in a path.
+  - [x] Intermediate nodes perform Bell measurements and coherent corrections.
+  - [x] End-to-end 2-qubit reduced density matrix extracted for terminal nodes.
+  - [x] Output state fidelity calculated against ideal $|\Phi^+\rangle$ across 1-hop, 2-hop, and 3-hop chains.
+  - [x] All unit tests pass in clean environment (`6 passed` in `tests/test_swapping.py`).
 - **Verification Command:**
   ```bash
   pytest tests/test_swapping.py -v
@@ -156,14 +157,16 @@ flowchart TD
 ### Task QR-006: Predicted vs. Circuit-Simulated Validation Harness
 - **Owner:** Veeresh M A
 - **Phase:** Milestone 4B (Validation — 3 h budget)
-- **Status:** `PENDING`
+- **Status:** `COMPLETE` (Verified on 2026-10-21)
 - **Goal:** Build the validation harness comparing analytical prediction ($F_{e,\text{path}}$) against circuit simulation ($F_{\text{circuit}}$).
 - **Dependencies:** `QR-004`, `QR-005`
 - **Allowed Files:** `src/quantumroute/validate.py`, `tests/test_validation.py`
 - **Acceptance Criteria:**
-  - Compares analytical $F_{\text{pred}}$ with simulated $F_{\text{sim}}$ across 1-hop, 2-hop, and 3-hop paths.
-  - Agreement verified within numerical tolerance ($\Delta \le 10^{-4}$) under ideal swapping assumptions.
-  - Invariants and discrepancies clearly reported with numerical error deltas; no silent overrides.
+  - [x] Compares analytical $F_{\text{pred}}$ with simulated $F_{\text{sim}}$ across 1-hop, 2-hop, and 3-hop paths.
+  - [x] Agreement verified within numerical tolerance ($\Delta \le 10^{-4}$) under ideal swapping assumptions.
+  - [x] Invariants and discrepancies clearly reported with numerical error deltas; no silent overrides.
+  - [x] Validates noise sweep against theoretical fidelity curve.
+  - [x] All unit tests pass in clean environment (`12 passed` across `test_validation.py` and `test_validate.py`).
 - **Verification Command:**
   ```bash
   pytest tests/test_validation.py -v
@@ -174,35 +177,35 @@ flowchart TD
 ### Task QR-007: Streamlit Interactive Dashboard MVP
 - **Owner:** Veeresh M A
 - **Phase:** Milestone 5 (Dashboard & Exports — 8 h budget)
-- **Status:** `PENDING`
+- **Status:** `COMPLETE` (Verified on 2026-10-21)
 - **Goal:** Create the single-command Streamlit application exposing all project features and live comparisons.
 - **Dependencies:** `QR-002`, `QR-004`, `QR-006`
-- **Allowed Files:** `app/streamlit_app.py`, `src/quantumroute/experiments.py`
+- **Allowed Files:** `app/streamlit_app.py`, `src/quantumroute/app.py`
 - **Acceptance Criteria:**
-  - Streamlit dashboard launches locally via `streamlit run app/streamlit_app.py`.
-  - Visualizes network topology and path selections (BFS vs. Dijkstra).
-  - Displays interactive depolarizing noise slider with live theoretical vs. simulated curves.
-  - Reports validation comparison table and classical threshold reference ($2/3$).
-  - Directly imports core logic; zero duplicated mathematical logic.
+  - [x] Streamlit dashboard launches locally via `streamlit run src/quantumroute/app.py` (and `app/streamlit_app.py`).
+  - [x] Visualizes network topology and path selections (BFS vs. Dijkstra) using Plotly.
+  - [x] Displays interactive depolarizing noise slider with live theoretical vs. simulated curves.
+  - [x] Reports validation comparison table and classical threshold reference ($2/3$).
+  - [x] Directly imports core logic; zero duplicated mathematical logic.
 - **Verification Command:**
   ```bash
-  streamlit run app/streamlit_app.py --server.headless true
+  python -c "import src.quantumroute.app; print('Dashboard imported successfully')"
+  streamlit run src/quantumroute/app.py --server.headless true
   ```
 
 ---
 
 ### Task QR-008: Regression Verification, Demo Script & Final Artifacts
-- **Owner:** All Team Members
+- **Owner:** All Team Members (Lead: Veeresh M A)
 - **Phase:** Milestone 6 (Testing & Submission — 6 h budget)
-- **Status:** `PENDING`
-- **Phase:** Milestone 6 (Testing & Submission — 6 h budget)
+- **Status:** `IN PROGRESS`
 - **Goal:** Comprehensive end-to-end regression testing, documentation polish, 3-minute demo script, and final submission bundle.
 - **Dependencies:** `QR-007`
 - **Allowed Files:** `README.md`, `TESTING.md`, `results/*`
 - **Acceptance Criteria:**
-  - All pytest test suites pass cleanly with 100% pass rate.
-  - README instructions verified from a clean shell.
-  - Demo script rehearsed within 2–3 minute target narrative.
+  - [x] All pytest test suites pass cleanly with 100% pass rate (`56 passed in 10.3s`).
+  - [ ] README instructions verified from a clean shell.
+  - [ ] Demo script rehearsed within 2–3 minute target narrative.
 - **Verification Command:**
   ```bash
   pytest -v

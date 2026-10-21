@@ -387,16 +387,16 @@ Open a Pull Request on GitHub and follow the team's review process.
 
 ### Project and repository
 
-- [#] README updated with the final project details.
-- [#] All team members and GitHub usernames listed.
-- [#] Official track and problem statement confirmed.
-- [#] Dependencies verified in a clean environment.
-- [ ] Quantum teleportation circuit implemented and tested.
-- [ ] Noise experiments implemented and validated.
-- [ ] Network model and routing algorithms tested.
-- [ ] Analytical predictions compared with simulated results.
-- [ ] Final source code committed to the official team repository.
-- [ ] Latest implementation and tests verified.
+- [x] README updated with the final project details.
+- [x] All team members and GitHub usernames listed.
+- [x] Official track and problem statement confirmed.
+- [x] Dependencies verified in a clean environment.
+- [x] Quantum teleportation circuit implemented and tested.
+- [x] Noise experiments implemented and validated.
+- [x] Network model and routing algorithms tested.
+- [x] Analytical predictions compared with simulated results.
+- [x] Final source code committed to the official team repository.
+- [x] Latest implementation and tests verified.
 - [ ] Demo screenshot or video linked in the README.
 - [ ] Required project summary submitted through the hackathon portal.
 - [ ] Final presentation and demonstration prepared.
