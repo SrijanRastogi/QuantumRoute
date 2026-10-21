@@ -5,6 +5,7 @@ import numpy as np
 
 from quantumroute.swapping import (
     create_werner_density_matrix,
+    build_n_hop_swapping_circuit,
     simulate_swapping_chain,
     calculate_end_to_end_bell_fidelity,
 )
@@ -85,3 +86,68 @@ def test_swapping_parameter_validation():
 
     with pytest.raises(TypeError):
         create_werner_density_matrix(False)
+
+
+def test_build_n_hop_swapping_circuit_properties():
+    """Verify circuit structure and gate counts across arbitrary N-hop topologies."""
+    # 1 hop: 2 qubits, 0 gates
+    qc1 = build_n_hop_swapping_circuit(1)
+    assert qc1.num_qubits == 2
+    assert len(qc1.data) == 0
+
+    # N hops: 2N qubits, 2(N-1) CX gates, (N-1) H gates, (N-1) CZ gates
+    for n in [2, 3, 4, 5]:
+        qc = build_n_hop_swapping_circuit(n)
+        assert qc.num_qubits == 2 * n
+        op_counts = qc.count_ops()
+        assert op_counts.get("cx", 0) == 2 * (n - 1)
+        assert op_counts.get("h", 0) == (n - 1)
+        assert op_counts.get("cz", 0) == (n - 1)
+
+    # Calling with sequence of links
+    qc_seq = build_n_hop_swapping_circuit([0.9, 0.8, 0.7])
+    assert qc_seq.num_qubits == 6
+
+    # Invalid inputs
+    with pytest.raises(ValueError, match="at least 1"):
+        build_n_hop_swapping_circuit(0)
+
+    with pytest.raises(TypeError):
+        build_n_hop_swapping_circuit("invalid")
+
+
+def test_four_hop_circuit_swapping_simulation():
+    """Verify exact 4-hop (8 qubits, 3 repeaters) quantum circuit simulation against Werner theorem."""
+    # Links along 4 hops: N=4, 8 qubits joint state
+    w_links = [0.95, 0.90, 0.85, 0.80]
+    dm = simulate_swapping_chain(w_links)
+
+    # Check density matrix physical validity
+    assert np.isclose(np.trace(dm.data), 1.0, atol=1e-7)
+    eigvals = np.linalg.eigvalsh(dm.data)
+    assert np.all(eigvals >= -1e-7)
+
+    # Output Bell fidelity vs theoretical Werner product
+    fid = calculate_end_to_end_bell_fidelity(dm)
+    expected_w = float(np.prod(w_links))  # 0.95 * 0.90 * 0.85 * 0.80 = 0.5814
+    expected_fid = (1.0 + 3.0 * expected_w) / 4.0
+    assert np.isclose(fid, expected_fid, atol=1e-4)
+
+
+def test_five_hop_circuit_swapping_simulation():
+    """Verify exact 5-hop (10 qubits, 4 repeaters) quantum circuit simulation against Werner theorem."""
+    # Links along 5 hops: N=5, 10 qubits joint state
+    w_links = [0.95, 0.95, 0.90, 0.90, 0.85]
+    dm = simulate_swapping_chain(w_links)
+
+    # Check density matrix physical validity
+    assert np.isclose(np.trace(dm.data), 1.0, atol=1e-7)
+    eigvals = np.linalg.eigvalsh(dm.data)
+    assert np.all(eigvals >= -1e-7)
+
+    # Output Bell fidelity vs theoretical Werner product
+    fid = calculate_end_to_end_bell_fidelity(dm)
+    expected_w = float(np.prod(w_links))
+    expected_fid = (1.0 + 3.0 * expected_w) / 4.0
+    assert np.isclose(fid, expected_fid, atol=1e-4)
+

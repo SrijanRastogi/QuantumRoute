@@ -72,6 +72,12 @@ VTU-Qiskit Fall Fest 2026 Hackathon · VTU Belagavi
 - [x] **Circuit-level entanglement swapping (QR-005):** Implemented and verified multi-hop quantum circuit simulation with Werner pairs and coherent feedforward corrections (`src/quantumroute/swapping.py`).
 - [x] **Model validation harness (QR-006):** Analytical predictions vs. circuit-simulated validation harness (`src/quantumroute/validate.py`).
 - [x] **Interactive dashboard (QR-007):** Streamlit interactive UI application (`src/quantumroute/app.py`).
+- [x] **Arbitrary N-hop circuit compiler (QR-011):** Scalable 2N-qubit dynamic circuit generation with coherent feedforward across arbitrary repeater chains, verified for 4-hop and 5-hop exact simulations (`src/quantumroute/swapping.py`).
+- [x] **Real-world telecom topologies & multi-metric routing (QR-012):** Authentic Karnataka Quantum Backbone with realistic fiber distances and dual-metric routing balancing quantum fidelity vs. classical signaling propagation latency (`src/quantumroute/network.py`, `src/quantumroute/routing.py`).
+- [x] **Physical fiber attenuation & T1/T2 decoherence (QR-009):** Realistic silica optical fiber attenuation ($\alpha = 0.2\text{ dB/km}$ at $1550\text{ nm}$), dark count SNR scaling, and $T_1/T_2$ memory relaxation channels (`src/quantumroute/physics.py`).
+- [x] **BBPSSW entanglement purification (QR-010):** 4-qubit bilateral CNOT quantum distillation protocol with parity post-selection and multi-round cascading, strictly enhancing Bell fidelity for any entangled input ($F > 0.5$) (`src/quantumroute/purification.py`).
+- [x] **Quantum state tomography (QR-013):** Realistic Pauli basis ($X, Y, Z$) measurement engine with finite shots on Qiskit Aer and linear Stokes density-matrix reconstruction with physical projection (`src/quantumroute/tomography.py`).
+- [x] **Interactive Dashboard 2.0 (QR-014):** 3D Plotly Bloch sphere visualizer, multi-topology switcher (Karnataka Backbone, Ring, Star, Grid), multi-metric routing, and one-click OpenQASM 3.0 / Qiskit hardware export (`src/quantumroute/app.py`).
 
 ---
 

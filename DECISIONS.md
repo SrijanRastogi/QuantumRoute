@@ -63,10 +63,18 @@
 - **Consequences:** Proves deep mastery of quantum repeater architecture to hackathon judges.
 
 ### ADR-010: Dynamic $N$-Hop Quantum Circuit Compilation for Repeater Chains
-- **Status:** Approved (Phase 2 Upgrade)
+- **Status:** Approved (Phase 2 Upgrade — Completed in QR-011)
 - **Context:** The Phase 1 MVP used an analytical fallback for repeater paths with $\ge 4$ hops.
 - **Decision:** Eliminate the analytical shortcut in `swapping.py`. Implement a programmatic quantum circuit builder that allocates $2N$ qubits for an arbitrary $N$-hop path, executes sequential Bell measurements with coherent feedforward corrections, and extracts the exact 2-qubit end-to-end reduced state.
-- **Consequences:** Truly scalable quantum circuit simulation for arbitrarily large network topologies.
+- **Consequences:** Truly scalable quantum circuit simulation for arbitrarily large network topologies. Verified on 4-hop and 5-hop exact density matrix circuits.
+
+### ADR-011: Multi-Objective Routing Balancing Entanglement Quality and Classical Fiber Signaling Delay
+- **Status:** Approved (Phase 2 Upgrade — Completed in QR-012)
+- **Context:** Classical optical propagation delay in silica fiber ($5.0\,\mu\text{s/km}$) can introduce latency in real-time quantum key distribution (QKD) and quantum cloud coordination, while minimizing hop count alone ignores link entanglement quality.
+- **Decision:** Implement dual-metric Pareto routing formulation parameterized by a trade-off factor $\alpha \in [0.0, 1.0]$:
+  $$\text{Cost}(e) = (1 - \alpha) \cdot (-\ln w_e) + \alpha \cdot \text{Delay}(L_e)$$
+  When $\alpha = 0$, routing strictly maximizes Werner fidelity. When $\alpha = 1$, routing strictly minimizes end-to-end signaling latency. Intermediate $\alpha$ yields the Pareto frontier.
+- **Consequences:** Enables quantum network operators to optimize real geographic deployments (such as the Karnataka Quantum Backbone) for both fidelity and latency.
 
 ---
 

@@ -28,19 +28,108 @@ def create_werner_density_matrix(w: float) -> DensityMatrix:
     return DensityMatrix(werner_data)
 
 
+def build_n_hop_swapping_circuit(
+    link_parameters_or_hops: int | Sequence[float],
+) -> QuantumCircuit:
+    """Construct the scalable 2N-qubit quantum circuit for an N-hop repeater chain.
+
+    Implements ADR-002 (coherent feedforward corrections under deferred measurement)
+    for arbitrary N-hop entanglement swapping.
+
+    For an N-hop path, the network has N links and N-1 intermediate repeater nodes:
+        - Link 0: Qubits (0, 1) [Source to Repeater 1]
+        - Link 1: Qubits (2, 3) [Repeater 1 to Repeater 2]
+        ...
+        - Link k: Qubits (2k, 2k+1) [Repeater k to Repeater k+1]
+        ...
+        - Link N-1: Qubits (2N-2, 2N-1) [Repeater N-1 to Destination]
+
+    At each intermediate repeater node k in {1, ..., N-1}:
+        - Qubit 2k-1 (left port) and Qubit 2k (right port) undergo Bell-basis measurement:
+            CX(2k-1, 2k)
+            H(2k-1)
+        - Coherent feedforward corrections are propagated to the next stage qubit (2k+1):
+            CX(2k, 2k+1)   [bit-flip correction based on parity outcome]
+            CZ(2k-1, 2k+1) [phase-flip correction based on phase outcome]
+
+    Terminal Endpoints:
+        Qubit 0 (Source) and Qubit 2N-1 (Destination).
+        All intermediate qubits [1, 2, ..., 2N-2] are subsequently traced out.
+
+    Args:
+        link_parameters_or_hops: Either the integer number of hops N (>= 1),
+                                 or a sequence of link parameters whose length determines N.
+
+    Returns:
+        QuantumCircuit: A 2N-qubit circuit implementing the complete swapping chain.
+
+    Raises:
+        ValueError: If N < 1.
+    """
+    if isinstance(link_parameters_or_hops, bool) or isinstance(link_parameters_or_hops, (str, bytes)):
+        raise TypeError(
+            f"Expected int or Sequence of floats for link_parameters_or_hops, got {type(link_parameters_or_hops).__name__}"
+        )
+    if isinstance(link_parameters_or_hops, int):
+        num_hops = link_parameters_or_hops
+    elif isinstance(link_parameters_or_hops, Sequence):
+        num_hops = len(link_parameters_or_hops)
+    else:
+        raise TypeError(
+            f"Expected int or Sequence for link_parameters_or_hops, got {type(link_parameters_or_hops).__name__}"
+        )
+
+    if num_hops < 1:
+        raise ValueError(f"Number of hops must be at least 1, got {num_hops}")
+
+    # Total qubits in joint state is 2 * num_hops
+    total_qubits = 2 * num_hops
+    qc = QuantumCircuit(total_qubits, name=f"swapping_{num_hops}hop")
+
+    # For 1 hop, no intermediate swapping operations are required
+    if num_hops == 1:
+        return qc
+
+    # Apply sequential Bell-state measurements and coherent feedforward corrections
+    # across each intermediate repeater k in {1, ..., N-1}
+    for k in range(1, num_hops):
+        rep_left = 2 * k - 1
+        rep_right = 2 * k
+        target_qubit = 2 * k + 1
+
+        # Bell measurement on repeater qubits (rep_left, rep_right)
+        qc.cx(rep_left, rep_right)
+        qc.h(rep_left)
+
+        # Coherent feedforward corrections to the forward link qubit
+        qc.cx(rep_right, target_qubit)
+        qc.cz(rep_left, target_qubit)
+
+    return qc
+
+
 def simulate_swapping_chain(
     link_parameters: Sequence[float],
+    max_circuit_hops: int = 5,
 ) -> DensityMatrix:
-    """Simulate entanglement swapping along a multi-hop repeater path.
+    """Simulate entanglement swapping along an arbitrary multi-hop repeater path.
 
     Uses coherent feedforward corrections (ADR-002 deferred measurement).
     Evaluates the exact 2-qubit reduced density matrix between the terminal endpoints.
 
+    For paths with N <= max_circuit_hops (up to 10 qubits), an exact 2N-qubit joint density
+    matrix is constructed, evolved through the compiled quantum circuit, and intermediate
+    repeaters are traced out using partial trace.
+
+    For larger paths (N > max_circuit_hops), where full density matrix representation would
+    exceed machine memory (e.g., > 10 qubits), the state is evaluated using the mathematically
+    proven isotropic Werner composition theorem:
+        w_path = prod_{i=1}^N w_i
+
     Args:
         link_parameters: List of Werner parameters w_e for consecutive links in the path.
-                         Length 1: Single link (1 hop, 2 qubits).
-                         Length 2: 2 hops (4 qubits, intermediate Bell measurement).
-                         Length 3: 3 hops (6 qubits, two intermediate Bell measurements).
+        max_circuit_hops: Maximum number of hops to simulate via full 2N-qubit circuit
+                          evolution before applying theorem composition (default: 5).
 
     Returns:
         DensityMatrix: 2-qubit reduced density matrix of the terminal nodes.
@@ -63,62 +152,29 @@ def simulate_swapping_chain(
     if num_links == 1:
         return create_werner_density_matrix(link_parameters[0])
 
-    # 2 Hops: Links (0, 1) and (2, 3). Intermediate repeater has qubits (1, 2)
-    if num_links == 2:
-        dm1 = create_werner_density_matrix(link_parameters[0])
-        dm2 = create_werner_density_matrix(link_parameters[1])
-        # 4-qubit joint density matrix: link1 ⊗ link2
-        # Qubits: 0 = Source, 1 = Repeater left, 2 = Repeater right, 3 = Destination
-        joint_dm = dm1.tensor(dm2)
+    # Dynamic 2N-qubit quantum circuit simulation for N <= max_circuit_hops
+    if num_links <= max_circuit_hops:
+        # Build tensor product of initial 2-qubit Werner states along the chain:
+        # joint_dm = rho_W(w_0) ⊗ rho_W(w_1) ⊗ ... ⊗ rho_W(w_{N-1})
+        joint_dm = create_werner_density_matrix(link_parameters[0])
+        for w in link_parameters[1:]:
+            joint_dm = joint_dm.tensor(create_werner_density_matrix(w))
 
-        # Apply intermediate Bell measurement & coherent corrections:
-        # Circuit on 4 qubits
-        qc = QuantumCircuit(4)
-        # Bell measurement on repeater qubits (1, 2)
-        qc.cx(1, 2)
-        qc.h(1)
-        # Coherent feedforward corrections to Destination (qubit 3):
-        # CX controlled by q2 (bit flip)
-        # CZ controlled by q1 (phase flip)
-        qc.cx(2, 3)
-        qc.cz(1, 3)
+        # Dynamically compile the 2N-qubit swapping circuit
+        qc = build_n_hop_swapping_circuit(num_links)
 
-        # Evolve density matrix through circuit
+        # Evolve density matrix through the swapping circuit
         evolved_dm = joint_dm.evolve(qc)
 
-        # Trace out intermediate repeater qubits [1, 2]
-        # Remaining subsystem is [0, 3] (Source and Destination)
-        end_to_end_dm = partial_trace(evolved_dm, [1, 2])
+        # Intermediate repeater qubits to trace out: [1, 2, ..., 2N-2]
+        intermediate_qubits = list(range(1, 2 * num_links - 1))
+
+        # Terminal endpoints remaining: [0, 2N-1] (Source and Destination)
+        end_to_end_dm = partial_trace(evolved_dm, intermediate_qubits)
         return end_to_end_dm
 
-    # 3 Hops: Links (0, 1), (2, 3), and (4, 5).
-    # Repeaters at (1, 2) and (3, 4). Endpoints: 0 and 5.
-    if num_links == 3:
-        dm1 = create_werner_density_matrix(link_parameters[0])
-        dm2 = create_werner_density_matrix(link_parameters[1])
-        dm3 = create_werner_density_matrix(link_parameters[2])
-        joint_dm = dm1.tensor(dm2).tensor(dm3)
-
-        qc = QuantumCircuit(6)
-        # First swapping on repeater (1, 2) -> correct to qubit 3
-        qc.cx(1, 2)
-        qc.h(1)
-        qc.cx(2, 3)
-        qc.cz(1, 3)
-
-        # Second swapping on repeater (3, 4) -> correct to qubit 5
-        qc.cx(3, 4)
-        qc.h(3)
-        qc.cx(4, 5)
-        qc.cz(3, 5)
-
-        evolved_dm = joint_dm.evolve(qc)
-        # Trace out intermediate qubits [1, 2, 3, 4]
-        end_to_end_dm = partial_trace(evolved_dm, [1, 2, 3, 4])
-        return end_to_end_dm
-
-    # For larger arbitrary paths, under the validated ideal swapping theorem:
-    # w_path = ∏ w_e
+    # For chains exceeding memory bounds (N > max_circuit_hops), apply the proven Werner
+    # composition theorem: w_path = prod_{i=1}^N w_i
     w_effective = float(np.prod(link_parameters))
     return create_werner_density_matrix(w_effective)
 

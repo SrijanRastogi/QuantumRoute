@@ -29,14 +29,17 @@ Deliver a scientifically defensible, reproducible, and competitive Qiskit simula
 - **`QR-002`**: Single-qubit depolarizing noise model on distributed Bell link ($F = 1 - p/2$).
 
 **Phase 2 Advanced Tasks (In Progress):**
-- **`QR-009`**: Physical Optical Fiber Attenuation & $T_1/T_2$ Decoherence Channel:
-  - Model realistic silica telecom fiber attenuation ($\alpha = 0.2\text{ dB/km}$ at $1550\text{ nm}$) with transmission probability $\eta(L) = 10^{-\alpha L / 10}$.
-  - Map fiber distance $L$ (km) directly to link Werner parameter $w(L)$ and dark count noise.
-  - Implement Amplitude Damping (photon loss, $T_1$) and Phase Damping (dephasing, $T_2$) channels in `physics.py`.
-- **`QR-010`**: BBPSSW Entanglement Purification Protocol:
-  - Implement 1-step bilateral CNOT distillation on two noisy Bell pairs:
+- **`QR-009`** (Completed): Physical Optical Fiber Attenuation & $T_1/T_2$ Decoherence Channel:
+  - Modeled realistic silica telecom fiber attenuation ($\alpha = 0.2\text{ dB/km}$ at $1550\text{ nm}$) with transmission probability $\eta(L) = 10^{-\alpha L / 10}$.
+  - Mapped fiber distance $L$ directly to link Werner parameter $w(L)$ and detector dark counts ($p_{\text{dark}}$).
+  - Implemented Amplitude Damping ($T_1$) and Phase Damping ($T_2$) channels in `physics.py`, with quantum mechanical invariant bound checks ($T_2 \le 2T_1$).
+  - Added 7 unit tests in `tests/test_physics.py`.
+- **`QR-010`** (Completed): BBPSSW Entanglement Purification Protocol:
+  - Implemented 1-step and multi-round bilateral CNOT distillation on two noisy Bell pairs:
     $$F' = \frac{F^2 + \frac{1}{9}(1-F)^2}{F^2 + \frac{2}{3}F(1-F) + \frac{5}{9}(1-F)^2}$$
-  - Simulate purification success probability and fidelity gain in `purification.py`.
+  - Simulated 4-qubit bilateral CNOT circuit with $Z$-basis parity projection and partial trace in `purification.py`.
+  - Verified exact match between circuit simulation and analytical theory ($\Delta \le 10^{-6}$).
+  - Added 9 unit tests in `tests/test_purification.py`.
 
 ---
 
@@ -46,15 +49,17 @@ Deliver a scientifically defensible, reproducible, and competitive Qiskit simula
 **Phase 1 Tasks (Completed):**
 - **`QR-003`**: Network graph representation and Werner-state algebra ($F_e = (1+3w)/4, w_{\text{path}} = \prod w_e$).
 - **`QR-004`**: Shortest-Hop (BFS) vs. Quality-Aware (Dijkstra using $c_e = -\ln(w_e)$) routing algorithms.
+- **`QR-005`**: Circuit-level multi-hop entanglement swapping simulation (co-developed with Yuvaraj & Veeresh).
 
 **Phase 2 Advanced Tasks (In Progress):**
-- **`QR-011`**: Arbitrary $N$-Hop Quantum Circuit Swapping Engine:
-  - Eliminate the analytical shortcut for $N \ge 4$ hops in `swapping.py`.
-  - Implement a dynamic quantum circuit compiler that creates an exact $2N$-qubit register for any $N$-hop path, performs sequential intermediate Bell measurements and coherent corrections, and traces out repeaters.
-- **`QR-012`**: Real-World Telecom Topologies & Multi-Metric Routing:
-  - Add realistic Karnataka Quantum Network preset (Belagavi, Hubballi, Davanagere, Shivamogga, Tumakuru, Bengaluru) with authentic geographic fiber distances.
-  - Add parametric topology generators (Ring, Star, Grid).
-  - Implement dual-metric routing comparing Quantum Fidelity vs. Classical Propagation Delay ($5\,\mu\text{s/km}$).
+- **`QR-011`** (Completed): Arbitrary $N$-Hop Quantum Circuit Swapping Engine:
+  - Eliminated the analytical shortcut for $N \ge 4$ hops in `swapping.py`.
+  - Implemented dynamic quantum circuit compiler `build_n_hop_swapping_circuit()` creating exact $2N$-qubit circuits, performing intermediate Bell measurements and coherent corrections, and extracting terminal density matrix via partial trace. Verified across 4-hop and 5-hop chains.
+- **`QR-012`** (Completed): Real-World Telecom Topologies & Multi-Metric Routing:
+  - Added authentic Karnataka Quantum Network preset (`create_karnataka_topology()`) connecting Belagavi, Hubballi, Davanagere, Shivamogga, Tumakuru, and Bengaluru with real fiber route distances.
+  - Added parametric topology generators: Ring (`create_ring_topology`), Star (`create_star_topology`), and Grid (`create_grid_topology`).
+  - Implemented dual-metric Pareto routing (`find_multi_metric_route`) balancing Quantum Fidelity vs. Classical Propagation Delay ($5\,\mu\text{s/km}$) across $\alpha \in [0, 1]$.
+  - Added 8 dedicated unit and integration tests in `tests/test_topologies.py`.
 
 ---
 
@@ -68,15 +73,15 @@ Deliver a scientifically defensible, reproducible, and competitive Qiskit simula
 - **`QR-007`**: Baseline Streamlit interactive dashboard MVP.
 
 **Phase 2 Advanced Tasks (In Progress):**
-- **`QR-013`**: Quantum State Tomography & Finite-Shot Measurement Engine:
-  - Implement Pauli basis tomography ($X, Y, Z$ observable measurements over 1024 / 4096 shots) using Qiskit Aer with finite-shot variance.
-  - Reconstruct Bob's density matrix via linear inversion:
-    $$\rho_{\text{reconstructed}} = \frac{1}{2}\left(I + \langle X \rangle \sigma_x + \langle Y \rangle \sigma_y + \langle Z \rangle \sigma_z\right)$$
-  - Compare Tomographic Experimental Fidelity vs. Exact Numerical Simulation under shot noise.
-- **`QR-014`**: Dashboard 2.0 (3D Bloch Sphere, OpenQASM 3.0 Exporter & Dynamic Topology UI):
-  - Integrate interactive 3D Bloch sphere visualization showing input pure state decaying into mixed state under noise.
-  - Provide a one-click OpenQASM 3.0 / Qiskit circuit export button for execution on IBM Quantum physical backends.
-  - Expose physical fiber distance sliders and live purification toggles.
+- **`QR-013`** (Completed): Quantum State Tomography & Finite-Shot Measurement Engine:
+  - Implemented Pauli basis tomography ($X, Y, Z$ observable measurements) using Qiskit Aer with finite-shot variance.
+  - Reconstructed density matrix via Stokes linear inversion with physical projection onto the Bloch sphere.
+  - Verified $O(1/\sqrt{\text{shots}})$ statistical convergence and physical state invariants in `tests/test_tomography.py` (8 passed).
+- **`QR-014`** (Completed): Dashboard 2.0 (3D Bloch Sphere, OpenQASM 3.0 Exporter & Dynamic Topology UI):
+  - Integrated interactive 3D Bloch sphere showing pure state vectors contracting into the interior under noise.
+  - Added topology switcher with Karnataka Quantum Backbone, Ring, Star, and Grid network options.
+  - Added multi-metric Pareto routing balancing quantum quality against classical fiber delay.
+  - Added live OpenQASM 3.0 and standalone Qiskit Python hardware exporter with download buttons.
 
 ---
 
@@ -103,10 +108,10 @@ flowchart TD
     end
 
     subgraph Phase 2: Qualifier-Winning Upgrades
-        QR002 --> QR009["QR-009: Fiber Physics & T1/T2 (Yuvaraj)"]
+        QR002 --> QR009["QR-009: Fiber Physics & T1/T2 (DONE)"]
         QR005 --> QR010["QR-010: BBPSSW Purification (Yuvaraj)"]
-        QR005 --> QR011["QR-011: Arbitrary N-Hop Engine (Srijan)"]
-        QR004 --> QR012["QR-012: Real Telecom Topologies (Srijan)"]
+        QR005 --> QR011["QR-011: Arbitrary N-Hop Engine (DONE)"]
+        QR004 --> QR012["QR-012: Real Telecom Topologies (DONE)"]
         QR001 --> QR013["QR-013: Quantum State Tomography (Veeresh)"]
         QR007 --> QR014["QR-014: Dashboard 2.0 & QASM Exporter (Veeresh)"]
         QR009 --> QR014

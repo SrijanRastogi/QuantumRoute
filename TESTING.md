@@ -50,9 +50,11 @@ Every module and test suite in QuantumRoute must verify and preserve these funda
 tests/
 ├── test_teleport.py       # Unit tests for input states, Bell preparation, ideal teleportation
 ├── test_noise.py          # Validation of depolarizing noise model against theory
+├── test_physics.py        # Optical fiber attenuation, dark count SNR, and T1/T2 memory decoherence
 ├── test_network.py        # Graph construction, Werner mechanics, edge validation
 ├── test_routing.py        # Dijkstra quality-aware vs. BFS shortest-hop verification
-├── test_swapping.py       # Circuit-level multi-hop entanglement swapping simulation
+├── test_swapping.py       # Circuit-level multi-hop entanglement swapping simulation (1 to 5 hops)
+├── test_topologies.py     # Real Karnataka telecom network, parametric generators & multi-metric routing
 └── test_validation.py     # End-to-end predicted vs. simulated validation harness
 ```
 
@@ -93,21 +95,36 @@ tests/
 
 ## 3. Reproducibility & Verified Test Status
 
-### 3.1 Verified Execution Summary (Milestones 0, 1, 2, 3A & 4)
+### 3.1 Verified Execution Summary (Phase 1 Baseline & Phase 2 Upgrades)
 
-Tests executed in clean local environment (`.venv` Python 3.12.14, Qiskit 1.4.6, Qiskit Aer 0.18.0, NumPy 2.5.4, pytest 9.1.1, NetworkX 3.7):
+Tests executed in clean local environment (`.venv` Python 3.14.4 / 3.12, Qiskit 1.4.6, Qiskit Aer 0.18.0, NumPy 2.5.4, pytest 9.1.1, NetworkX 3.7):
 
 ```bash
 # Full test suite execution command:
-.\.venv\Scripts\python.exe -m pytest -v --durations=10
+python3 -m pytest -v --durations=10
 ```
 
 #### Execution Results:
-- **Total Tests Collected:** 38
-- **Passed:** 38 (100% pass rate)
+- **Total Tests Collected:** 91
+- **Passed:** 91 (100% pass rate)
 - **Failed:** 0
-- **Warnings:** 0 (cleanly filtered)
-- **Execution Time:** ~2.66 seconds
+- **Warnings:** 0
+- **Execution Time:** ~5.0 seconds
+
+#### Verified Test Breakdown by Suite:
+| Test Suite | Tests | Target Metric / Invariant | Result |
+|---|---|---|---|
+| `test_environment.py` | 2 | Dependency pinning, Qiskit Aer smoke execution | `PASSED` (2/2) |
+| `test_teleport.py` | 8 | Normalization, state fidelity, ideal teleportation, Bob subsystem extraction | `PASSED` (8/8) |
+| `test_noise.py` | 8 | Depolarizing channel, analytical curve $F=1-p/2$, isotropic invariance | `PASSED` (8/8) |
+| `test_network.py` | 10 | Werner product $w_{\text{path}} = \prod w_e$, forbidden direct $F$ multiplication, 7-node topology | `PASSED` (10/10) |
+| `test_routing.py` | 10 | Dijkstra $-\ln(w)$ vs BFS hop-count, exhaustive 21-pair search, divergence cases | `PASSED` (10/10) |
+| `test_swapping.py` | 9 | Multi-hop swapping circuits (1 to 5 hops), dynamic $2N$-qubit compilation, partial trace | `PASSED` (9/9) |
+| `test_validation.py` | 12 | Analytical vs simulated harness ($\Delta \le 10^{-4}$), noisy teleportation verification | `PASSED` (12/12) |
+| `test_topologies.py` | 8 | Karnataka Quantum Backbone (6 cities, fiber delay), Ring/Star/Grid generators, multi-metric $\alpha$-sweep | `PASSED` (8/8) |
+| `test_physics.py` | 7 | Fiber attenuation ($1550\,\text{nm}, 0.2\,\text{dB/km}$), dark count SNR, Amplitude/Phase Damping ($T_2 \le 2T_1$) | `PASSED` (7/7) |
+| `test_purification.py` | 9 | BBPSSW bilateral CNOT circuit, parity post-selection, fixed points, and multi-round distillation | `PASSED` (9/9) |
+| `test_tomography.py` | 8 | Pauli tomography ($X, Y, Z$), Stokes inversion, $O(1/\sqrt{\text{shots}})$ convergence, Bloch shrinkage | `PASSED` (8/8) |
 
 #### Verified Test Breakdown:
 | Test File | Test Case | Target Metric / Invariant | Result |

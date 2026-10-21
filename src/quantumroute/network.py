@@ -39,11 +39,15 @@ class PathMetrics:
         bell_fidelity: End-to-end Bell-state fidelity F_e,path = (1 + 3*w_path) / 4 in [0.25, 1.0].
         average_teleportation_fidelity: Average single-qubit teleportation fidelity F_tel,avg in [0.5, 1.0].
         num_hops: Number of edge hops along the path.
+        total_distance_km: Cumulative physical optical fiber distance along the path in km.
+        total_delay_ms: Cumulative classical propagation latency along the path in milliseconds.
     """
     werner_parameter: float
     bell_fidelity: float
     average_teleportation_fidelity: float
     num_hops: int
+    total_distance_km: float = 0.0
+    total_delay_ms: float = 0.0
 
 
 def validate_werner_parameter(w: float) -> float:
@@ -243,6 +247,8 @@ def calculate_path_metrics(graph: nx.Graph, path: Sequence[Hashable]) -> PathMet
         )
 
     link_params: list[float] = []
+    total_dist = 0.0
+    total_delay = 0.0
     for i in range(len(path) - 1):
         u, v = path[i], path[i + 1]
         if u not in graph:
@@ -258,8 +264,19 @@ def calculate_path_metrics(graph: nx.Graph, path: Sequence[Hashable]) -> PathMet
                 f"Edge ({u}, {v}) is missing required Werner parameter attribute 'w'."
             )
         link_params.append(edge_data["w"])
+        d = float(edge_data.get("distance_km", 0.0))
+        total_dist += d
+        total_delay += float(edge_data.get("delay_ms", d * 0.005))
 
-    return path_metrics(link_params)
+    base_metrics = path_metrics(link_params)
+    return PathMetrics(
+        werner_parameter=base_metrics.werner_parameter,
+        bell_fidelity=base_metrics.bell_fidelity,
+        average_teleportation_fidelity=base_metrics.average_teleportation_fidelity,
+        num_hops=base_metrics.num_hops,
+        total_distance_km=total_dist,
+        total_delay_ms=total_delay,
+    )
 
 
 def create_topology() -> nx.Graph:
@@ -318,5 +335,236 @@ def create_topology() -> nx.Graph:
             weight=weight,
             bell_fidelity=fe,
         )
+
+    return g
+
+
+def create_karnataka_topology() -> nx.Graph:
+    """Construct the authentic Karnataka Regional Quantum Backbone Network (QR-012).
+
+    Connects major institutional VTU academic and research centers across Karnataka
+    with authentic geographic optical fiber route distances:
+        - Belagavi (VTU Headquarters)
+        - Hubballi (North Karnataka Tech Hub)
+        - Davanagere (Central Textile & Educational Hub)
+        - Shivamogga (Malnad Gateway)
+        - Tumakuru (Industrial & Academic corridor)
+        - Bengaluru (Capital & Quantum Computing Hub)
+
+    Fiber propagation latency is modeled at the standard silica telecom delay of 5.0 μs/km.
+
+    Returns:
+        nx.Graph: NetworkX graph populated with geographic node coordinates, fiber distances (km),
+                  propagation delays (ms), Werner link qualities, and logarithmic routing costs.
+    """
+    g = nx.Graph(name="karnataka_quantum_backbone")
+
+    # Node positions based on normalized Karnataka geographic coordinates
+    nodes = {
+        "Belagavi": {"pos": (15.8497, 74.4977), "region": "North"},
+        "Hubballi": {"pos": (15.3647, 75.1240), "region": "North-Central"},
+        "Davanagere": {"pos": (14.4644, 75.9218), "region": "Central"},
+        "Shivamogga": {"pos": (13.9299, 75.5681), "region": "Malnad"},
+        "Tumakuru": {"pos": (13.3379, 77.1173), "region": "South-Central"},
+        "Bengaluru": {"pos": (12.9716, 77.5946), "region": "South"},
+    }
+
+    for name, attrs in nodes.items():
+        g.add_node(name, **attrs)
+
+    # Undirected links: (Source, Target, Distance in km, Werner quality parameter w)
+    edges = [
+        # Primary NH48 Highway Trunk Line
+        ("Belagavi", "Hubballi", 95.0, 0.96),
+        ("Hubballi", "Davanagere", 145.0, 0.92),
+        ("Davanagere", "Tumakuru", 195.0, 0.88),
+        ("Tumakuru", "Bengaluru", 70.0, 0.98),
+        # Western / Malnad Alternate Routes
+        ("Hubballi", "Shivamogga", 190.0, 0.86),
+        ("Davanagere", "Shivamogga", 85.0, 0.94),
+        ("Shivamogga", "Tumakuru", 170.0, 0.89),
+        # Express Long-Haul Bypass (higher loss, but fewer intermediate hops)
+        ("Davanagere", "Bengaluru", 260.0, 0.78),
+    ]
+
+    for u, v, dist_km, w in edges:
+        w_val = validate_werner_parameter(w)
+        weight = -math.log(w_val) if w_val > 0.0 else float("inf")
+        fe = bell_state_fidelity(w_val)
+        delay_ms = dist_km * 0.005  # 5 microseconds per km = 0.005 ms/km
+
+        g.add_edge(
+            u,
+            v,
+            w=w_val,
+            werner_parameter=w_val,
+            distance_km=float(dist_km),
+            delay_ms=float(delay_ms),
+            weight=weight,
+            bell_fidelity=fe,
+        )
+
+    return g
+
+
+def create_ring_topology(
+    num_nodes: int = 6,
+    default_w: float = 0.90,
+    default_distance_km: float = 50.0,
+) -> nx.Graph:
+    """Construct a parametric Ring quantum network topology.
+
+    Args:
+        num_nodes: Total number of repeater nodes on the ring (minimum 3).
+        default_w: Default Werner parameter for each link in (0, 1].
+        default_distance_km: Distance in km between adjacent ring nodes.
+
+    Returns:
+        nx.Graph: Connected ring topology.
+
+    Raises:
+        ValueError: If num_nodes < 3 or default_w outside (0, 1].
+    """
+    if num_nodes < 3:
+        raise ValueError(f"Ring topology requires at least 3 nodes, got {num_nodes}.")
+    w_val = validate_werner_parameter(default_w)
+
+    g = nx.Graph(name=f"quantum_ring_{num_nodes}")
+    node_names = [f"R{i}" for i in range(num_nodes)]
+    g.add_nodes_from(node_names)
+
+    delay_ms = default_distance_km * 0.005
+    weight = -math.log(w_val) if w_val > 0.0 else float("inf")
+    fe = bell_state_fidelity(w_val)
+
+    for i in range(num_nodes):
+        u = node_names[i]
+        v = node_names[(i + 1) % num_nodes]
+        g.add_edge(
+            u,
+            v,
+            w=w_val,
+            werner_parameter=w_val,
+            distance_km=float(default_distance_km),
+            delay_ms=float(delay_ms),
+            weight=weight,
+            bell_fidelity=fe,
+        )
+
+    return g
+
+
+def create_star_topology(
+    num_spokes: int = 5,
+    hub_name: str = "Hub",
+    default_w: float = 0.92,
+    default_distance_km: float = 25.0,
+) -> nx.Graph:
+    """Construct a parametric Star quantum network topology centered around a quantum router hub.
+
+    Args:
+        num_spokes: Number of spoke client nodes connected to the central hub (minimum 1).
+        hub_name: Identifier for the central quantum switch/router node.
+        default_w: Werner parameter for spoke links.
+        default_distance_km: Radial distance in km from hub to each client.
+
+    Returns:
+        nx.Graph: Star topology with central hub.
+
+    Raises:
+        ValueError: If num_spokes < 1 or default_w outside (0, 1].
+    """
+    if num_spokes < 1:
+        raise ValueError(f"Star topology requires at least 1 spoke, got {num_spokes}.")
+    w_val = validate_werner_parameter(default_w)
+
+    g = nx.Graph(name=f"quantum_star_{num_spokes}")
+    g.add_node(hub_name, is_hub=True)
+
+    delay_ms = default_distance_km * 0.005
+    weight = -math.log(w_val) if w_val > 0.0 else float("inf")
+    fe = bell_state_fidelity(w_val)
+
+    for i in range(num_spokes):
+        client = f"Client_{i + 1}"
+        g.add_node(client, is_hub=False)
+        g.add_edge(
+            hub_name,
+            client,
+            w=w_val,
+            werner_parameter=w_val,
+            distance_km=float(default_distance_km),
+            delay_ms=float(delay_ms),
+            weight=weight,
+            bell_fidelity=fe,
+        )
+
+    return g
+
+
+def create_grid_topology(
+    rows: int = 3,
+    cols: int = 3,
+    default_w: float = 0.90,
+    default_distance_km: float = 30.0,
+) -> nx.Graph:
+    """Construct a 2D Mesh/Grid quantum repeater network topology.
+
+    Args:
+        rows: Number of grid rows (minimum 2).
+        cols: Number of grid columns (minimum 2).
+        default_w: Werner parameter for grid edges.
+        default_distance_km: Distance in km between adjacent grid vertices.
+
+    Returns:
+        nx.Graph: 2D lattice quantum network.
+
+    Raises:
+        ValueError: If rows < 2, cols < 2, or default_w outside (0, 1].
+    """
+    if rows < 2 or cols < 2:
+        raise ValueError(f"Grid topology requires at least 2x2 nodes, got {rows}x{cols}.")
+    w_val = validate_werner_parameter(default_w)
+
+    g = nx.Graph(name=f"quantum_grid_{rows}x{cols}")
+    delay_ms = default_distance_km * 0.005
+    weight = -math.log(w_val) if w_val > 0.0 else float("inf")
+    fe = bell_state_fidelity(w_val)
+
+    for r in range(rows):
+        for c in range(cols):
+            node_id = f"N_{r}_{c}"
+            g.add_node(node_id, row=r, col=c)
+
+    # Horizontal and vertical links
+    for r in range(rows):
+        for c in range(cols):
+            curr = f"N_{r}_{c}"
+            # Connect right
+            if c + 1 < cols:
+                right = f"N_{r}_{c + 1}"
+                g.add_edge(
+                    curr,
+                    right,
+                    w=w_val,
+                    werner_parameter=w_val,
+                    distance_km=float(default_distance_km),
+                    delay_ms=float(delay_ms),
+                    weight=weight,
+                    bell_fidelity=fe,
+                )
+            # Connect down
+            if r + 1 < rows:
+                down = f"N_{r + 1}_{c}"
+                g.add_edge(
+                    curr,
+                    down,
+                    w=w_val,
+                    werner_parameter=w_val,
+                    distance_km=float(default_distance_km),
+                    delay_ms=float(delay_ms),
+                    weight=weight,
+                    bell_fidelity=fe,
+                )
 
     return g
