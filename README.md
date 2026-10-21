@@ -35,7 +35,6 @@ VTU-Qiskit Fall Fest 2026 Hackathon · VTU Belagavi
 
 ## 👥 Team Members (GitHub IDs)
 
-Team members must accept their GitHub repository invitations before contributing.
 
 | # | Name | GitHub Username | Role |
 |---|---|---|---|
