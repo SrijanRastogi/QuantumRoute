@@ -40,6 +40,12 @@ from quantumroute.routing import (
     compare_routes,
     exhaustive_quality_route,
 )
+from quantumroute.validate import (
+    ValidationResult,
+    compare_model_and_simulation,
+    compare_predicted_vs_simulated,
+    validate_noise_model,
+)
 
 __version__ = "0.1.0"
 
@@ -76,4 +82,9 @@ __all__ = [
     "quality_aware_path",
     "compare_routes",
     "exhaustive_quality_route",
+    # Validation harness
+    "ValidationResult",
+    "compare_model_and_simulation",
+    "compare_predicted_vs_simulated",
+    "validate_noise_model",
 ]
