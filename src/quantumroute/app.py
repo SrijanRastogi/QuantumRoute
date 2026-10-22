@@ -139,7 +139,7 @@ def render_network_graph(
 
     # Base edges
     base_x, base_y = [], []
-    edge_text_x, edge_text_y, edge_text = [], []
+    edge_text_x, edge_text_y, edge_text = [], [], []
 
     for u, v, d in graph.edges(data=True):
         x0, y0 = pos[u]
