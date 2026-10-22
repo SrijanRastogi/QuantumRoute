@@ -1,0 +1,193 @@
+/* QuantumRoute V2 — Deep Plum & Violet Theme */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Theme Palette: Deep Plum & Obsidian */
+  --bg-deep: #090514;
+  --bg-canvas: #0c081b;
+  --bg-card: rgba(20, 13, 40, 0.75);
+  --bg-card-hover: rgba(28, 18, 54, 0.9);
+  --bg-card-alt: rgba(14, 9, 28, 0.85);
+
+  --border-subtle: rgba(147, 51, 234, 0.18);
+  --border-light: rgba(168, 85, 247, 0.35);
+  --border-active: #c026d3;
+
+  /* Glows & Gradients */
+  --accent-purple: #9333ea;
+  --accent-magenta: #c026d3;
+  --accent-fuchsia: #d946ef;
+  --accent-violet: #8b5cf6;
+  --gradient-primary: linear-gradient(135deg, #7e22ce 0%, #c026d3 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(147, 51, 234, 0.4) 0%, rgba(192, 38, 211, 0.4) 100%);
+  --gradient-card: linear-gradient(180deg, rgba(26, 17, 51, 0.7) 0%, rgba(15, 10, 31, 0.8) 100%);
+
+  /* Node & Route Highlights */
+  --color-alice: #38bdf8;
+  --color-bob: #f59e0b;
+  --color-repeater: #a855f7;
+  --color-active-route: #f0abfc;
+  --color-active-glow: rgba(217, 70, 239, 0.6);
+  --color-inactive-link: rgba(147, 51, 234, 0.25);
+
+  /* Status & Algorithm Colors */
+  --color-bfs-red: #f43f5e;
+  --color-dijkstra-blue: #38bdf8;
+  --color-multi-purple: #c084fc;
+  --color-success: #10b981;
+
+  /* Typography */
+  --text-white: #ffffff;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #8b819f;
+  --text-dim: #5c5372;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(147, 51, 234, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(192, 38, 211, 0.10) 0%, transparent 45%),
+    radial-gradient(circle at 50% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(147, 51, 234, 0.35);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.6);
+}
+
+/* Glassmorphism Panel */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  transition: all 0.2s ease-in-out;
+}
+
+.glass-panel:hover {
+  border-color: var(--border-light);
+}
+
+/* Glow Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--gradient-primary);
+  color: var(--text-white);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 9px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(192, 38, 211, 0.35);
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 25px rgba(217, 70, 239, 0.55);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.0rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-sans);
+}
+
+.btn-secondary:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: var(--border-light);
+  color: var(--text-white);
+}
+
+/* Custom form selects and radios */
+select, input {
+  font-family: var(--font-sans);
+}
+
+.custom-select {
+  width: 100%;
+  background: rgba(11, 7, 24, 0.9);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-white);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+  cursor: pointer;
+}
+
+.custom-select:focus {
+  border-color: var(--accent-fuchsia);
+  box-shadow: 0 0 10px rgba(217, 70, 239, 0.25);
+}
+
+/* Pulse animation for Alice and Bob */
+@keyframes ring-pulse-blue {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.35); opacity: 0.15; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+@keyframes ring-pulse-amber {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.35); opacity: 0.15; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.pulse-blue {
+  animation: ring-pulse-blue 2.4s infinite ease-in-out;
+}
+
+.pulse-amber {
+  animation: ring-pulse-amber 2.4s infinite ease-in-out;
+}

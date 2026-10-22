@@ -181,3 +181,14 @@ def test_invalid_circuit_and_state_handling():
     with pytest.raises(TypeError, match="cannot be a boolean"):
         build_teleportation_circuit((0.0, 0.0), link_error=True)
 
+
+def test_prepare_input_state_density_matrix_conversion():
+    """Verify that prepare_input_state output can be converted to DensityMatrix without QiskitError (regression test)."""
+    sv = prepare_input_state(np.pi / 3.0, np.pi / 4.0)
+    assert isinstance(sv, Statevector)
+    dm = DensityMatrix(sv)
+    assert dm.is_valid()
+    assert abs(dm.trace() - 1.0) < 1e-7
+    assert dm.purity() > 0.999999
+
+
