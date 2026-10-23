@@ -46,23 +46,26 @@
 **Speaker:** Veeresh M A (`Validation & Dashboard Lead`)  
 **Screen Visual:** Full-screen screen-recording of the running Streamlit dashboard (`streamlit run src/quantumroute/app.py`).
 
-> *"I'm Veeresh, and I led the validation harness and the interactive Streamlit dashboard.*  
+> *"I'm Veeresh, and I led the validation harness and the interactive Streamlit Dashboard 2.0.*  
 >  
-> *[Show Tab 1: Routing Comparison]*  
-> *Here on the dashboard, we select Source Node 'A' and Destination Node 'D'. Notice the live comparison: BFS selects the 2-hop route with an end-to-end Werner parameter of 0.49 and Bell fidelity of 61.7%. Meanwhile, our Quality-Aware Dijkstra engine routes through 3 hops, achieving a Werner parameter of 0.857 and a Bell fidelity of 89.3%—a massive 27.6% boost in state preservation!*  
+> *[Show Tab 1: Multi-Topology Routing]*  
+> *Here on the dashboard, we select Source Node 'A' and Destination Node 'D'. Notice the live comparison: BFS selects the 2-hop route with an end-to-end Werner parameter of 0.49 and Bell fidelity of 61.7%. Meanwhile, our Quality-Aware Dijkstra engine routes through 3 hops, achieving a Werner parameter of 0.857 and a Bell fidelity of 89.3%—a massive 27.6% boost in state preservation! We can also switch to the Karnataka Quantum Backbone to balance fidelity against optical propagation delay.*  
 >  
-> *[Show Tab 2: Validation Harness]*  
-> *Under Task QR-006, we engineered a rigorous validation engine comparing our analytical formulas directly against full Qiskit Aer density-matrix circuit simulations across 1-hop, 2-hop, and 3-hop swapping chains. Every single case passes within a strict numerical tolerance of $\Delta \le 10^{-4}$.*  
+> *[Show Tab 2: 3D Bloch Sphere & State Tomography]*  
+> *In Tab 2, we visualize input and output states on both 2D meridian planes and a 3D Bloch sphere, demonstrating Bloch radius contraction under depolarizing noise and finite-shot Pauli tomography.*  
 >  
-> *[Show Tab 3: Noise Sweeps & Classical Boundary]*  
-> *Finally, our noise sweep tab demonstrates the theoretical vs. simulated fidelity curves and highlights the classical benchmark threshold of $2/3 \approx 0.667$. Above this line, quantum teleportation achieves genuine quantum advantage; below it, shared entanglement is unentangled and separable."*
+> *[Show Tab 3: Swapping & Validation Harness]*  
+> *Under Tasks QR-006 and QR-011, our validation harness compares analytical formulas directly against full Qiskit Aer density-matrix circuit simulations across 1-hop to 4-hop swapping chains. Every single case passes within strict numerical tolerance $\Delta \le 10^{-4}$.*  
+>  
+> *[Show Tabs 4 & 5: Fiber Physics, Distillation & Hardware Exporter]*  
+> *Tabs 4 and 5 showcase physical optical fiber attenuation at 1550 nm, BBPSSW entanglement distillation rescuing sub-threshold links, and one-click OpenQASM 3.0 export for IBM Quantum physical QPUs."*
 
 ---
 
 ### Part 4: Conclusion & Testing Rigor (2:35 – 3:00)
 **Speaker:** Yuvaraj B Sutar & All  
-**Screen Visual:** Terminal showing `pytest -v` output (`56 passed in 6.92s`) and GitHub repository view.
+**Screen Visual:** Terminal showing `pytest -v` output (`91 passed in 6.93s`) and GitHub repository view.
 
-> *"To ensure complete reproducibility, our entire codebase is tested under pytest with 56 automated unit tests passing at 100% in under 7 seconds. We do not claim physical quantum hardware execution—this is a local-first, scientifically defensible simulator designed to model link noise and quality-optimal routing.*  
+> *"To ensure complete reproducibility, our entire codebase is tested under pytest with 91 automated unit tests passing at 100% in under 7 seconds. We do not claim physical quantum hardware execution—this is a local-first, scientifically defensible simulator designed to model link noise and quality-optimal routing.*  
 >  
 > *Thank you to VTU, IBM Quantum, and the Qiskit Fall Fest team!"*

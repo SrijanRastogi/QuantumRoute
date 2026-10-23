@@ -177,3 +177,122 @@ def test_sweep_helper_and_experiments_interoperability():
     exp_res = exp_sweep(seed=42)
     assert exp_res["passed"] is True
     assert exp_get_analytical(0.4) == get_analytical_depolarizing_fidelity(0.4)
+
+
+def test_analytical_density_matrix_evolution_multistate_multinoise():
+    """Verify that Bob's density matrix matches (1 - p) * |psi><psi| + p * (I/2) exactly.
+    
+    Tests across multiple noise values p in [0.0, 0.1, 0.25, 0.5, 0.75, 1.0] and multiple
+    input states across the Bloch sphere.
+    """
+    p_values = [0.0, 0.1, 0.25, 0.5, 0.75, 1.0]
+    test_angles = [
+        (0.0, 0.0),                  # |0>
+        (np.pi, 0.0),                # |1>
+        (np.pi / 2, 0.0),            # |+>
+        (np.pi / 2, np.pi),          # |->
+        (np.pi / 2, np.pi / 2),      # |+i>
+        (np.pi / 2, 3 * np.pi / 2),  # |-i>
+        (np.pi / 3, np.pi / 4),      # General pure state
+        (2.35, 1.15),                # Arbitrary Bloch point
+    ]
+
+    for p in p_values:
+        for theta, phi in test_angles:
+            psi = prepare_input_state(theta, phi)
+            rho_target_ideal = np.outer(psi.data, psi.data.conj())
+            expected_rho = (1.0 - p) * rho_target_ideal + p * 0.5 * np.eye(2, dtype=complex)
+
+            rho_bob = teleport_rho(theta, phi, link_error=p)
+
+            # Check all density matrix components match theoretical evolution within 1e-6
+            np.testing.assert_allclose(
+                rho_bob.data,
+                expected_rho,
+                atol=1e-6,
+                err_msg=f"Density matrix evolution failed for p={p}, theta={theta}, phi={phi}",
+            )
+
+
+def test_bloch_vector_isotropic_contraction_multinoise():
+    """Verify that the output Bloch vector contracts strictly isotropically: r_out = (1 - p) * r_in."""
+    from quantumroute.tomography import exact_bloch_vector
+    from qiskit.quantum_info import DensityMatrix
+
+    p_values = [0.0, 0.15, 0.35, 0.5, 0.6667, 0.85, 1.0]
+    test_angles = [
+        (0.0, 0.0),                  # r_in = (0, 0, 1)
+        (np.pi, 0.0),                # r_in = (0, 0, -1)
+        (np.pi / 2, 0.0),            # r_in = (1, 0, 0)
+        (np.pi / 2, np.pi / 2),      # r_in = (0, 1, 0)
+        (np.pi / 4, np.pi / 3),      # arbitrary
+    ]
+
+    for p in p_values:
+        expected_scale = 1.0 - p
+        for theta, phi in test_angles:
+            psi = prepare_input_state(theta, phi)
+            rx_in, ry_in, rz_in = exact_bloch_vector(DensityMatrix(psi))
+
+            rho_bob = teleport_rho(theta, phi, link_error=p)
+            rx_out, ry_out, rz_out = exact_bloch_vector(rho_bob)
+
+            assert abs(rx_out - expected_scale * rx_in) < 1e-6
+            assert abs(ry_out - expected_scale * ry_in) < 1e-6
+            assert abs(rz_out - expected_scale * rz_in) < 1e-6
+
+            # Radius must contract identically
+            r_out_norm = np.sqrt(rx_out ** 2 + ry_out ** 2 + rz_out ** 2)
+            assert abs(r_out_norm - expected_scale * 1.0) < 1e-6
+
+
+def test_state_purity_evolution_analytical():
+    """Verify analytical purity formula: gamma(p) = Tr(rho^2) = 1 - p + p^2 / 2 for pure input states."""
+    p_values = np.linspace(0.0, 1.0, 11).tolist()
+    states = [
+        (0.0, 0.0),
+        (np.pi / 2, 0.0),
+        (np.pi / 3, np.pi / 5),
+    ]
+
+    for p in p_values:
+        expected_purity = 1.0 - p + (p ** 2) / 2.0
+        for theta, phi in states:
+            rho_bob = teleport_rho(theta, phi, link_error=p)
+            actual_purity = float(np.real(np.trace(rho_bob.data @ rho_bob.data)))
+            assert abs(actual_purity - expected_purity) < 1e-6, (
+                f"Purity mismatch at p={p}: actual={actual_purity}, expected={expected_purity}"
+            )
+
+
+def test_fidelity_distinctions_resource_vs_state_vs_average():
+    """Verify scientific distinction between Bell resource fidelity, state fidelity, and average teleportation fidelity.
+
+    Formulas under depolarizing link noise (Werner parameter w = 1 - p):
+    - Werner parameter: w = 1 - p
+    - Bell state fidelity: F_e = <Phi+|rho_W|Phi+> = (1 + 3w)/4 = 1 - 3p/4
+    - State-specific teleportation fidelity: F(|psi>, rho_Bob) = (1 + w)/2 = 1 - p/2
+    - Average teleportation fidelity: F_tel,avg = (2*F_e + 1)/3 = 1 - p/2
+    """
+    for p in [0.0, 0.1, 0.33, 0.5, 0.666667, 0.8, 1.0]:
+        w = 1.0 - p
+        bell_fid = (1.0 + 3.0 * w) / 4.0
+        avg_tel_fid = (2.0 * bell_fid + 1.0) / 3.0
+        expected_state_fid = 1.0 - p / 2.0
+
+        # Verify mathematical identity between average teleportation and state fidelity
+        assert abs(avg_tel_fid - expected_state_fid) < 1e-10
+
+        # Verify Bell fidelity strictly differs from teleportation fidelity when p > 0
+        if 0.0 < p < 1.0:
+            assert bell_fid < avg_tel_fid, (
+                f"F_e ({bell_fid}) must be strictly less than F_tel ({avg_tel_fid}) for p={p}"
+            )
+
+        # Verify with simulated quantum teleportation for cardinal and arbitrary states
+        for theta, phi in [(0.0, 0.0), (np.pi / 2, np.pi / 4), (1.8, 4.2)]:
+            psi = prepare_input_state(theta, phi)
+            rho_bob = teleport_rho(theta, phi, link_error=p)
+            sim_fid = calculate_state_fidelity(psi, rho_bob)
+            assert abs(sim_fid - expected_state_fid) < 1e-6
+

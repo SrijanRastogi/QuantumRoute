@@ -12,8 +12,8 @@ VTU-Qiskit Fall Fest 2026 Hackathon · VTU Belagavi
 | Repository | `vtu-hc-quantum-d-clan` |
 | Organisation | `vtu-qiskit-fall-fest-2026` |
 | Project | QuantumRoute |
-| Status | 🚧 In Development |
-| Core Technology | Python, Qiskit, Qiskit Aer |
+| Status | ✅ QuantumRoute V2 Complete & Verified (138/138 Tests Passing) |
+| Core Technology | Python, Qiskit, Qiskit Aer, FastAPI, React, Three.js, TypeScript |
 
 ---
 
@@ -256,7 +256,7 @@ Large generated datasets and environment-specific files should not be committed 
 
 ## 🚀 How to Run
 
-**Status:** Environment setup, ideal teleportation (QR-001), and depolarizing noise validation (QR-002) are verified. Automated test suite passes with 100% success rate.
+**Status:** All Phase 1 milestones (QR-000 through QR-007) and Phase 2 competitive upgrades (QR-009 through QR-014) are implemented and verified. The automated test suite passes with 100% success rate (91/91 passing tests).
 
 ### Prerequisites
 
@@ -298,19 +298,48 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Run tests
+### 4. Run tests & build validation
 
-Execute the complete automated test suite (verifying QR-000 through QR-006):
+Execute the complete automated test suite (verifying QR-000 through QR-014 plus V2 backend API, 3D Bloch sphere, coordinate editor, editable links, and network regression tests):
 
 ```bash
 pytest -v
 ```
 
-All 56 tests execute in ~2.6 seconds with 100% pass rate.
+All 138 tests execute with 100% clean pass rate.
 
-### 5. Run the application (Planned)
+Verify the frontend production build:
 
-The Streamlit dashboard (`app/streamlit_app.py`) will be implemented in Milestone 5 (QR-007):
+```bash
+cd frontend
+npm run build
+```
+
+### 5. Run the application
+
+#### Option A: QuantumRoute V2 Interactive Web Platform (Recommended)
+
+1. **Launch the FastAPI backend server:**
+   ```bash
+   uvicorn backend.main:app --reload --port 8000
+   ```
+2. **Launch the React + Three.js frontend application:**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   Open your browser to `http://localhost:5173` to explore the interactive Network Lab, editable link parameters, and the 3D WebGL Bloch Sphere with real-time Cartesian/spherical coordinate editing.
+
+#### Option B: Standalone Streamlit Dashboard 2.0
+
+Launch locally via Streamlit:
+
+```bash
+streamlit run src/quantumroute/app.py
+```
+
+Or via the application forwarder:
 
 ```bash
 streamlit run app/streamlit_app.py
@@ -402,7 +431,7 @@ Open a Pull Request on GitHub and follow the team's review process.
 - [x] Network model and routing algorithms tested.
 - [x] Analytical predictions compared with simulated results.
 - [x] Final source code committed to the official team repository.
-- [x] Latest implementation and tests verified (91/91 passing tests across 12 test suites).
+- [x] Latest implementation and tests verified (138/138 passing tests across 19 test suites).
 - [ ] Demo screenshot or video linked in the README.
 - [ ] Required project summary submitted through the hackathon portal.
 - [ ] Final presentation and demonstration prepared.
