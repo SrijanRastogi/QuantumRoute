@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: quantumroute
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "./start_server.sh"
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
