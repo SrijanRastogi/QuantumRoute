@@ -438,13 +438,9 @@ Open a Pull Request on GitHub and follow the team's review process.
 
 ### Final submission
 
-- [ ] Working prototype demonstrated.
-- [ ] GitHub repository link included in the presentation.
-- [ ] Quantum algorithm and circuit details explained.
-- [ ] Results and limitations clearly presented.
-- [ ] Team details included.
-- [ ] Required YouTube demo video submitted.
-- [ ] Submission deadlines and portal requirements confirmed.
+Demo video link : https://drive.google.com/file/d/1Ezigu5rwmMLeJBBTu-m_38Dm-12Kz4o6/view?usp=sharing
+PPT link : https://docs.google.com/presentation/d/1yPdhyOasj2ZPjHyhXCLypGn-iwbCFlgo/edit?slide=id.p1#slide=id.p1
+
 
 **Repository visibility:** The organizers' repository is currently the official team repository. Do not make it public or change its access settings unless the organizers explicitly require and authorize that change. Confirm the final visibility requirement before submission.
 
