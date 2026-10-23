@@ -310,7 +310,7 @@ def render_network_graph(
 
     # 1. Base Unselected Links (Thin Slate)
     base_x, base_y = [], []
-    edge_hover_x, edge_hover_y, edge_hover_text = [], [], []
+
 
     for u, v, d in graph.edges(data=True):
         x0, y0 = pos[u]
