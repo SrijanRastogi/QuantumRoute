@@ -432,10 +432,7 @@ Open a Pull Request on GitHub and follow the team's review process.
 - [x] Analytical predictions compared with simulated results.
 - [x] Final source code committed to the official team repository.
 - [x] Latest implementation and tests verified (138/138 passing tests across 19 test suites).
-- [ ] Demo screenshot or video linked in the README.
-- [ ] Required project summary submitted through the hackathon portal.
-- [ ] Final presentation and demonstration prepared.
-
+- [X] Demo screenshot or video linked in the README.
 ### Final submission
 
 Demo video link : https://drive.google.com/file/d/1Ezigu5rwmMLeJBBTu-m_38Dm-12Kz4o6/view?usp=sharing
