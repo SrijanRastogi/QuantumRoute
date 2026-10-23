@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import type { 
-  NetworkGraphData, 
+import type {
+  NetworkGraphData,
   NetworkEdge,
   LinkOverride,
-  RouteResponse, 
-  SimulationResult, 
-  EducationalExplanation 
+  RouteResponse,
+  SimulationResult,
+  EducationalExplanation
 } from './types';
-import { 
-  fetchTopologies, 
-  fetchTopologyGraph, 
-  calculateRoute, 
-  runSimulation, 
-  fetchExplanation 
+import {
+  fetchTopologies,
+  fetchTopologyGraph,
+  calculateRoute,
+  runSimulation,
+  fetchExplanation
 } from './api';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -23,7 +23,7 @@ import { SelectedRoute } from './components/SelectedRoute';
 import { AlgorithmComparison } from './components/AlgorithmComparison';
 import { SimulationModal } from './components/SimulationModal';
 import { LinkEditorModal } from './components/LinkEditorModal';
-import { HeroLanding } from './components/HeroLanding';
+import { LandingPage } from './components/landing/LandingPage';
 import { ExperimentsLab } from './components/ExperimentsLab';
 import { PhysicalChannelsLab } from './components/PhysicalChannelsLab';
 import { PurificationLab } from './components/PurificationLab';
@@ -34,8 +34,56 @@ import { DocumentationLab } from './components/DocumentationLab';
 import { Play, Settings2, Sparkles, X, RotateCcw, AlertCircle, Sliders } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<'home' | 'lab'>('lab');
-  const [activeTab, setActiveTab] = useState<string>('network');
+  // Routing State: '/' for Landing Page, '/simulator' for Live Quantum Simulator
+  const [currentRoute, setCurrentRoute] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      if (path === '/simulator') return '/simulator';
+    }
+    return '/';
+  });
+
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      if (tab) return tab;
+    }
+    return 'network';
+  });
+
+  // Client-side Router Helper
+  const navigateTo = useCallback((path: string, tab?: string) => {
+    let url = path;
+    const targetTab = tab || activeTab;
+    if (path === '/simulator') {
+      url += `?tab=${targetTab}`;
+      setActiveTab(targetTab);
+    }
+    window.history.pushState({}, '', url);
+    setCurrentRoute(path);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeTab]);
+
+  // Synchronize Browser Back / Forward actions
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const path = window.location.pathname;
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      if (tab) {
+        setActiveTab(tab);
+      }
+      if (path === '/simulator') {
+        setCurrentRoute('/simulator');
+      } else {
+        setCurrentRoute('/');
+      }
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
 
   // Topology & Graph
   const [presets, setPresets] = useState<string[]>([]);
@@ -261,34 +309,54 @@ export const App: React.FC = () => {
     multi_metric: 'Multi-Metric (α trade-off)',
   };
 
+  // 1. Root route: Premium Landing Page
+  if (currentRoute === '/') {
+    return (
+      <LandingPage
+        onLaunchSimulator={(tab) => navigateTo('/simulator', tab || 'network')}
+      />
+    );
+  }
+
+  // 2. /simulator route: Full Quantum Simulator Application Workspace
   return (
     <div style={{ minHeight: '100vh', padding: '1.25rem 1.75rem' }}>
-      
+
       {/* Top Navigation Header */}
-      <Header 
-        currentView={currentView}
-        onViewChange={setCurrentView}
+      <Header
+        currentView="lab"
+        onViewChange={(view) => {
+          if (view === 'home') {
+            navigateTo('/');
+          } else {
+            navigateTo('/simulator');
+          }
+        }}
         selectedPreset={selectedPreset}
         presets={presets}
         onPresetChange={setSelectedPreset}
+        activeTab={activeTab}
+        onNavigateTab={(tab) => {
+          setActiveTab(tab);
+          setRoadmapNotice(null);
+          window.history.replaceState({}, '', `/simulator?tab=${tab}`);
+        }}
       />
 
-      {currentView === 'home' ? (
-        <HeroLanding onExplore={() => setCurrentView('lab')} />
-      ) : (
-        <div style={{ display: 'flex', gap: '1.25rem' }}>
-          
-          {/* Truthful Left Navigation Rail */}
-          <Sidebar 
-            activeTab={activeTab} 
-            onTabChange={(tab) => {
-              setActiveTab(tab);
-              setRoadmapNotice(null);
-            }} 
-            onLockedFeatureClick={(item) => {
-              setRoadmapNotice(item);
-            }}
-          />
+      <div style={{ display: 'flex', gap: '1.25rem' }}>
+
+        {/* Truthful Left Navigation Rail */}
+        <Sidebar
+          activeTab={activeTab}
+          onTabChange={(tab) => {
+            setActiveTab(tab);
+            setRoadmapNotice(null);
+            window.history.replaceState({}, '', `/simulator?tab=${tab}`);
+          }}
+          onLockedFeatureClick={(item) => {
+            setRoadmapNotice(item);
+          }}
+        />
 
           {/* Main Workspace: 8 Full Functional Labs */}
           <main style={{ flex: 1, minWidth: 0 }}>
@@ -322,7 +390,7 @@ export const App: React.FC = () => {
               {/* Functional Workspace Actions */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 {isNetworkModified && (
-                  <span 
+                  <span
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -340,7 +408,7 @@ export const App: React.FC = () => {
                   </span>
                 )}
 
-                <button 
+                <button
                   onClick={resetToDefaults}
                   style={{
                     display: 'flex',
@@ -365,12 +433,12 @@ export const App: React.FC = () => {
 
             {/* Roadmap Notice Banner if unreleased sidebar item was clicked */}
             {roadmapNotice && (
-              <div 
-                style={{ 
-                  background: 'linear-gradient(90deg, rgba(147, 51, 234, 0.2) 0%, rgba(192, 38, 211, 0.1) 100%)', 
-                  border: '1px solid rgba(168, 85, 247, 0.4)', 
-                  borderRadius: '10px', 
-                  padding: '0.85rem 1.15rem', 
+              <div
+                style={{
+                  background: 'linear-gradient(90deg, rgba(147, 51, 234, 0.2) 0%, rgba(192, 38, 211, 0.1) 100%)',
+                  border: '1px solid rgba(168, 85, 247, 0.4)',
+                  borderRadius: '10px',
+                  padding: '0.85rem 1.15rem',
                   marginBottom: '1.15rem',
                   display: 'flex',
                   alignItems: 'center',
@@ -389,7 +457,7 @@ export const App: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => setRoadmapNotice(null)}
                   style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
                 >
@@ -400,7 +468,7 @@ export const App: React.FC = () => {
 
             {/* 3-Column Desktop Layout */}
             <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr 340px', gap: '1.15rem', alignItems: 'start' }}>
-              
+
               {/* LEFT COLUMN: Configuration Panel with Single Primary Simulation Action */}
               <div className="glass-panel" style={{ padding: '1.15rem' }}>
                 <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#fff', marginBottom: '1.0rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -420,7 +488,7 @@ export const App: React.FC = () => {
                   <label style={{ fontSize: '0.74rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.3rem' }}>
                     Topology Preset
                   </label>
-                  <select 
+                  <select
                     className="custom-select"
                     value={selectedPreset}
                     onChange={(e) => setSelectedPreset(e.target.value)}
@@ -436,7 +504,7 @@ export const App: React.FC = () => {
                   <label style={{ fontSize: '0.74rem', color: 'var(--color-alice)', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
                     🔵 Source Node (Alice)
                   </label>
-                  <select 
+                  <select
                     className="custom-select"
                     value={sourceNode}
                     onChange={(e) => setSourceNode(e.target.value)}
@@ -452,7 +520,7 @@ export const App: React.FC = () => {
                   <label style={{ fontSize: '0.74rem', color: 'var(--color-bob)', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
                     🟠 Destination Node (Bob)
                   </label>
-                  <select 
+                  <select
                     className="custom-select"
                     value={targetNode}
                     onChange={(e) => setTargetNode(e.target.value)}
@@ -474,7 +542,7 @@ export const App: React.FC = () => {
                       { id: 'shortest_hop', label: 'Shortest-Hop (BFS)' },
                       { id: 'multi_metric', label: 'Multi-Metric (α trade-off)' },
                     ].map((opt) => (
-                      <label 
+                      <label
                         key={opt.id}
                         style={{
                           display: 'flex',
@@ -491,9 +559,9 @@ export const App: React.FC = () => {
                           transition: 'all 0.15s ease',
                         }}
                       >
-                        <input 
-                          type="radio" 
-                          name="routingStrategy" 
+                        <input
+                          type="radio"
+                          name="routingStrategy"
                           value={opt.id}
                           checked={strategy === opt.id}
                           onChange={() => setStrategy(opt.id)}
@@ -507,7 +575,7 @@ export const App: React.FC = () => {
 
                 {/* Advanced Parameters Collapsible */}
                 <div style={{ marginBottom: '1.15rem' }}>
-                  <button 
+                  <button
                     onClick={() => setShowAdvanced(!showAdvanced)}
                     style={{
                       background: 'transparent',
@@ -531,11 +599,11 @@ export const App: React.FC = () => {
                         <span style={{ color: 'var(--text-muted)' }}>Multi-Metric α:</span>
                         <span style={{ color: '#fff', fontWeight: 600 }}>{alpha.toFixed(2)}</span>
                       </div>
-                      <input 
-                        type="range" 
-                        min="0" 
-                        max="1" 
-                        step="0.05" 
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.05"
                         value={alpha}
                         onChange={(e) => setAlpha(parseFloat(e.target.value))}
                         style={{ width: '100%', accentColor: 'var(--accent-fuchsia)' }}
@@ -549,7 +617,7 @@ export const App: React.FC = () => {
 
                 {/* Link Quick-Edit Fallback Action Button */}
                 <div style={{ marginBottom: '1.15rem' }}>
-                  <button 
+                  <button
                     onClick={() => {
                       if (graph && graph.edges.length > 0) {
                         setSelectedEdge(graph.edges[0]);
@@ -579,12 +647,12 @@ export const App: React.FC = () => {
                 </div>
 
                 {/* Single Primary Action Button with Loading & Error States */}
-                <button 
+                <button
                   onClick={handleRunSimulation}
                   disabled={isSimulating || !routeData?.selected_route}
                   className="btn-primary"
-                  style={{ 
-                    width: '100%', 
+                  style={{
+                    width: '100%',
                     padding: '0.75rem',
                     opacity: (isSimulating || !routeData?.selected_route) ? 0.6 : 1,
                     cursor: (isSimulating || !routeData?.selected_route) ? 'not-allowed' : 'pointer',
@@ -596,16 +664,16 @@ export const App: React.FC = () => {
                 >
                   {isSimulating ? (
                     <>
-                      <span 
-                        style={{ 
-                          width: '15px', 
-                          height: '15px', 
-                          border: '2px solid rgba(255,255,255,0.3)', 
-                          borderTopColor: '#fff', 
-                          borderRadius: '50%', 
+                      <span
+                        style={{
+                          width: '15px',
+                          height: '15px',
+                          border: '2px solid rgba(255,255,255,0.3)',
+                          borderTopColor: '#fff',
+                          borderRadius: '50%',
                           animation: 'spin 0.8s linear infinite',
-                          display: 'inline-block' 
-                        }} 
+                          display: 'inline-block'
+                        }}
                       />
                       Simulating Circuit...
                     </>
@@ -620,7 +688,7 @@ export const App: React.FC = () => {
 
               {/* CENTER COLUMN: Large Interactive Network Graph Centerpiece */}
               <div>
-                <NetworkGraph 
+                <NetworkGraph
                   graph={graph}
                   selectedRoute={routeData?.selected_route || null}
                   sourceNode={sourceNode}
@@ -655,13 +723,13 @@ export const App: React.FC = () => {
 
               {/* RIGHT COLUMN: Calculated Metrics & Selected Route */}
               <div>
-                <RouteMetrics 
+                <RouteMetrics
                   route={routeData?.selected_route || null}
                   strategyLabel={strategyNameMap[strategy] || strategy}
                   improvementPct={routeData?.werner_improvement_pct || 0}
                 />
 
-                <SelectedRoute 
+                <SelectedRoute
                   route={routeData?.selected_route || null}
                   hops={routeData?.hops_breakdown || []}
                 />
@@ -670,7 +738,7 @@ export const App: React.FC = () => {
             </div>
 
             {/* BOTTOM ROW: Routing Algorithm Comparison Section */}
-            <AlgorithmComparison 
+            <AlgorithmComparison
               bfsRoute={routeData?.comparison?.shortest_hop || null}
               dijkstraRoute={routeData?.comparison?.quality_aware || null}
               multiRoute={routeData?.comparison?.multi_metric || null}
@@ -683,10 +751,9 @@ export const App: React.FC = () => {
 
           </main>
         </div>
-      )}
 
       {/* Simulation Execution Modal */}
-      <SimulationModal 
+      <SimulationModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
@@ -700,7 +767,7 @@ export const App: React.FC = () => {
       />
 
       {/* Link Settings Editor Modal (Milestone 1.2) */}
-      <LinkEditorModal 
+      <LinkEditorModal
         isOpen={isLinkEditorOpen}
         onClose={() => {
           setIsLinkEditorOpen(false);

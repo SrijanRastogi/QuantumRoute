@@ -1,128 +1,101 @@
 import React from 'react';
-import { Atom, Search, ChevronDown } from 'lucide-react';
+import { Home, ChevronDown } from 'lucide-react';
+import { GlobalSearch } from './GlobalSearch';
 
 interface HeaderProps {
-  currentView: 'home' | 'lab';
+  currentView?: 'home' | 'lab';
   onViewChange: (view: 'home' | 'lab') => void;
   selectedPreset: string;
   presets: string[];
   onPresetChange: (preset: string) => void;
+  onNavigateTab?: (tab: string) => void;
+  activeTab?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  currentView,
   onViewChange,
   selectedPreset,
   presets,
   onPresetChange,
+  onNavigateTab,
 }) => {
   return (
-    <header className="glass-panel" style={{ padding: '0.75rem 1.5rem', marginBottom: '1.25rem' }}>
+    <header className="glass-panel" style={{ padding: '0.75rem 1.5rem', marginBottom: '1.25rem', position: 'relative', zIndex: 50 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-        
-        {/* Brand */}
+
+        {/* Brand & Clean Home Action */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div 
+          <div
             onClick={() => onViewChange('home')}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}
-          >
-            <div 
-              style={{
-                width: '40px',
-                height: '40px',
-                background: 'var(--gradient-primary)',
-                borderRadius: '10px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                boxShadow: '0 0 16px rgba(192, 38, 211, 0.45)',
-              }}
-            >
-              <Atom size={24} />
-            </div>
-            <div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>
-                QuantumRoute<span style={{ fontSize: '0.75rem', color: 'var(--accent-fuchsia)', verticalAlign: 'super' }}>™</span>
-              </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                Quantum Network Simulator
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Nav Switches */}
-          <div style={{ display: 'flex', background: 'rgba(0,0,0,0.3)', padding: '0.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
-            <button
-              onClick={() => onViewChange('lab')}
-              style={{
-                padding: '0.4rem 0.9rem',
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                borderRadius: '6px',
-                border: 'none',
-                cursor: 'pointer',
-                background: currentView === 'lab' ? 'var(--gradient-primary)' : 'transparent',
-                color: currentView === 'lab' ? '#fff' : 'var(--text-muted)',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              Network Lab
-            </button>
-            <button
-              onClick={() => onViewChange('home')}
-              style={{
-                padding: '0.4rem 0.9rem',
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                borderRadius: '6px',
-                border: 'none',
-                cursor: 'pointer',
-                background: currentView === 'home' ? 'var(--gradient-primary)' : 'transparent',
-                color: currentView === 'home' ? '#fff' : 'var(--text-muted)',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              Overview
-            </button>
-          </div>
-        </div>
-
-        {/* Center Search Pill */}
-        <div 
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.6rem',
-            background: 'rgba(10, 6, 22, 0.7)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: '24px',
-            padding: '0.45rem 1.15rem',
-            color: 'var(--text-muted)',
-            fontSize: '0.82rem',
-            minWidth: '320px',
-          }}
-        >
-          <Search size={15} color="var(--accent-violet)" />
-          <span style={{ flex: 1 }}>Search nodes, topologies, experiments...</span>
-          <span 
-            style={{ 
-              fontSize: '0.7rem', 
-              background: 'rgba(255,255,255,0.08)', 
-              padding: '0.15rem 0.45rem', 
-              borderRadius: '4px',
-              fontFamily: 'var(--font-mono)' 
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            title="QuantumRoute™ — Return to Public Landing Page"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.filter = 'drop-shadow(0 0 10px rgba(192, 38, 211, 0.65))';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.filter = 'none';
             }}
           >
-            Ctrl K
-          </span>
+            <img
+              src="/assets/quantumroute-logo.png"
+              alt="QuantumRoute™ Quantum Network Simulator"
+              style={{
+                height: '40px',
+                width: 'auto',
+                maxWidth: '190px',
+                objectFit: 'contain',
+                display: 'block',
+              }}
+            />
+          </div>
+
+          {/* Unobtrusive Return Home Link */}
+          <button
+            onClick={() => onViewChange('home')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: '8px',
+              padding: '0.35rem 0.75rem',
+              color: 'var(--text-secondary)',
+              fontSize: '0.78rem',
+              fontWeight: 500,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#fff';
+              e.currentTarget.style.borderColor = 'rgba(168, 85, 247, 0.5)';
+              e.currentTarget.style.background = 'rgba(147, 51, 234, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--text-secondary)';
+              e.currentTarget.style.borderColor = 'var(--border-subtle)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+            }}
+            title="Return to Public Landing Page"
+          >
+            <Home size={13} color="#c084fc" />
+            <span>Home</span>
+          </button>
         </div>
+
+        {/* Center: Functional Global Search (Ctrl+K) */}
+        <GlobalSearch onNavigate={(tab) => onNavigateTab ? onNavigateTab(tab) : null} />
 
         {/* Right Status Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          
+
           {/* Simulation Ready Badge */}
-          <div 
+          <div
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -136,14 +109,14 @@ export const Header: React.FC<HeaderProps> = ({
               borderRadius: '20px',
             }}
           >
-            <span 
-              style={{ 
-                width: '7px', 
-                height: '7px', 
-                borderRadius: '50%', 
+            <span
+              style={{
+                width: '7px',
+                height: '7px',
+                borderRadius: '50%',
                 backgroundColor: '#10b981',
                 boxShadow: '0 0 8px #10b981'
-              }} 
+              }}
             />
             Simulation Ready
           </div>
@@ -172,14 +145,14 @@ export const Header: React.FC<HeaderProps> = ({
                 </option>
               ))}
             </select>
-            <ChevronDown 
-              size={14} 
-              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} 
+            <ChevronDown
+              size={14}
+              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }}
             />
           </div>
 
           {/* Team Avatar Badge */}
-          <div 
+          <div
             title="Quantum D Clan · VTU-QFF-HC-0126"
             style={{
               width: '36px',

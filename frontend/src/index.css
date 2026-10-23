@@ -59,7 +59,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: 
+  background-image:
     radial-gradient(circle at 15% 15%, rgba(147, 51, 234, 0.12) 0%, transparent 40%),
     radial-gradient(circle at 85% 20%, rgba(192, 38, 211, 0.10) 0%, transparent 45%),
     radial-gradient(circle at 50% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
@@ -190,4 +190,57 @@ select, input {
 
 .pulse-amber {
   animation: ring-pulse-amber 2.4s infinite ease-in-out;
+}
+
+/* Dotted Matrix Grid Background (Framer-inspired) */
+.dotted-grid-bg {
+  background-image: radial-gradient(rgba(168, 85, 247, 0.22) 1.2px, transparent 1.2px);
+  background-size: 28px 28px;
+}
+
+/* Fluid Entrance Animations */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes ambientPulseGlow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes packetTravel {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
