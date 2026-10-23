@@ -436,8 +436,11 @@ Open a Pull Request on GitHub and follow the team's review process.
 ### Final submission
 
 Demo video link : https://youtu.be/qE4gO08JjBI
+
 PPT link : https://docs.google.com/presentation/d/17JAiyRgHKtqlCZXcxpjOMX49EzltU_sR/edit?usp=sharing&ouid=110928778499635314096&rtpof=true&sd=true
+
 Deployment Link: https://quantumroute-gazw.onrender.com
+
 **Repository visibility:** The organizers' repository is currently the official team repository. Do not make it public or change its access settings unless the organizers explicitly require and authorize that change. Confirm the final visibility requirement before submission.
 
 *All checklist items remain pending until individually completed and verified.*
