@@ -335,6 +335,8 @@ Validation comparing analytical Werner predictions against full Qiskit Aer densi
 - **Theme:** Verification Proof, Open Science & Links
 
 ### Official Submission Links
+- **Live Deployed Application:**  
+  `https://quantumroute-gazw.onrender.com`
 - **GitHub Repository:**  
   `https://github.com/vtu-qiskit-fall-fest-2026/vtu-hc-quantum-d-clan`
 - **Demo Video Link:**  
