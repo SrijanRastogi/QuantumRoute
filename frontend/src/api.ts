@@ -151,3 +151,239 @@ export async function runNoiseSweep(params: {
   return res.json();
 }
 
+export async function fetchChannelDefaults(): Promise<import('./types').ChannelDefaults> {
+  const res = await fetch(`${API_BASE_URL}/channels/defaults`);
+  if (!res.ok) {
+    throw new Error('Failed to load physical channel defaults');
+  }
+  return res.json();
+}
+
+export async function evaluatePhysicalLink(params: {
+  distance_km: number;
+  alpha_db_per_km?: number;
+  coupling_efficiency?: number;
+  p_dark?: number;
+  raw_visibility?: number;
+  use_decoupled_werner?: boolean;
+}): Promise<import('./types').PhysicalLinkResponse> {
+  const res = await fetch(`${API_BASE_URL}/channels/link`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Link evaluation failed' }));
+    throw new Error(err.detail || 'Link evaluation failed');
+  }
+  return res.json();
+}
+
+export async function fetchDistanceSweep(params: {
+  max_distance_km?: number;
+  num_points?: number;
+  alpha_db_per_km?: number;
+  coupling_efficiency?: number;
+  p_dark?: number;
+  raw_visibility?: number;
+}): Promise<import('./types').PhysicalSweepResponse> {
+  const res = await fetch(`${API_BASE_URL}/channels/sweep`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Distance sweep failed' }));
+    throw new Error(err.detail || 'Distance sweep failed');
+  }
+  return res.json();
+}
+
+export async function evaluatePhysicalPath(params: {
+  hops: Array<{
+    from: string;
+    to: string;
+    distance_km: number;
+    w?: number;
+    alpha_db_per_km?: number;
+    coupling_efficiency?: number;
+  }>;
+  alpha_db_per_km?: number;
+  coupling_efficiency?: number;
+  p_dark?: number;
+  raw_visibility?: number;
+  t2_memory_us?: number;
+  use_decoupled_werner?: boolean;
+}): Promise<import('./types').PhysicalPathResponse> {
+  const res = await fetch(`${API_BASE_URL}/channels/path`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Path evaluation failed' }));
+    throw new Error(err.detail || 'Path evaluation failed');
+  }
+  return res.json();
+}
+
+export async function comparePhysicalRoutes(params: {
+  topology: string;
+  source: string;
+  target: string;
+  alpha_db_per_km?: number;
+  coupling_efficiency?: number;
+  p_dark?: number;
+  raw_visibility?: number;
+  t2_memory_us?: number;
+}): Promise<import('./types').PhysicalRouteCompareResponse> {
+  const res = await fetch(`${API_BASE_URL}/channels/compare-routes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Route comparison failed' }));
+    throw new Error(err.detail || 'Route comparison failed');
+  }
+  return res.json();
+}
+
+// ==============================================================================
+// Milestone 4: Entanglement Purification API Client
+// ==============================================================================
+
+export async function fetchPurificationDefaults(): Promise<import('./types').PurificationDefaults> {
+  const res = await fetch(`${API_BASE_URL}/purification/defaults`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch purification defaults');
+  }
+  return res.json();
+}
+
+export async function evaluatePurification(params: {
+  werner_w?: number;
+  bell_fidelity?: number;
+  apply_twirling?: boolean;
+}): Promise<import('./types').PurificationEvaluateResponse> {
+  const res = await fetch(`${API_BASE_URL}/purification/evaluate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Purification evaluation failed' }));
+    throw new Error(err.detail || 'Purification evaluation failed');
+  }
+  return res.json();
+}
+
+export async function fetchPurificationSweep(params?: {
+  min_fidelity?: number;
+  max_fidelity?: number;
+  num_points?: number;
+}): Promise<import('./types').PurificationSweepResponse> {
+  const res = await fetch(`${API_BASE_URL}/purification/sweep`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params || {}),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Purification sweep failed' }));
+    throw new Error(err.detail || 'Purification sweep failed');
+  }
+  return res.json();
+}
+
+export async function simulatePurificationShots(params: {
+  werner_w?: number;
+  bell_fidelity?: number;
+  shots?: number;
+  seed?: number;
+}): Promise<import('./types').PurificationShotsResponse> {
+  const res = await fetch(`${API_BASE_URL}/purification/simulate-shots`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Finite-shot simulation failed' }));
+    throw new Error(err.detail || 'Finite-shot simulation failed');
+  }
+  return res.json();
+}
+
+// ==============================================================================
+// Phase 3: QASM Export, Validation, and State Analysis API Calls
+// ==============================================================================
+
+export async function fetchSupportedCircuits(): Promise<{ supported_circuits: import('./types').QasmCircuitOption[] }> {
+  const res = await fetch(`${API_BASE_URL}/qasm/circuits`);
+  if (!res.ok) {
+    throw new Error('Failed to load supported circuits');
+  }
+  return res.json();
+}
+
+export async function exportQasm(params: import('./types').QasmExportRequest): Promise<import('./types').QasmExportResponse> {
+  const res = await fetch(`${API_BASE_URL}/qasm/export`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'QASM export failed' }));
+    throw new Error(err.detail || 'QASM export failed');
+  }
+  return res.json();
+}
+
+export async function fetchValidationBenchmarks(tolerance = 1e-4): Promise<import('./types').BenchmarkSuiteResponse> {
+  const res = await fetch(`${API_BASE_URL}/validation/benchmarks?tolerance=${tolerance}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Failed to fetch validation benchmarks' }));
+    throw new Error(err.detail || 'Failed to fetch validation benchmarks');
+  }
+  return res.json();
+}
+
+export async function runCustomValidation(params: {
+  path_name?: string;
+  link_werner_parameters: number[];
+  tolerance?: number;
+}): Promise<import('./types').ValidationBenchmarkItem> {
+  const res = await fetch(`${API_BASE_URL}/validation/custom`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Custom validation failed' }));
+    throw new Error(err.detail || 'Custom validation failed');
+  }
+  return res.json();
+}
+
+export async function fetchAnalysisPresets(): Promise<{ presets: import('./types').AnalysisPreset[] }> {
+  const res = await fetch(`${API_BASE_URL}/analysis/presets`);
+  if (!res.ok) {
+    throw new Error('Failed to load analysis presets');
+  }
+  return res.json();
+}
+
+export async function runStateTomography(params: import('./types').TomographyRequest): Promise<import('./types').TomographyResponse> {
+  const res = await fetch(`${API_BASE_URL}/analysis/tomography`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Tomography analysis failed' }));
+    throw new Error(err.detail || 'Tomography analysis failed');
+  }
+  return res.json();
+}
+
+
+

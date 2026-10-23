@@ -25,6 +25,12 @@ import { SimulationModal } from './components/SimulationModal';
 import { LinkEditorModal } from './components/LinkEditorModal';
 import { HeroLanding } from './components/HeroLanding';
 import { ExperimentsLab } from './components/ExperimentsLab';
+import { PhysicalChannelsLab } from './components/PhysicalChannelsLab';
+import { PurificationLab } from './components/PurificationLab';
+import { QasmExportLab } from './components/QasmExportLab';
+import { ValidationLab } from './components/ValidationLab';
+import { StateAnalysisLab } from './components/StateAnalysisLab';
+import { DocumentationLab } from './components/DocumentationLab';
 import { Play, Settings2, Sparkles, X, RotateCcw, AlertCircle, Sliders } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -284,10 +290,22 @@ export const App: React.FC = () => {
             }}
           />
 
-          {/* Main Network Lab or Experiments Lab Workspace */}
+          {/* Main Workspace: 8 Full Functional Labs */}
           <main style={{ flex: 1, minWidth: 0 }}>
             {activeTab === 'experiments' ? (
               <ExperimentsLab />
+            ) : activeTab === 'channels' ? (
+              <PhysicalChannelsLab />
+            ) : activeTab === 'purification' ? (
+              <PurificationLab />
+            ) : activeTab === 'qasm' ? (
+              <QasmExportLab />
+            ) : activeTab === 'validation' ? (
+              <ValidationLab />
+            ) : activeTab === 'analysis' ? (
+              <StateAnalysisLab />
+            ) : activeTab === 'docs' ? (
+              <DocumentationLab />
             ) : (
               <>
                 {/* Top Workspace Header */}

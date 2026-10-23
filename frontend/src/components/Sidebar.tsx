@@ -7,7 +7,8 @@ import {
   Binary, 
   CheckCircle, 
   BookOpen,
-  Lock
+  Lock,
+  Sparkles,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -46,41 +47,49 @@ export const NAV_ITEMS: NavItem[] = [
     id: 'analysis', 
     label: 'State Analysis', 
     icon: Activity, 
-    status: 'coming_soon', 
-    milestone: 'Milestone 3',
-    description: 'Interactive 3D Bloch sphere, density matrix state tomography, and purity tracking.'
+    status: 'active', 
+    milestone: 'Active',
+    description: 'Stokes vector linear inversion, finite-shot Pauli tomography (X, Y, Z), and purity tracking.'
   },
   { 
     id: 'channels', 
-    label: 'Channels', 
+    label: 'Channels Lab', 
     icon: Radio, 
-    status: 'coming_soon', 
-    milestone: 'Milestone 3',
-    description: 'Physical optical fiber attenuation, memory decoherence, and BBPSSW purification.'
+    status: 'active', 
+    milestone: 'M3 Active',
+    description: 'Physical optical fiber transmission loss, coupling efficiency, conditional Werner quality, and path success.'
+  },
+  { 
+    id: 'purification', 
+    label: 'Purification Lab', 
+    icon: Sparkles, 
+    status: 'active', 
+    milestone: 'M4 Active',
+    description: 'Two-pair BBPSSW recurrence protocol, raw Bell-diagonal output, twirling, and finite-shot Aer trials.'
   },
   { 
     id: 'qasm', 
     label: 'QASM Export', 
     icon: Binary, 
-    status: 'coming_soon', 
-    milestone: 'Milestone 4',
-    description: 'Export compiled Qiskit circuits directly to standard OpenQASM 3.0.'
+    status: 'active', 
+    milestone: 'Active',
+    description: 'Compile and export verified Qiskit circuits directly to standard OpenQASM 3.0.'
   },
   { 
     id: 'validation', 
     label: 'Validation', 
     icon: CheckCircle, 
-    status: 'coming_soon', 
-    milestone: 'Milestone 4',
-    description: 'Analytical vs Qiskit Aer finite-shot statistical convergence tests.'
+    status: 'active', 
+    milestone: 'Active',
+    description: 'Continuous mathematical invariant validation comparing analytical predictions against Aer circuit simulation.'
   },
   { 
     id: 'docs', 
     label: 'Documentation', 
     icon: BookOpen, 
-    status: 'coming_soon', 
-    milestone: 'Milestone 4',
-    description: 'Mathematical invariants, API documentation, and architecture decision records.'
+    status: 'active', 
+    milestone: 'Active',
+    description: 'Mathematical invariants, ADR architecture decision records, and interactive Swagger API documentation.'
   },
 ];
 

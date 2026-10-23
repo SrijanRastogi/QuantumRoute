@@ -6,6 +6,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.routes.network import router as network_router
 from backend.routes.simulate import router as simulate_router
 from backend.routes.experiments import router as experiments_router
+from backend.routes.channels import router as channels_router
+from backend.routes.purification import router as purification_router
+from backend.routes.qasm import router as qasm_router
+from backend.routes.validation import router as validation_router
+from backend.routes.analysis import router as analysis_router
 
 app = FastAPI(
     title="QuantumRoute™ V2 Scientific API",
@@ -25,6 +30,11 @@ app.add_middleware(
 app.include_router(network_router)
 app.include_router(simulate_router)
 app.include_router(experiments_router)
+app.include_router(channels_router)
+app.include_router(purification_router)
+app.include_router(qasm_router)
+app.include_router(validation_router)
+app.include_router(analysis_router)
 
 
 @app.get("/api/health")

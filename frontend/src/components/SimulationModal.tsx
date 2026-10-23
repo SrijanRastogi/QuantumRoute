@@ -64,6 +64,8 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
         {/* Close Button */}
         <button 
           onClick={onClose}
+          aria-label="Close modal"
+          data-testid="close-sim-modal"
           style={{
             position: 'absolute',
             top: '18px',

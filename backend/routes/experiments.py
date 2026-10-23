@@ -287,9 +287,25 @@ def run_teleport_experiment(req: TeleportExperimentRequest) -> Dict[str, Any]:
         qasm_str = ""
         try:
             from qiskit import qasm2
-            qasm_str = qasm2.dumps(circuit)
-        except Exception:
-            qasm_str = str(circuit)
+            # OpenQASM 2 is a unitary specification; export unitary circuit with channel annotation
+            clean_qc = build_teleportation_circuit((theta, phi), link_error=None)
+            base_qasm = qasm2.dumps(clean_qc)
+            if noise_p > 0.0:
+                lines = base_qasm.splitlines()
+                annotated_lines = []
+                inserted_noise_comment = False
+                for line in lines:
+                    annotated_lines.append(line)
+                    if not inserted_noise_comment and "cx q[1],q[2];" in line:
+                        annotated_lines.append(
+                            f"// Distributed link channel: Depolarizing noise p={noise_p:.4f} (Werner w={werner_w:.4f}) on q[2]"
+                        )
+                        inserted_noise_comment = True
+                qasm_str = "\n".join(annotated_lines)
+            else:
+                qasm_str = base_qasm
+        except Exception as qasm_err:
+            qasm_str = f"// Circuit QASM export error: {qasm_err}\n// Depolarizing noise p={noise_p:.4f}"
 
         # Step 7: Optional finite-shot tomography for educational contrast
         tomography_data = None
