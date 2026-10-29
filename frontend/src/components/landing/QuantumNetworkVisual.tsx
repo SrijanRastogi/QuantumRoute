@@ -8,17 +8,17 @@ export const QuantumNetworkVisual: React.FC = () => {
         width: '100%',
         height: '100%',
         minHeight: '480px',
-        borderRadius: '24px',
+        borderRadius: 'var(--radius-md)',
         overflow: 'hidden',
-        background: 'linear-gradient(135deg, rgba(16, 10, 34, 0.95) 0%, rgba(8, 4, 18, 0.98) 100%)',
-        border: '1px solid rgba(168, 85, 247, 0.35)',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 35px rgba(147, 51, 234, 0.2)',
+        background: 'linear-gradient(135deg, #140b26 0%, #050505 100%)',
+        border: '1px solid rgba(168, 85, 247, 0.3)',
+        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.55), inset 0 0 35px rgba(147, 51, 234, 0.16)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: '1.25rem',
       }}
-      className="dotted-grid-bg"
+      className="dotted-grid-bg qr-dark-surface"
     >
       {/* Ambient Sweeping Glow in Background */}
       <div
@@ -50,7 +50,7 @@ export const QuantumNetworkVisual: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'rgba(10, 6, 22, 0.85)',
+            background: 'var(--surface-inset)',
             border: '1px solid rgba(147, 51, 234, 0.35)',
             borderRadius: '20px',
             padding: '4px 12px',
@@ -62,24 +62,24 @@ export const QuantumNetworkVisual: React.FC = () => {
               width: '7px',
               height: '7px',
               borderRadius: '50%',
-              background: '#34d399',
-              boxShadow: '0 0 8px #34d399',
+              background: 'var(--color-success)',
+              boxShadow: '0 0 8px var(--color-success)',
             }}
           />
-          <span style={{ fontSize: '0.74rem', fontWeight: 700, color: '#f8fafc', letterSpacing: '0.02em' }}>
+          <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '0.02em' }}>
             Live Dijkstra Optimal Path
           </span>
         </div>
 
         <div
           style={{
-            background: 'rgba(10, 6, 22, 0.85)',
+            background: 'var(--surface-inset)',
             border: '1px solid rgba(56, 189, 248, 0.3)',
             borderRadius: '20px',
             padding: '4px 10px',
             fontSize: '0.72rem',
             fontFamily: 'var(--font-mono)',
-            color: '#38bdf8',
+            color: 'var(--color-info)',
             backdropFilter: 'blur(8px)',
           }}
         >
@@ -110,19 +110,19 @@ export const QuantumNetworkVisual: React.FC = () => {
           <defs>
             {/* Gradients */}
             <linearGradient id="activeRouteGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#38bdf8" />
-              <stop offset="50%" stopColor="#c084fc" />
-              <stop offset="100%" stopColor="#f59e0b" />
+              <stop offset="0%" stopColor="var(--color-info)" />
+              <stop offset="50%" stopColor="var(--accent-violet)" />
+              <stop offset="100%" stopColor="var(--color-warning)" />
             </linearGradient>
 
             <radialGradient id="nodeAliceGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+              <stop offset="0%" stopColor="var(--color-info)" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="var(--color-info)" stopOpacity="0" />
             </radialGradient>
 
             <radialGradient id="nodeBobGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+              <stop offset="0%" stopColor="var(--color-warning)" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="var(--color-warning)" stopOpacity="0" />
             </radialGradient>
 
             <filter id="glowEffect" x="-20%" y="-20%" width="140%" height="140%">
@@ -173,7 +173,7 @@ export const QuantumNetworkVisual: React.FC = () => {
           </g>
 
           {/* Traveling Photon Wave Packet 1 */}
-          <circle r="4.5" fill="#38bdf8" filter="url(#glowEffect)">
+          <circle r="4.5" fill="var(--color-info)" filter="url(#glowEffect)">
             <animateMotion
               path="M 60 210 L 180 90 L 350 300 L 460 210"
               dur="2.8s"
@@ -182,7 +182,7 @@ export const QuantumNetworkVisual: React.FC = () => {
           </circle>
 
           {/* Traveling Photon Wave Packet 2 (Offset phase) */}
-          <circle r="4.0" fill="#f0abfc" filter="url(#glowEffect)">
+          <circle r="4.0" fill="var(--accent-magenta)" filter="url(#glowEffect)">
             <animateMotion
               path="M 60 210 L 180 90 L 350 300 L 460 210"
               dur="2.8s"
@@ -192,12 +192,12 @@ export const QuantumNetworkVisual: React.FC = () => {
           </circle>
 
           {/* Nodes */}
-          
+
           {/* Intermediate Relay: Repeater B */}
           <g transform="translate(160, 310)">
             <circle r="14" fill="rgba(139, 92, 246, 0.15)" />
-            <circle r="7" fill="#8b5cf6" />
-            <text x="0" y="22" textAnchor="middle" fill="var(--text-muted)" fontSize="9" fontFamily="var(--font-mono)">
+            <circle r="7" fill="var(--accent-violet)" />
+            <text x="0" y="22" textAnchor="middle" fill="currentColor" fontSize="9" fontFamily="var(--font-mono)">
               Repeater β
             </text>
           </g>
@@ -205,8 +205,8 @@ export const QuantumNetworkVisual: React.FC = () => {
           {/* Intermediate Relay: Repeater C */}
           <g transform="translate(330, 80)">
             <circle r="14" fill="rgba(217, 70, 239, 0.15)" />
-            <circle r="7" fill="#d946ef" />
-            <text x="0" y="-14" textAnchor="middle" fill="var(--text-muted)" fontSize="9" fontFamily="var(--font-mono)">
+            <circle r="7" fill="var(--accent-magenta)" />
+            <text x="0" y="-14" textAnchor="middle" fill="currentColor" fontSize="9" fontFamily="var(--font-mono)">
               Repeater γ
             </text>
           </g>
@@ -215,12 +215,12 @@ export const QuantumNetworkVisual: React.FC = () => {
           <g transform="translate(180, 90)">
             <circle r="22" fill="rgba(168, 85, 247, 0.2)" className="pulse-blue" />
             <circle r="15" fill="rgba(168, 85, 247, 0.35)" />
-            <circle r="9" fill="#c084fc" filter="url(#glowEffect)" />
-            <circle r="3.5" fill="#ffffff" />
-            <text x="0" y="-18" textAnchor="middle" fill="#f0abfc" fontSize="10.5" fontWeight="700" fontFamily="var(--font-mono)">
+            <circle r="9" fill="var(--accent-violet)" filter="url(#glowEffect)" />
+            <circle r="3.5" fill="currentColor" />
+            <text x="0" y="-18" textAnchor="middle" fill="var(--accent-magenta)" fontSize="10.5" fontWeight="700" fontFamily="var(--font-mono)">
               Repeater α
             </text>
-            <text x="0" y="-7" textAnchor="middle" fill="var(--text-muted)" fontSize="8" fontFamily="var(--font-mono)">
+            <text x="0" y="-7" textAnchor="middle" fill="currentColor" fontSize="8" fontFamily="var(--font-mono)">
               w=0.95 · BSM
             </text>
           </g>
@@ -229,12 +229,12 @@ export const QuantumNetworkVisual: React.FC = () => {
           <g transform="translate(350, 300)">
             <circle r="22" fill="rgba(192, 38, 211, 0.2)" className="pulse-blue" />
             <circle r="15" fill="rgba(192, 38, 211, 0.35)" />
-            <circle r="9" fill="#e879f9" filter="url(#glowEffect)" />
-            <circle r="3.5" fill="#ffffff" />
-            <text x="0" y="24" textAnchor="middle" fill="#f0abfc" fontSize="10.5" fontWeight="700" fontFamily="var(--font-mono)">
+            <circle r="9" fill="var(--accent-magenta)" filter="url(#glowEffect)" />
+            <circle r="3.5" fill="currentColor" />
+            <text x="0" y="24" textAnchor="middle" fill="var(--accent-magenta)" fontSize="10.5" fontWeight="700" fontFamily="var(--font-mono)">
               Repeater δ
             </text>
-            <text x="0" y="35" textAnchor="middle" fill="var(--text-muted)" fontSize="8" fontFamily="var(--font-mono)">
+            <text x="0" y="35" textAnchor="middle" fill="currentColor" fontSize="8" fontFamily="var(--font-mono)">
               w=0.95 · BSM
             </text>
           </g>
@@ -244,14 +244,14 @@ export const QuantumNetworkVisual: React.FC = () => {
             {/* Outer animated halo */}
             <circle r="30" fill="url(#nodeAliceGlow)" className="pulse-blue" />
             <circle r="18" fill="rgba(56, 189, 248, 0.25)" />
-            <circle r="11" fill="#38bdf8" filter="url(#glowEffect)" />
-            <circle r="4.5" fill="#ffffff" />
-            
+            <circle r="11" fill="var(--color-info)" filter="url(#glowEffect)" />
+            <circle r="4.5" fill="currentColor" />
+
             {/* Label badge */}
-            <text x="0" y="27" textAnchor="middle" fill="#38bdf8" fontSize="12" fontWeight="800">
+            <text x="0" y="27" textAnchor="middle" fill="var(--color-info)" fontSize="12" fontWeight="800">
               Alice
             </text>
-            <text x="0" y="39" textAnchor="middle" fill="var(--text-muted)" fontSize="8.5" fontFamily="var(--font-mono)">
+            <text x="0" y="39" textAnchor="middle" fill="currentColor" fontSize="8.5" fontFamily="var(--font-mono)">
               Source |ψ⟩
             </text>
           </g>
@@ -261,14 +261,14 @@ export const QuantumNetworkVisual: React.FC = () => {
             {/* Outer animated halo */}
             <circle r="30" fill="url(#nodeBobGlow)" className="pulse-amber" />
             <circle r="18" fill="rgba(245, 158, 11, 0.25)" />
-            <circle r="11" fill="#f59e0b" filter="url(#glowEffect)" />
-            <circle r="4.5" fill="#ffffff" />
+            <circle r="11" fill="var(--color-warning)" filter="url(#glowEffect)" />
+            <circle r="4.5" fill="currentColor" />
 
             {/* Label badge */}
-            <text x="0" y="27" textAnchor="middle" fill="#f59e0b" fontSize="12" fontWeight="800">
+            <text x="0" y="27" textAnchor="middle" fill="var(--color-warning)" fontSize="12" fontWeight="800">
               Bob
             </text>
-            <text x="0" y="39" textAnchor="middle" fill="var(--text-muted)" fontSize="8.5" fontFamily="var(--font-mono)">
+            <text x="0" y="39" textAnchor="middle" fill="currentColor" fontSize="8.5" fontFamily="var(--font-mono)">
               Target |ψ'⟩
             </text>
           </g>
@@ -287,43 +287,43 @@ export const QuantumNetworkVisual: React.FC = () => {
       >
         <div
           style={{
-            background: 'rgba(10, 6, 22, 0.85)',
+            background: 'var(--surface-inset)',
             border: '1px solid rgba(147, 51, 234, 0.25)',
             borderRadius: '10px',
             padding: '0.45rem 0.65rem',
           }}
         >
           <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Route Distance</div>
-          <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-mono)' }}>
+          <div style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
             3 Hops · 510 km
           </div>
         </div>
 
         <div
           style={{
-            background: 'rgba(10, 6, 22, 0.85)',
+            background: 'var(--surface-inset)',
             border: '1px solid rgba(147, 51, 234, 0.25)',
             borderRadius: '10px',
             padding: '0.45rem 0.65rem',
           }}
         >
           <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Teleport Fidelity</div>
-          <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>
+          <div style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--color-info)', fontFamily: 'var(--font-mono)' }}>
             F_tel = 0.9287
           </div>
         </div>
 
         <div
           style={{
-            background: 'rgba(10, 6, 22, 0.85)',
+            background: 'var(--surface-inset)',
             border: '1px solid rgba(16, 185, 129, 0.3)',
             borderRadius: '10px',
             padding: '0.45rem 0.65rem',
           }}
         >
-          <div style={{ fontSize: '0.65rem', color: '#10b981' }}>BSM Verification</div>
-          <div style={{ fontSize: '0.82rem', fontWeight: 800, color: '#34d399', display: 'flex', alignItems: 'center', gap: '3px' }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#10b981' }} />
+          <div style={{ fontSize: '0.65rem', color: 'var(--color-success)' }}>BSM Verification</div>
+          <div style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--color-success)', display: 'flex', alignItems: 'center', gap: '3px' }}>
+            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--color-success)' }} />
             Qiskit Aer Verified
           </div>
         </div>

@@ -24,6 +24,8 @@ import { AlgorithmComparison } from './components/AlgorithmComparison';
 import { SimulationModal } from './components/SimulationModal';
 import { LinkEditorModal } from './components/LinkEditorModal';
 import { LandingPage } from './components/landing/LandingPage';
+import { BootScreen, requestBootReplay } from './components/BootScreen';
+import { AmbientBackdrop } from './components/AmbientBackdrop';
 import { ExperimentsLab } from './components/ExperimentsLab';
 import { PhysicalChannelsLab } from './components/PhysicalChannelsLab';
 import { PurificationLab } from './components/PurificationLab';
@@ -62,8 +64,14 @@ export const App: React.FC = () => {
     }
     window.history.pushState({}, '', url);
     setCurrentRoute(path);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [activeTab]);
+
+  // Every route/tab change starts at the top of the document. Without this a
+  // tab opened while scrolled deep into the previous lab rendered "blank".
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [currentRoute, activeTab]);
 
   // Synchronize Browser Back / Forward actions
   useEffect(() => {
@@ -312,15 +320,24 @@ export const App: React.FC = () => {
   // 1. Root route: Premium Landing Page
   if (currentRoute === '/') {
     return (
-      <LandingPage
-        onLaunchSimulator={(tab) => navigateTo('/simulator', tab || 'network')}
-      />
+      <>
+        <BootScreen />
+        <AmbientBackdrop variant="landing" />
+        <LandingPage
+          onLaunchSimulator={(tab) => {
+            requestBootReplay();
+            navigateTo('/simulator', tab || 'network');
+          }}
+        />
+      </>
     );
   }
 
   // 2. /simulator route: Full Quantum Simulator Application Workspace
   return (
-    <div style={{ minHeight: '100vh', padding: '1.25rem 1.75rem' }}>
+    <div className="qr-shell">
+      <BootScreen />
+      <AmbientBackdrop variant="lab" />
 
       {/* Top Navigation Header */}
       <Header
@@ -332,18 +349,16 @@ export const App: React.FC = () => {
             navigateTo('/simulator');
           }
         }}
-        selectedPreset={selectedPreset}
-        presets={presets}
-        onPresetChange={setSelectedPreset}
         activeTab={activeTab}
         onNavigateTab={(tab) => {
           setActiveTab(tab);
           setRoadmapNotice(null);
           window.history.replaceState({}, '', `/simulator?tab=${tab}`);
+          window.scrollTo({ top: 0, behavior: 'instant' });
         }}
       />
 
-      <div style={{ display: 'flex', gap: '1.25rem' }}>
+      <div className="qr-body">
 
         {/* Truthful Left Navigation Rail */}
         <Sidebar
@@ -352,6 +367,7 @@ export const App: React.FC = () => {
             setActiveTab(tab);
             setRoadmapNotice(null);
             window.history.replaceState({}, '', `/simulator?tab=${tab}`);
+            window.scrollTo({ top: 0, behavior: 'instant' });
           }}
           onLockedFeatureClick={(item) => {
             setRoadmapNotice(item);
@@ -359,7 +375,8 @@ export const App: React.FC = () => {
         />
 
           {/* Main Workspace: 8 Full Functional Labs */}
-          <main style={{ flex: 1, minWidth: 0 }}>
+          <main className="qr-main">
+            <div className="qr-tab-enter" key={activeTab}>
             {activeTab === 'experiments' ? (
               <ExperimentsLab />
             ) : activeTab === 'channels' ? (
@@ -377,56 +394,56 @@ export const App: React.FC = () => {
             ) : (
               <>
                 {/* Top Workspace Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.0rem' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '1.25rem',
+                    marginBottom: '1.5rem',
+                    paddingBottom: '1.25rem',
+                    borderBottom: '1px solid var(--border-faint)',
+                  }}
+                >
                   <div>
-                    <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
-                      Network Lab
+                    <span className="qr-eyebrow">Network Lab · Milestone 1</span>
+                    <h1 className="qr-page-title" style={{ marginTop: '0.6rem' }}>
+                      Route the network.
                     </h1>
-                    <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                      Build and simulate quantum communication networks across customizable repeaters
+                    <p className="qr-page-sub">
+                      Build and simulate quantum communication networks across customizable repeaters.
                     </p>
                   </div>
 
               {/* Functional Workspace Actions */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
                 {isNetworkModified && (
                   <span
                     style={{
-                      display: 'flex',
+                      display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '0.35rem',
-                      background: 'rgba(234, 179, 8, 0.15)',
-                      border: '1px solid rgba(234, 179, 8, 0.4)',
-                      borderRadius: '8px',
-                      padding: '0.4rem 0.75rem',
-                      fontSize: '0.76rem',
-                      fontWeight: 600,
-                      color: '#facc15',
+                      gap: '0.4rem',
+                      border: '1px solid var(--border-subtle)',
+                      borderRadius: 'var(--radius-pill)',
+                      padding: '0.35rem 0.75rem',
+                      fontSize: '0.72rem',
+                      fontWeight: 500,
+                      color: 'var(--accent-yellow)',
+                      background: 'var(--surface-1)',
                     }}
                   >
-                    <span>Modified network ({Object.keys(linkOverrides).length} custom {Object.keys(linkOverrides).length === 1 ? 'link' : 'links'})</span>
+                    {Object.keys(linkOverrides).length} custom {Object.keys(linkOverrides).length === 1 ? 'link' : 'links'}
                   </span>
                 )}
 
                 <button
                   onClick={resetToDefaults}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: '8px',
-                    padding: '0.45rem 0.85rem',
-                    color: 'var(--text-secondary)',
-                    fontSize: '0.78rem',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                  }}
-                  title="Reset network to generic default mesh"
+                  className="btn-secondary"
+                  title="Reset network to the default mesh"
                 >
                   <RotateCcw size={13} />
-                  Reset to Defaults
+                  Reset to defaults
                 </button>
               </div>
             </div>
@@ -435,11 +452,12 @@ export const App: React.FC = () => {
             {roadmapNotice && (
               <div
                 style={{
-                  background: 'linear-gradient(90deg, rgba(147, 51, 234, 0.2) 0%, rgba(192, 38, 211, 0.1) 100%)',
-                  border: '1px solid rgba(168, 85, 247, 0.4)',
-                  borderRadius: '10px',
-                  padding: '0.85rem 1.15rem',
-                  marginBottom: '1.15rem',
+                  background: 'var(--surface-1)',
+                  border: '1px solid var(--border-subtle)',
+                  borderLeft: '2px solid var(--accent-purple)',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '0.8rem 1rem',
+                  marginBottom: '1.25rem',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
@@ -447,18 +465,20 @@ export const App: React.FC = () => {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                  <Sparkles size={18} color="var(--accent-fuchsia)" />
+                  <Sparkles size={16} color="var(--accent-purple)" aria-hidden="true" />
                   <div>
-                    <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.86rem' }}>
+                    <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.84rem' }}>
                       {roadmapNotice.label} ({roadmapNotice.milestone})
                     </span>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginLeft: '0.6rem' }}>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '0.79rem', marginLeft: '0.6rem' }}>
                       {roadmapNotice.description} — <i>Network Lab is currently active.</i>
                     </span>
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setRoadmapNotice(null)}
+                  aria-label="Dismiss notice"
                   style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
                 >
                   <X size={16} />
@@ -467,18 +487,18 @@ export const App: React.FC = () => {
             )}
 
             {/* 3-Column Desktop Layout */}
-            <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr 340px', gap: '1.15rem', alignItems: 'start' }}>
+            <div className="qr-network-grid">
 
               {/* LEFT COLUMN: Configuration Panel with Single Primary Simulation Action */}
               <div className="glass-panel" style={{ padding: '1.15rem' }}>
-                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#fff', marginBottom: '1.0rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.01em', color: 'var(--text-primary)', marginBottom: '1.0rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                    <Settings2 size={16} color="var(--accent-fuchsia)" />
+                    <Settings2 size={15} color="var(--accent-purple)" />
                     Network Configuration
                   </div>
                   {isNetworkModified && (
-                    <span style={{ fontSize: '0.65rem', color: '#facc15', background: 'rgba(234, 179, 8, 0.15)', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>
-                      Custom Links
+                    <span style={{ fontSize: '0.62rem', fontWeight: 500, color: 'var(--accent-yellow)', background: 'var(--surface-1)', padding: '0.12rem 0.4rem', borderRadius: 'var(--radius-xs)' }}>
+                      Custom
                     </span>
                   )}
                 </div>
@@ -548,12 +568,12 @@ export const App: React.FC = () => {
                           display: 'flex',
                           alignItems: 'center',
                           gap: '0.6rem',
-                          background: strategy === opt.id ? 'rgba(192, 38, 211, 0.12)' : 'rgba(255, 255, 255, 0.02)',
-                          border: strategy === opt.id ? '1px solid var(--accent-fuchsia)' : '1px solid var(--border-subtle)',
-                          borderRadius: '8px',
-                          padding: '0.55rem 0.75rem',
-                          fontSize: '0.82rem',
-                          color: strategy === opt.id ? '#fff' : 'var(--text-secondary)',
+                          background: strategy === opt.id ? 'var(--surface-2)' : 'transparent',
+                          border: strategy === opt.id ? '1px solid var(--accent-purple)' : '1px solid var(--border-subtle)',
+                          borderRadius: 'var(--radius-sm)',
+                          padding: '0.55rem 0.7rem',
+                          fontSize: '0.8rem',
+                          color: strategy === opt.id ? 'var(--text-primary)' : 'var(--text-secondary)',
                           cursor: 'pointer',
                           fontWeight: strategy === opt.id ? 600 : 400,
                           transition: 'all 0.15s ease',
@@ -594,10 +614,10 @@ export const App: React.FC = () => {
                   </button>
 
                   {showAdvanced && (
-                    <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'var(--surface-inset)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-faint)' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '0.3rem' }}>
                         <span style={{ color: 'var(--text-muted)' }}>Multi-Metric α:</span>
-                        <span style={{ color: '#fff', fontWeight: 600 }}>{alpha.toFixed(2)}</span>
+                        <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{alpha.toFixed(2)}</span>
                       </div>
                       <input
                         type="range"
@@ -626,12 +646,12 @@ export const App: React.FC = () => {
                     }}
                     style={{
                       width: '100%',
-                      background: 'rgba(255, 255, 255, 0.04)',
+                      background: 'transparent',
                       border: '1px dashed var(--border-subtle)',
-                      borderRadius: '8px',
+                      borderRadius: 'var(--radius-sm)',
                       padding: '0.55rem',
                       color: 'var(--text-secondary)',
-                      fontSize: '0.78rem',
+                      fontSize: '0.76rem',
                       fontWeight: 500,
                       cursor: 'pointer',
                       display: 'flex',
@@ -641,7 +661,7 @@ export const App: React.FC = () => {
                       transition: 'all 0.15s ease'
                     }}
                   >
-                    <Sliders size={14} color="var(--accent-fuchsia)" />
+                    <Sliders size={14} color="var(--accent-purple)" />
                     <span>Edit a Network Link (Distance / Quality)</span>
                   </button>
                 </div>
@@ -664,23 +684,13 @@ export const App: React.FC = () => {
                 >
                   {isSimulating ? (
                     <>
-                      <span
-                        style={{
-                          width: '15px',
-                          height: '15px',
-                          border: '2px solid rgba(255,255,255,0.3)',
-                          borderTopColor: '#fff',
-                          borderRadius: '50%',
-                          animation: 'spin 0.8s linear infinite',
-                          display: 'inline-block'
-                        }}
-                      />
-                      Simulating Circuit...
+                      <span className="spinner" aria-hidden="true" />
+                      Simulating circuit…
                     </>
                   ) : (
                     <>
-                      <Play size={16} fill="#fff" />
-                      Run Simulation ▶
+                      <Play size={15} fill="currentColor" aria-hidden="true" />
+                      Run simulation
                     </>
                   )}
                 </button>
@@ -707,14 +717,14 @@ export const App: React.FC = () => {
                 />
 
                 {isLoadingRoute && (
-                  <div style={{ marginTop: '0.65rem', padding: '0.4rem 0.8rem', background: 'rgba(147, 51, 234, 0.15)', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '6px', color: '#d8b4fe', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--accent-fuchsia)' }} />
-                    Evaluating optimal quantum routes across topology...
+                  <div style={{ marginTop: '0.65rem', padding: '0.45rem 0.8rem', background: 'var(--surface-1)', border: '1px solid var(--border-faint)', borderRadius: 'var(--radius-sm)', color: 'var(--text-secondary)', fontSize: '0.76rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-purple)' }} />
+                    Evaluating optimal quantum routes across topology…
                   </div>
                 )}
 
                 {routeError && (
-                  <div style={{ marginTop: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '8px', color: '#f87171', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <div style={{ marginTop: '0.75rem', padding: '0.75rem 1rem', background: 'var(--surface-1)', border: '1px solid var(--color-danger)', borderRadius: 'var(--radius-sm)', color: 'var(--color-danger)', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <AlertCircle size={16} />
                     {routeError}
                   </div>
@@ -748,6 +758,7 @@ export const App: React.FC = () => {
             />
               </>
             )}
+            </div>
 
           </main>
         </div>

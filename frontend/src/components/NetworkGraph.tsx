@@ -86,14 +86,14 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
 
   if (!graph || !graph.nodes || graph.nodes.length === 0) {
     return (
-      <div 
+      <div
         style={{
           height: '490px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: 'var(--text-muted)',
-          background: 'rgba(10, 6, 22, 0.6)',
+          background: 'var(--surface-inset)',
           borderRadius: '12px',
           border: '1px solid var(--border-subtle)',
         }}
@@ -104,27 +104,30 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
   }
 
   return (
-    <div 
-      style={{ 
-        position: 'relative', 
-        width: '100%', 
-        height: '490px', 
-        background: 'radial-gradient(ellipse at center, rgba(30, 16, 62, 0.5) 0%, rgba(9, 5, 20, 0.95) 75%)',
-        borderRadius: '12px',
+    <div
+      className="qr-dark-surface"
+      style={{
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        height: '520px',
+        background: 'radial-gradient(ellipse at center, rgba(30, 16, 62, 0.5) 0%, #050505 75%)',
+        borderRadius: 'var(--radius-md)',
         border: '1px solid var(--border-subtle)',
         overflow: 'hidden',
         boxShadow: 'inset 0 0 60px rgba(0, 0, 0, 0.7)',
       }}
     >
       {/* Top Left: Accessible Link Selector & Modified Indicator */}
-      <div 
+      <div
         style={{
-          position: 'absolute',
-          top: '16px',
-          left: '18px',
+          position: 'relative',
           display: 'flex',
           alignItems: 'center',
+          flexWrap: 'wrap',
           gap: '0.65rem',
+          padding: '12px 14px 0',
           zIndex: 10,
         }}
       >
@@ -132,12 +135,12 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(14, 9, 28, 0.85)', backdropFilter: 'blur(8px)', padding: '0.35rem 0.65rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
           <Sliders size={13} color="var(--accent-fuchsia)" />
           <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>Link:</span>
-          <select 
+          <select
             aria-label="Select link to edit"
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: '0.74rem',
               fontWeight: 600,
               cursor: 'pointer',
@@ -152,11 +155,11 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
               if (edge && onEdgeClick) onEdgeClick(edge);
             }}
           >
-            <option value="" style={{ background: '#120b24', color: '#888' }}>
+            <option value="" style={{ background: '#120b24', color: 'var(--text-muted)' }}>
               Choose a link to edit...
             </option>
             {graph.edges.map((e) => (
-              <option key={`${e.source}-${e.target}`} value={`${e.source}-${e.target}`} style={{ background: '#120b24', color: '#fff' }}>
+              <option key={`${e.source}-${e.target}`} value={`${e.source}-${e.target}`} style={{ background: '#120b24', color: 'var(--text-primary)' }}>
                 {e.source} ↔ {e.target} ({e.distance_km}km, w={e.w.toFixed(2)})
               </option>
             ))}
@@ -165,7 +168,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
 
         {/* Modified Network Indicator */}
         {isNetworkModified && (
-          <div 
+          <div
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -176,18 +179,18 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
               padding: '0.35rem 0.65rem',
               fontSize: '0.74rem',
               fontWeight: 600,
-              color: '#facc15',
+              color: 'var(--color-warning)',
               backdropFilter: 'blur(8px)',
             }}
           >
             <span>Modified network</span>
             {onResetAllLinks && (
-              <button 
+              <button
                 onClick={onResetAllLinks}
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#fef08a',
+                  color: 'var(--color-warning)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -207,20 +210,15 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
       </div>
 
       {/* Top Right: Legend */}
-      <div 
+      <div
         style={{
-          position: 'absolute',
-          top: '16px',
-          right: '18px',
-          background: 'rgba(14, 9, 28, 0.85)',
-          backdropFilter: 'blur(8px)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: '8px',
-          padding: '0.55rem 0.8rem',
-          fontSize: '0.72rem',
           display: 'flex',
-          flexDirection: 'column',
-          gap: '0.3rem',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: '0.3rem 1.1rem',
+          padding: '0.5rem 14px 0.6rem',
+          fontSize: '0.68rem',
+          borderBottom: '1px solid var(--border-faint)',
           zIndex: 10,
           color: 'var(--text-secondary)',
         }}
@@ -230,7 +228,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           <span>Selected Route</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ width: '16px', height: '2px', background: 'rgba(147, 51, 234, 0.4)', borderRadius: '2px' }} />
+          <span style={{ width: '18px', height: '2px', background: 'rgba(196, 181, 253, 0.85)', boxShadow: '0 0 6px rgba(147, 51, 234, 0.8)', borderRadius: '2px' }} />
           <span>Network Link (Click to Edit)</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -244,9 +242,11 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
       </div>
 
       {/* SVG Canvas */}
-      <svg 
-        viewBox="0 0 700 480" 
-        style={{ width: '100%', height: '100%', display: 'block' }}
+      <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
+      <svg
+        viewBox="0 0 700 480"
+        preserveAspectRatio="xMidYMid meet"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}
       >
         <defs>
           {/* Active Route Glow Filter */}
@@ -297,44 +297,44 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           const isSelected = isEdgeSelected(edge);
 
           return (
-            <g 
-              key={`${edge.source}-${edge.target}`} 
+            <g
+              key={`${edge.source}-${edge.target}`}
               style={{ cursor: 'pointer' }}
               onClick={() => onEdgeClick && onEdgeClick(edge)}
               onMouseEnter={() => setHoveredEdge(edge)}
               onMouseLeave={() => setHoveredEdge(null)}
             >
               {/* Invisible thicker hit-area for easy mouse clicking */}
-              <line 
-                x1={u.x} 
-                y1={u.y} 
-                x2={v.x} 
-                y2={v.y} 
-                stroke="transparent" 
-                strokeWidth={18} 
+              <line
+                x1={u.x}
+                y1={u.y}
+                x2={v.x}
+                y2={v.y}
+                stroke="transparent"
+                strokeWidth={18}
               />
 
               {/* Distinct selected edge halo */}
               {isSelected && (
-                <line 
-                  x1={u.x} 
-                  y1={u.y} 
-                  x2={v.x} 
-                  y2={v.y} 
-                  stroke="#fbbf24" 
-                  strokeWidth={6} 
+                <line
+                  x1={u.x}
+                  y1={u.y}
+                  x2={v.x}
+                  y2={v.y}
+                  stroke="var(--color-warning)"
+                  strokeWidth={6}
                   strokeOpacity={0.6}
                   filter="url(#selectedEdgeGlow)"
                 />
               )}
 
               {/* Visual line */}
-              <line 
-                x1={u.x} 
-                y1={u.y} 
-                x2={v.x} 
-                y2={v.y} 
-                stroke={isSelected ? '#facc15' : isHovered ? 'rgba(192, 38, 211, 0.9)' : 'rgba(147, 51, 234, 0.35)'} 
+              <line
+                x1={u.x}
+                y1={u.y}
+                x2={v.x}
+                y2={v.y}
+                stroke={isSelected ? 'var(--color-warning)' : isHovered ? 'rgba(192, 38, 211, 0.9)' : 'rgba(167, 90, 244, 0.5)'}
                 strokeWidth={isSelected ? 3.0 : isHovered ? 2.5 : 1.5}
                 strokeDasharray={isSelected ? '6,3' : isHovered ? 'none' : '4,3'}
                 style={{ transition: 'all 0.15s ease' }}
@@ -347,14 +347,14 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
                 width={40}
                 height={14}
                 rx={3}
-                fill={isSelected ? 'rgba(234, 179, 8, 0.25)' : isHovered ? 'rgba(147, 51, 234, 0.35)' : 'rgba(10, 6, 22, 0.7)'}
-                stroke={isSelected ? '#facc15' : isHovered ? 'rgba(192, 38, 211, 0.6)' : 'transparent'}
+                fill={isSelected ? 'rgba(234, 179, 8, 0.25)' : isHovered ? 'rgba(167, 90, 244, 0.5)' : 'var(--surface-inset)'}
+                stroke={isSelected ? 'var(--color-warning)' : isHovered ? 'rgba(192, 38, 211, 0.6)' : 'transparent'}
                 strokeWidth={1}
               />
               <text
                 x={(u.x + v.x) / 2}
                 y={(u.y + v.y) / 2 - 3}
-                fill={isSelected ? '#fde047' : isHovered ? '#fff' : 'rgba(192, 132, 252, 0.65)'}
+                fill={isSelected ? 'var(--color-warning)' : isHovered ? 'var(--text-primary)' : 'rgba(192, 132, 252, 0.65)'}
                 fontSize="8.5"
                 fontFamily="var(--font-mono)"
                 textAnchor="middle"
@@ -378,56 +378,56 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           const isSelected = isEdgeSelected(edge);
 
           return (
-            <g 
-              key={`active-${edge.source}-${edge.target}`} 
+            <g
+              key={`active-${edge.source}-${edge.target}`}
               style={{ cursor: 'pointer' }}
               onClick={() => onEdgeClick && onEdgeClick(edge)}
               onMouseEnter={() => setHoveredEdge(edge)}
               onMouseLeave={() => setHoveredEdge(null)}
             >
               {/* Invisible thicker hit-area */}
-              <line 
-                x1={u.x} 
-                y1={u.y} 
-                x2={v.x} 
-                y2={v.y} 
-                stroke="transparent" 
-                strokeWidth={20} 
+              <line
+                x1={u.x}
+                y1={u.y}
+                x2={v.x}
+                y2={v.y}
+                stroke="transparent"
+                strokeWidth={20}
               />
 
               {/* Selected halo */}
               {isSelected && (
-                <line 
-                  x1={u.x} 
-                  y1={u.y} 
-                  x2={v.x} 
-                  y2={v.y} 
-                  stroke="#fbbf24" 
-                  strokeWidth={12} 
+                <line
+                  x1={u.x}
+                  y1={u.y}
+                  x2={v.x}
+                  y2={v.y}
+                  stroke="var(--color-warning)"
+                  strokeWidth={12}
                   strokeOpacity={0.65}
                   filter="url(#selectedEdgeGlow)"
                 />
               )}
 
               {/* Soft ambient outer halo */}
-              <line 
-                x1={u.x} 
-                y1={u.y} 
-                x2={v.x} 
-                y2={v.y} 
-                stroke="rgba(217, 70, 239, 0.4)" 
-                strokeWidth={10} 
+              <line
+                x1={u.x}
+                y1={u.y}
+                x2={v.x}
+                y2={v.y}
+                stroke="rgba(217, 70, 239, 0.4)"
+                strokeWidth={10}
                 strokeLinecap="round"
                 filter="url(#routeGlow)"
               />
               {/* Core intense laser line */}
-              <line 
-                x1={u.x} 
-                y1={u.y} 
-                x2={v.x} 
-                y2={v.y} 
-                stroke={isSelected ? '#fde047' : isHovered ? '#fff' : '#f5d0fe'} 
-                strokeWidth={isHovered ? 4.5 : 3.8} 
+              <line
+                x1={u.x}
+                y1={u.y}
+                x2={v.x}
+                y2={v.y}
+                stroke={isSelected ? 'var(--color-warning)' : isHovered ? 'var(--text-primary)' : 'var(--accent-magenta)'}
+                strokeWidth={isHovered ? 4.5 : 3.8}
                 strokeLinecap="round"
               />
 
@@ -439,13 +439,13 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
                 height={16}
                 rx={4}
                 fill={isSelected ? 'rgba(234, 179, 8, 0.3)' : 'rgba(19, 11, 36, 0.95)'}
-                stroke={isSelected ? '#facc15' : 'rgba(217, 70, 239, 0.8)'}
+                stroke={isSelected ? 'var(--color-warning)' : 'rgba(217, 70, 239, 0.8)'}
                 strokeWidth={isSelected ? 1.5 : 1}
               />
               <text
                 x={(u.x + v.x) / 2}
                 y={(u.y + v.y) / 2 + 1}
-                fill={isSelected ? '#fde047' : '#f0abfc'}
+                fill={isSelected ? 'var(--color-warning)' : 'var(--accent-magenta)'}
                 fontSize="9"
                 fontWeight="700"
                 fontFamily="var(--font-mono)"
@@ -468,29 +468,29 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           const isHovered = hoveredNode === n.id;
 
           let fillColor = '#170f2e';
-          let strokeColor = '#818cf8';
+          let strokeColor = 'var(--accent-violet)';
           let nodeRadius = 13;
           let filterUrl = '';
 
           if (isSource) {
             fillColor = 'var(--color-alice)';
-            strokeColor = '#bae6fd';
+            strokeColor = 'var(--color-info)';
             nodeRadius = 15;
             filterUrl = 'url(#aliceGlow)';
           } else if (isTarget) {
             fillColor = 'var(--color-bob)';
-            strokeColor = '#fde68a';
+            strokeColor = 'var(--color-warning)';
             nodeRadius = 15;
             filterUrl = 'url(#bobGlow)';
           } else if (inRoute) {
-            fillColor = '#7e22ce';
-            strokeColor = '#f0abfc';
+            fillColor = 'var(--accent-purple)';
+            strokeColor = 'var(--accent-magenta)';
             nodeRadius = 14;
           }
 
           return (
-            <g 
-              key={n.id} 
+            <g
+              key={n.id}
               style={{ cursor: 'pointer' }}
               onClick={() => onNodeClick && onNodeClick(n.id)}
               onMouseEnter={() => setHoveredNode(n.id)}
@@ -498,27 +498,27 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
             >
               {/* Outer pulsing ring for Source / Destination */}
               {isSource && (
-                <circle 
-                  cx={pt.x} 
-                  cy={pt.y} 
-                  r={22} 
-                  fill="none" 
-                  stroke="var(--color-alice)" 
-                  strokeWidth={1.5} 
-                  strokeDasharray="3,3" 
+                <circle
+                  cx={pt.x}
+                  cy={pt.y}
+                  r={22}
+                  fill="none"
+                  stroke="var(--color-alice)"
+                  strokeWidth={1.5}
+                  strokeDasharray="3,3"
                   opacity={0.7}
                 />
               )}
 
               {isTarget && (
-                <circle 
-                  cx={pt.x} 
-                  cy={pt.y} 
-                  r={22} 
-                  fill="none" 
-                  stroke="var(--color-bob)" 
-                  strokeWidth={1.5} 
-                  strokeDasharray="4,2" 
+                <circle
+                  cx={pt.x}
+                  cy={pt.y}
+                  r={22}
+                  fill="none"
+                  stroke="var(--color-bob)"
+                  strokeWidth={1.5}
+                  strokeDasharray="4,2"
                   opacity={0.8}
                 />
               )}
@@ -540,7 +540,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
                 cx={pt.x}
                 cy={pt.y}
                 r={4}
-                fill="#fff"
+                fill="currentColor"
                 opacity={0.9}
               />
 
@@ -548,7 +548,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
               <text
                 x={pt.x}
                 y={pt.y + 24}
-                fill="#fff"
+                fill="currentColor"
                 fontSize="11"
                 fontWeight="700"
                 fontFamily="var(--font-sans)"
@@ -561,9 +561,10 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           );
         })}
       </svg>
+      </div>
 
       {/* Bottom Canvas Controls & Legend */}
-      <div 
+      <div
         style={{
           position: 'absolute',
           bottom: '14px',

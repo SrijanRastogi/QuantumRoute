@@ -1,39 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Play, 
-  RotateCcw, 
-  Sparkles, 
-  Info, 
-  CheckCircle, 
-  AlertTriangle, 
-  Code, 
-  Layers, 
-  TrendingDown, 
-  Gauge, 
+import {
+  Play,
+  RotateCcw,
+  Sparkles,
+  Info,
+  CheckCircle,
+  AlertTriangle,
+  Code,
+  Layers,
+  TrendingDown,
+  Gauge,
   Eye,
   ChevronDown,
   ChevronUp,
   HelpCircle,
   Check
 } from 'lucide-react';
+import { MathBlock, MathInline } from './MathView';
 import { BlochSphere } from './BlochSphere';
 import { NoiseSweepChart } from './NoiseSweepChart';
-import { 
-  fetchStatePresets, 
-  prepareCustomState, 
-  runTeleportExperiment, 
-  runNoiseSweep 
+import {
+  fetchStatePresets,
+  prepareCustomState,
+  runTeleportExperiment,
+  runNoiseSweep
 } from '../api';
-import type { 
-  StatePreset, 
-  StatePrepResponse, 
-  TeleportExperimentResponse, 
-  NoiseSweepResponse 
+import type {
+  StatePreset,
+  StatePrepResponse,
+  TeleportExperimentResponse,
+  NoiseSweepResponse
 } from '../types';
-import { 
-  sphericalToCartesian, 
-  cartesianToSpherical, 
-  validateCartesianCoordinates 
+import {
+  sphericalToCartesian,
+  cartesianToSpherical,
+  validateCartesianCoordinates
 } from '../utils/quantumCoordinates';
 
 export const ExperimentsLab: React.FC = () => {
@@ -280,12 +281,12 @@ export const ExperimentsLab: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      
+
       {/* Top Workspace Header */}
-      <div 
-        style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '1rem',
@@ -295,7 +296,7 @@ export const ExperimentsLab: React.FC = () => {
       >
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', margin: 0 }}>
+            <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', margin: 0 }}>
               Guided Quantum Experiments & 3D Bloch Explorer
             </h1>
             <span
@@ -305,7 +306,7 @@ export const ExperimentsLab: React.FC = () => {
                 padding: '0.2rem 0.55rem',
                 borderRadius: '6px',
                 background: 'rgba(56, 189, 248, 0.15)',
-                color: '#38bdf8',
+                color: 'var(--color-info)',
                 border: '1px solid rgba(56, 189, 248, 0.35)',
               }}
             >
@@ -320,20 +321,20 @@ export const ExperimentsLab: React.FC = () => {
         {/* Workspace Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           {/* Sub-tab Switcher */}
-          <div 
-            style={{ 
-              display: 'flex', 
-              background: 'rgba(15, 23, 42, 0.6)', 
-              borderRadius: '8px', 
-              padding: '2px', 
-              border: '1px solid var(--border-subtle)' 
+          <div
+            style={{
+              display: 'flex',
+              background: 'var(--surface-inset)',
+              borderRadius: '8px',
+              padding: '2px',
+              border: '1px solid var(--border-subtle)'
             }}
           >
             <button
               onClick={() => setActiveTab('teleport')}
               style={{
                 background: activeTab === 'teleport' ? 'var(--accent-purple)' : 'transparent',
-                color: activeTab === 'teleport' ? '#fff' : 'var(--text-muted)',
+                color: activeTab === 'teleport' ? 'var(--text-primary)' : 'var(--text-muted)',
                 border: 'none',
                 borderRadius: '6px',
                 padding: '0.4rem 0.85rem',
@@ -354,7 +355,7 @@ export const ExperimentsLab: React.FC = () => {
               }}
               style={{
                 background: activeTab === 'sweep' ? 'var(--accent-purple)' : 'transparent',
-                color: activeTab === 'sweep' ? '#fff' : 'var(--text-muted)',
+                color: activeTab === 'sweep' ? 'var(--text-primary)' : 'var(--text-muted)',
                 border: 'none',
                 borderRadius: '6px',
                 padding: '0.4rem 0.85rem',
@@ -375,7 +376,7 @@ export const ExperimentsLab: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '0.4rem',
-              background: 'rgba(255, 255, 255, 0.04)',
+              background: 'var(--surface-1)',
               border: '1px solid var(--border-subtle)',
               borderRadius: '8px',
               padding: '0.45rem 0.85rem',
@@ -393,37 +394,37 @@ export const ExperimentsLab: React.FC = () => {
       </div>
 
       {/* Collapsible "What am I seeing?" Educational Guide */}
-      <div 
-        className="glass-panel" 
-        style={{ 
-          padding: '0.85rem 1.15rem', 
+      <div
+        className="glass-panel"
+        style={{
+          padding: '0.85rem 1.15rem',
           background: 'rgba(30, 27, 75, 0.3)',
           border: '1px solid rgba(168, 85, 247, 0.25)',
         }}
       >
-        <div 
+        <div
           onClick={() => setShowExplanation(!showExplanation)}
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between', 
-            cursor: 'pointer' 
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#c084fc', fontWeight: 700, fontSize: '0.85rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-violet)', fontWeight: 700, fontSize: '0.85rem' }}>
             <HelpCircle size={16} />
             <span>What am I seeing? Bloch Sphere & Coordinate Foundations</span>
           </div>
-          {showExplanation ? <ChevronUp size={16} color="#c084fc" /> : <ChevronDown size={16} color="#c084fc" />}
+          {showExplanation ? <ChevronUp size={16} color="var(--accent-violet)" /> : <ChevronDown size={16} color="var(--accent-violet)" />}
         </div>
 
         {showExplanation && (
-          <div 
-            style={{ 
-              marginTop: '0.85rem', 
-              paddingTop: '0.75rem', 
-              borderTop: '1px dashed rgba(255, 255, 255, 0.1)', 
-              fontSize: '0.76rem', 
+          <div
+            style={{
+              marginTop: '0.85rem',
+              paddingTop: '0.75rem',
+              borderTop: '1px dashed rgba(255, 255, 255, 0.1)',
+              fontSize: '0.76rem',
               color: 'var(--text-secondary)',
               lineHeight: 1.55,
               display: 'grid',
@@ -432,19 +433,19 @@ export const ExperimentsLab: React.FC = () => {
             }}
           >
             <div>
-              <div style={{ fontWeight: 700, color: '#38bdf8', marginBottom: '0.2rem' }}>
+              <div style={{ fontWeight: 700, color: 'var(--color-info)', marginBottom: '0.2rem' }}>
                 1. The Bloch Sphere
               </div>
               A geometric representation of a 2-level quantum state space. Every point on the unit sphere surface (||r|| = 1.0) represents a unique pure state |ψ⟩. The interior (||r|| &lt; 1.0) represents mixed states.
             </div>
             <div>
-              <div style={{ fontWeight: 700, color: '#34d399', marginBottom: '0.2rem' }}>
+              <div style={{ fontWeight: 700, color: 'var(--color-success)', marginBottom: '0.2rem' }}>
                 2. Cartesian vs. Spherical
               </div>
-              Coordinates X, Y, Z are the expectation values of Pauli spin matrices: X = ⟨σ_x⟩, Y = ⟨σ_y⟩, Z = ⟨σ_z⟩. Spherical angle θ is polar latitude (Z axis), and φ is azimuthal phase in the equator (X-Y plane).
+              Coordinates X, Y, Z are the expectation values of Pauli spin matrices: <MathInline math={`X = \\langle\\sigma_x\\rangle`} />, <MathInline math={`Y = \\langle\\sigma_y\\rangle`} />, <MathInline math={`Z = \\langle\\sigma_z\\rangle`} />. Spherical angle θ is polar latitude (Z axis), and φ is azimuthal phase in the equator (X-Y plane).
             </div>
             <div>
-              <div style={{ fontWeight: 700, color: '#f43f5e', marginBottom: '0.2rem' }}>
+              <div style={{ fontWeight: 700, color: 'var(--color-danger)', marginBottom: '0.2rem' }}>
                 3. Noise Contraction
               </div>
               Depolarizing noise contracts Bob's received state vector isotropically: r_out = (1 - p) * r_in. Pure states become mixed, shrinking toward the center (0, 0, 0) where the state is completely mixed (I/2).
@@ -455,22 +456,22 @@ export const ExperimentsLab: React.FC = () => {
 
       {/* Main Grid Layout: Controls (Left) + 3D Bloch Canvas & Teleportation (Right) */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1.25rem' }}>
-        
+
         {/* LEFT COLUMN: State Playground & Coordinate Editors */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          
+
           {/* Phase A & B: State Playground & Dual Coordinate Editors */}
           <div className="glass-panel" style={{ padding: '1.25rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Layers size={16} color="var(--accent-cyan)" />
-                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   1. Input State & Coordinate Editor
                 </h3>
               </div>
-              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                Single-Qubit State |ψ⟩
-              </span>
+              <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                <MathInline math={`|\\psi\\rangle = \\cos(\\theta/2)|0\\rangle + e^{i\\phi}\\sin(\\theta/2)|1\\rangle`} />
+              </div>
             </div>
 
             {/* Presets Grid */}
@@ -487,7 +488,7 @@ export const ExperimentsLab: React.FC = () => {
                       onClick={() => handleSelectPreset(preset)}
                       style={{
                         background: isSelected ? 'rgba(56, 189, 248, 0.18)' : 'rgba(255, 255, 255, 0.03)',
-                        border: isSelected ? '1px solid #38bdf8' : '1px solid var(--border-subtle)',
+                        border: isSelected ? '1px solid var(--color-info)' : '1px solid var(--border-subtle)',
                         borderRadius: '8px',
                         padding: '0.55rem 0.25rem',
                         cursor: 'pointer',
@@ -496,7 +497,7 @@ export const ExperimentsLab: React.FC = () => {
                       }}
                       title={preset.description}
                     >
-                      <div style={{ fontSize: '0.88rem', fontWeight: 800, color: isSelected ? '#38bdf8' : '#e2e8f0' }}>
+                      <div style={{ fontSize: '0.88rem', fontWeight: 800, color: isSelected ? 'var(--color-info)' : 'var(--text-primary)' }}>
                         {preset.symbol}
                       </div>
                       <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginTop: '2px' }}>
@@ -509,20 +510,20 @@ export const ExperimentsLab: React.FC = () => {
             </div>
 
             {/* Cartesian Coordinate Editor (X, Y, Z) */}
-            <div 
-              style={{ 
-                background: 'rgba(15, 23, 42, 0.55)', 
-                border: '1px solid var(--border-subtle)', 
-                borderRadius: '8px', 
-                padding: '0.85rem 1rem', 
-                marginBottom: '1rem' 
+            <div
+              style={{
+                background: 'var(--surface-inset)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '8px',
+                padding: '0.85rem 1rem',
+                marginBottom: '1rem'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
-                <span style={{ fontSize: '0.76rem', color: '#e2e8f0', fontWeight: 700 }}>
+                <span style={{ fontSize: '0.76rem', color: 'var(--text-primary)', fontWeight: 700 }}>
                   Cartesian Bloch Vector (X, Y, Z):
                 </span>
-                
+
                 {/* Mixed-State Mode Toggle */}
                 <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
                   <input
@@ -534,9 +535,9 @@ export const ExperimentsLab: React.FC = () => {
                       const val = validateCartesianCoordinates(cartX, cartY, cartZ, newMode);
                       setCoordValidation({ isValid: val.isValid, error: val.error, radius: val.radius });
                     }}
-                    style={{ accentColor: '#c084fc', cursor: 'pointer' }}
+                    style={{ accentColor: 'var(--accent-violet)', cursor: 'pointer' }}
                   />
-                  <span style={{ fontSize: '0.68rem', color: isMixedMode ? '#c084fc' : 'var(--text-muted)', fontWeight: 600 }}>
+                  <span style={{ fontSize: '0.68rem', color: isMixedMode ? 'var(--accent-violet)' : 'var(--text-muted)', fontWeight: 600 }}>
                     Mixed Mode (||r|| ≤ 1)
                   </span>
                 </label>
@@ -546,7 +547,7 @@ export const ExperimentsLab: React.FC = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.65rem', marginBottom: '0.65rem' }}>
                 {/* X Input */}
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: '#f43f5e', fontWeight: 600, marginBottom: '2px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--color-danger)', fontWeight: 600, marginBottom: '2px' }}>
                     <span>X (|+⟩ / |-⟩):</span>
                   </div>
                   <input
@@ -561,11 +562,11 @@ export const ExperimentsLab: React.FC = () => {
                     }}
                     style={{
                       width: '100%',
-                      background: 'rgba(0, 0, 0, 0.3)',
+                      background: 'var(--surface-inset)',
                       border: '1px solid var(--border-subtle)',
                       borderRadius: '6px',
                       padding: '0.35rem 0.5rem',
-                      color: '#fff',
+                      color: 'var(--text-primary)',
                       fontSize: '0.78rem',
                       fontFamily: 'monospace',
                     }}
@@ -574,7 +575,7 @@ export const ExperimentsLab: React.FC = () => {
 
                 {/* Y Input */}
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: '#10b981', fontWeight: 600, marginBottom: '2px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--color-success)', fontWeight: 600, marginBottom: '2px' }}>
                     <span>Y (|+i⟩ / |-i⟩):</span>
                   </div>
                   <input
@@ -589,11 +590,11 @@ export const ExperimentsLab: React.FC = () => {
                     }}
                     style={{
                       width: '100%',
-                      background: 'rgba(0, 0, 0, 0.3)',
+                      background: 'var(--surface-inset)',
                       border: '1px solid var(--border-subtle)',
                       borderRadius: '6px',
                       padding: '0.35rem 0.5rem',
-                      color: '#fff',
+                      color: 'var(--text-primary)',
                       fontSize: '0.78rem',
                       fontFamily: 'monospace',
                     }}
@@ -602,7 +603,7 @@ export const ExperimentsLab: React.FC = () => {
 
                 {/* Z Input */}
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: '#38bdf8', fontWeight: 600, marginBottom: '2px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--color-info)', fontWeight: 600, marginBottom: '2px' }}>
                     <span>Z (|0⟩ / |1⟩):</span>
                   </div>
                   <input
@@ -617,11 +618,11 @@ export const ExperimentsLab: React.FC = () => {
                     }}
                     style={{
                       width: '100%',
-                      background: 'rgba(0, 0, 0, 0.3)',
+                      background: 'var(--surface-inset)',
                       border: '1px solid var(--border-subtle)',
                       borderRadius: '6px',
                       padding: '0.35rem 0.5rem',
-                      color: '#fff',
+                      color: 'var(--text-primary)',
                       fontSize: '0.78rem',
                       fontFamily: 'monospace',
                     }}
@@ -633,11 +634,11 @@ export const ExperimentsLab: React.FC = () => {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.72rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Bloch Radius ||r||:</span>
-                  <span 
-                    style={{ 
-                      fontWeight: 700, 
-                      fontFamily: 'monospace', 
-                      color: coordValidation.isValid ? '#34d399' : '#f87171' 
+                  <span
+                    style={{
+                      fontWeight: 700,
+                      fontFamily: 'monospace',
+                      color: coordValidation.isValid ? 'var(--color-success)' : 'var(--color-danger)'
                     }}
                   >
                     {coordValidation.radius.toFixed(4)}
@@ -652,10 +653,10 @@ export const ExperimentsLab: React.FC = () => {
                       alignItems: 'center',
                       gap: '4px',
                       background: 'rgba(56, 189, 248, 0.15)',
-                      border: '1px solid #38bdf8',
+                      border: '1px solid var(--color-info)',
                       borderRadius: '5px',
                       padding: '2px 8px',
-                      color: '#38bdf8',
+                      color: 'var(--color-info)',
                       fontSize: '0.68rem',
                       fontWeight: 700,
                       cursor: 'pointer',
@@ -670,14 +671,14 @@ export const ExperimentsLab: React.FC = () => {
 
               {/* Validation Warning Alert */}
               {!coordValidation.isValid && coordValidation.error && (
-                <div 
-                  style={{ 
-                    marginTop: '0.5rem', 
-                    padding: '0.45rem 0.65rem', 
-                    background: 'rgba(239, 68, 68, 0.12)', 
-                    border: '1px solid rgba(239, 68, 68, 0.3)', 
+                <div
+                  style={{
+                    marginTop: '0.5rem',
+                    padding: '0.45rem 0.65rem',
+                    background: 'rgba(239, 68, 68, 0.12)',
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
                     borderRadius: '6px',
-                    color: '#f87171',
+                    color: 'var(--color-danger)',
                     fontSize: '0.7rem',
                     display: 'flex',
                     alignItems: 'center',
@@ -691,21 +692,21 @@ export const ExperimentsLab: React.FC = () => {
             </div>
 
             {/* Synchronized Spherical Angle Sliders */}
-            <div 
-              style={{ 
-                background: 'rgba(15, 23, 42, 0.45)', 
-                border: '1px solid var(--border-subtle)', 
-                borderRadius: '8px', 
-                padding: '0.85rem 1rem', 
-                marginBottom: '1rem' 
+            <div
+              style={{
+                background: 'var(--surface-inset)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '8px',
+                padding: '0.85rem 1rem',
+                marginBottom: '1rem'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
                 <span style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
                   Synchronized Spherical Coordinates (θ, φ):
                 </span>
-                <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>
-                  θ = arccos(z) · φ = atan2(y, x)
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                  <MathInline math={`\\theta = \\arccos(z), \\quad \\phi = \\text{atan2}(y, x)`} />
                 </span>
               </div>
 
@@ -713,7 +714,7 @@ export const ExperimentsLab: React.FC = () => {
               <div style={{ marginBottom: '0.75rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '3px' }}>
                   <span>Polar Angle θ (0 → π):</span>
-                  <span style={{ color: '#38bdf8', fontFamily: 'monospace', fontWeight: 600 }}>
+                  <span style={{ color: 'var(--color-info)', fontFamily: 'monospace', fontWeight: 600 }}>
                     {theta.toFixed(3)} rad ({(theta * 180 / Math.PI).toFixed(1)}°)
                   </span>
                 </div>
@@ -732,7 +733,7 @@ export const ExperimentsLab: React.FC = () => {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '3px' }}>
                   <span>Azimuthal Angle φ (0 → 2π):</span>
-                  <span style={{ color: '#38bdf8', fontFamily: 'monospace', fontWeight: 600 }}>
+                  <span style={{ color: 'var(--color-info)', fontFamily: 'monospace', fontWeight: 600 }}>
                     {phi.toFixed(3)} rad ({(phi * 180 / Math.PI).toFixed(1)}°)
                   </span>
                 </div>
@@ -749,17 +750,17 @@ export const ExperimentsLab: React.FC = () => {
             </div>
 
             {/* Selected State Description Card */}
-            <div 
-              style={{ 
-                background: 'rgba(56, 189, 248, 0.05)', 
-                border: '1px solid rgba(56, 189, 248, 0.2)', 
-                borderRadius: '8px', 
+            <div
+              style={{
+                background: 'rgba(56, 189, 248, 0.05)',
+                border: '1px solid rgba(56, 189, 248, 0.2)',
+                borderRadius: '8px',
                 padding: '0.75rem 0.95rem',
                 fontSize: '0.76rem',
                 lineHeight: 1.45,
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#38bdf8', fontWeight: 700, marginBottom: '0.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--color-info)', fontWeight: 700, marginBottom: '0.25rem' }}>
                 <Sparkles size={13} />
                 <span>{currentPreset ? currentPreset.label : 'Custom Single-Qubit State'}</span>
                 <span style={{ color: 'var(--text-muted)', fontWeight: 400, marginLeft: 'auto' }}>
@@ -778,16 +779,16 @@ export const ExperimentsLab: React.FC = () => {
           <div className="glass-panel" style={{ padding: '1.25rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <TrendingDown size={16} color="#f43f5e" />
-                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+                <TrendingDown size={16} color="var(--color-danger)" />
+                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   2. Entangled Link Depolarizing Noise
                 </h3>
               </div>
-              <span 
-                style={{ 
-                  fontSize: '0.72rem', 
-                  fontWeight: 600, 
-                  color: noiseP === 0 ? '#10b981' : noiseP > 2/3 ? '#f43f5e' : '#f59e0b' 
+              <span
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                  color: noiseP === 0 ? 'var(--color-success)' : noiseP > 2/3 ? 'var(--color-danger)' : 'var(--color-warning)'
                 }}
               >
                 {noiseP === 0 ? 'Noiseless Link (p=0)' : noiseP > 2/3 ? 'Sub-Classical Link (p > 2/3)' : 'Noisy Quantum Link'}
@@ -798,7 +799,7 @@ export const ExperimentsLab: React.FC = () => {
             <div style={{ marginBottom: '0.85rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: 'var(--text-secondary)', marginBottom: '0.35rem' }}>
                 <span>Depolarizing Noise Parameter (p):</span>
-                <span style={{ color: '#f43f5e', fontFamily: 'monospace', fontWeight: 700 }}>
+                <span style={{ color: 'var(--color-danger)', fontFamily: 'monospace', fontWeight: 700 }}>
                   {noiseP.toFixed(3)}
                 </span>
               </div>
@@ -814,7 +815,7 @@ export const ExperimentsLab: React.FC = () => {
                     setIsSimStale(true);
                   }
                 }}
-                style={{ width: '100%', accentColor: '#f43f5e', cursor: 'pointer' }}
+                style={{ width: '100%', accentColor: 'var(--color-danger)', cursor: 'pointer' }}
               />
             </div>
 
@@ -837,10 +838,10 @@ export const ExperimentsLab: React.FC = () => {
                   }}
                   style={{
                     background: Math.abs(noiseP - btn.val) < 0.01 ? 'rgba(244, 63, 94, 0.2)' : 'rgba(255, 255, 255, 0.03)',
-                    border: Math.abs(noiseP - btn.val) < 0.01 ? '1px solid #f43f5e' : '1px solid var(--border-subtle)',
+                    border: Math.abs(noiseP - btn.val) < 0.01 ? '1px solid var(--color-danger)' : '1px solid var(--border-subtle)',
                     borderRadius: '6px',
                     padding: '0.3rem 0.6rem',
-                    color: Math.abs(noiseP - btn.val) < 0.01 ? '#f43f5e' : 'var(--text-secondary)',
+                    color: Math.abs(noiseP - btn.val) < 0.01 ? 'var(--color-danger)' : 'var(--text-secondary)',
                     fontSize: '0.68rem',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -853,45 +854,45 @@ export const ExperimentsLab: React.FC = () => {
 
             {/* Derived Link Metrics Preview */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.65rem' }}>
-              <div 
-                style={{ 
-                  background: 'rgba(15, 23, 42, 0.5)', 
-                  border: '1px solid var(--border-subtle)', 
-                  borderRadius: '6px', 
+              <div
+                style={{
+                  background: 'var(--surface-inset)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '6px',
                   padding: '0.6rem',
-                  textAlign: 'center' 
+                  textAlign: 'center'
                 }}
               >
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Equivalent Werner (w)</div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#e2e8f0', fontFamily: 'monospace' }}>
+                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'monospace' }}>
                   {(1.0 - noiseP).toFixed(3)}
                 </div>
               </div>
-              <div 
-                style={{ 
-                  background: 'rgba(15, 23, 42, 0.5)', 
-                  border: '1px solid var(--border-subtle)', 
-                  borderRadius: '6px', 
+              <div
+                style={{
+                  background: 'var(--surface-inset)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '6px',
                   padding: '0.6rem',
-                  textAlign: 'center' 
+                  textAlign: 'center'
                 }}
               >
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Bell Link Fidelity (Fe)</div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#38bdf8', fontFamily: 'monospace' }}>
+                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--color-info)', fontFamily: 'monospace' }}>
                   {((1.0 + 3.0 * (1.0 - noiseP)) / 4.0).toFixed(3)}
                 </div>
               </div>
-              <div 
-                style={{ 
-                  background: 'rgba(15, 23, 42, 0.5)', 
-                  border: '1px solid var(--border-subtle)', 
-                  borderRadius: '6px', 
+              <div
+                style={{
+                  background: 'var(--surface-inset)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '6px',
                   padding: '0.6rem',
-                  textAlign: 'center' 
+                  textAlign: 'center'
                 }}
               >
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Theory Fidelity (F)</div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#a855f7', fontFamily: 'monospace' }}>
+                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--accent-purple)', fontFamily: 'monospace' }}>
                   {(1.0 - noiseP / 2.0).toFixed(3)}
                 </div>
               </div>
@@ -903,30 +904,30 @@ export const ExperimentsLab: React.FC = () => {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Gauge size={16} color="var(--accent-purple)" />
-                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   3. Simulation Mode & Execution
                 </h3>
               </div>
               {isSimStale && (
-                <span style={{ fontSize: '0.72rem', color: '#f59e0b', fontWeight: 600 }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--color-warning)', fontWeight: 600 }}>
                   ● State updated (Re-run needed)
                 </span>
               )}
             </div>
 
             {/* Finite-Shot Tomography Option */}
-            <div 
-              style={{ 
-                background: 'rgba(15, 23, 42, 0.5)', 
-                border: '1px solid var(--border-subtle)', 
-                borderRadius: '8px', 
+            <div
+              style={{
+                background: 'var(--surface-inset)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '8px',
                 padding: '0.65rem 0.85rem',
                 marginBottom: '1rem',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
-                  <div style={{ fontSize: '0.76rem', fontWeight: 600, color: '#e2e8f0' }}>
+                  <div style={{ fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-primary)' }}>
                     Finite-Shot Pauli Tomography
                   </div>
                   <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>
@@ -940,7 +941,7 @@ export const ExperimentsLab: React.FC = () => {
                     onChange={(e) => setEnableTomography(e.target.checked)}
                     style={{ accentColor: 'var(--accent-purple)', cursor: 'pointer' }}
                   />
-                  <span style={{ fontSize: '0.74rem', color: enableTomography ? '#c084fc' : 'var(--text-muted)', fontWeight: 600 }}>
+                  <span style={{ fontSize: '0.74rem', color: enableTomography ? 'var(--accent-violet)' : 'var(--text-muted)', fontWeight: 600 }}>
                     {enableTomography ? 'Finite Shots' : 'Exact DM'}
                   </span>
                 </label>
@@ -955,12 +956,12 @@ export const ExperimentsLab: React.FC = () => {
                       onClick={() => setTomoShots(s)}
                       style={{
                         background: tomoShots === s ? 'rgba(192, 38, 211, 0.25)' : 'rgba(255, 255, 255, 0.04)',
-                        border: tomoShots === s ? '1px solid #d946ef' : '1px solid var(--border-subtle)',
+                        border: tomoShots === s ? '1px solid var(--accent-magenta)' : '1px solid var(--border-subtle)',
                         borderRadius: '4px',
                         padding: '2px 8px',
                         fontSize: '0.68rem',
                         fontWeight: 600,
-                        color: tomoShots === s ? '#d946ef' : 'var(--text-secondary)',
+                        color: tomoShots === s ? 'var(--accent-magenta)' : 'var(--text-secondary)',
                         cursor: 'pointer',
                       }}
                     >
@@ -977,15 +978,15 @@ export const ExperimentsLab: React.FC = () => {
               disabled={isRunning || !coordValidation.isValid}
               style={{
                 width: '100%',
-                background: isRunning 
-                  ? 'rgba(168, 85, 247, 0.3)' 
+                background: isRunning
+                  ? 'rgba(168, 85, 247, 0.3)'
                   : !coordValidation.isValid
                   ? 'rgba(100, 116, 139, 0.2)'
-                  : 'linear-gradient(135deg, #9333ea 0%, #c026d3 100%)',
+                  : 'var(--gradient-purple)',
                 border: '1px solid rgba(168, 85, 247, 0.5)',
                 borderRadius: '8px',
                 padding: '0.75rem',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 fontSize: '0.88rem',
                 fontWeight: 700,
                 cursor: (isRunning || !coordValidation.isValid) ? 'not-allowed' : 'pointer',
@@ -999,27 +1000,27 @@ export const ExperimentsLab: React.FC = () => {
             >
               {isRunning ? (
                 <>
-                  <div className="spinner" style={{ width: '16px', height: '16px', borderTopColor: '#fff' }} />
+                  <div className="spinner" style={{ width: '16px', height: '16px', borderTopColor: 'var(--text-primary)' }} />
                   <span>Executing Qiskit Aer Teleportation Circuit...</span>
                 </>
               ) : (
                 <>
-                  <Play size={16} fill="#fff" />
+                  <Play size={16} fill="currentColor" />
                   <span>Run Teleportation Experiment ▶</span>
                 </>
               )}
             </button>
 
             {experimentError && (
-              <div 
-                style={{ 
-                  marginTop: '0.75rem', 
-                  padding: '0.65rem 0.85rem', 
-                  background: 'rgba(239, 68, 68, 0.15)', 
-                  border: '1px solid rgba(239, 68, 68, 0.35)', 
-                  borderRadius: '6px', 
-                  color: '#f87171', 
-                  fontSize: '0.74rem' 
+              <div
+                style={{
+                  marginTop: '0.75rem',
+                  padding: '0.65rem 0.85rem',
+                  background: 'rgba(239, 68, 68, 0.15)',
+                  border: '1px solid rgba(239, 68, 68, 0.35)',
+                  borderRadius: '6px',
+                  color: 'var(--color-danger)',
+                  fontSize: '0.74rem'
                 }}
               >
                 {experimentError}
@@ -1030,17 +1031,17 @@ export const ExperimentsLab: React.FC = () => {
 
         {/* RIGHT COLUMN: 3D Bloch Canvas & Teleportation Protocol Details */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          
+
           {/* Interactive 3D Bloch Sphere Panel */}
           <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                <Eye size={15} color="#38bdf8" />
-                <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+                <Eye size={15} color="var(--color-info)" />
+                <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Interactive 3D Bloch Sphere
                 </h3>
               </div>
-              <span style={{ fontSize: '0.72rem', color: '#c084fc', fontWeight: 600 }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--accent-violet)', fontWeight: 600 }}>
                 Three.js WebGL Orbit
               </span>
             </div>
@@ -1055,37 +1056,26 @@ export const ExperimentsLab: React.FC = () => {
 
             {/* Density Matrix Representation */}
             {stateData && (
-              <div 
-                style={{ 
-                  width: '100%', 
-                  marginTop: '1rem', 
-                  background: 'rgba(15, 23, 42, 0.4)', 
-                  border: '1px solid var(--border-subtle)', 
-                  borderRadius: '8px', 
+              <div
+                style={{
+                  width: '100%',
+                  marginTop: '1rem',
+                  background: 'var(--surface-inset)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '8px',
                   padding: '0.75rem 0.85rem',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                    Target State Density Matrix ρ = |ψ⟩⟨ψ|:
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.45rem' }}>
+                  <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                    Target State Density Matrix <MathInline math={`\\rho = |\\psi\\rangle\\langle\\psi|`} />
                   </span>
-                  <span style={{ fontSize: '0.68rem', color: '#34d399', fontWeight: 600 }}>
-                    Purity γ = {stateData.purity.toFixed(3)}
+                  <span style={{ fontSize: '0.72rem', color: 'var(--color-success)', fontWeight: 600 }}>
+                    <MathInline math={`\\text{Purity } \\gamma = \\text{Tr}(\\rho^2) = ${stateData.purity.toFixed(3)}`} />
                   </span>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.45rem', fontFamily: 'monospace', fontSize: '0.72rem' }}>
-                  <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '4px 6px', borderRadius: '4px', textAlign: 'center' }}>
-                    ρ₀₀ = {stateData.density_matrix.real[0][0].toFixed(3)}
-                  </div>
-                  <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '4px 6px', borderRadius: '4px', textAlign: 'center' }}>
-                    ρ₀₁ = {stateData.density_matrix.real[0][1].toFixed(3)} + {stateData.density_matrix.imag[0][1].toFixed(3)}i
-                  </div>
-                  <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '4px 6px', borderRadius: '4px', textAlign: 'center' }}>
-                    ρ₁₀ = {stateData.density_matrix.real[1][0].toFixed(3)} - {Math.abs(stateData.density_matrix.imag[1][0]).toFixed(3)}i
-                  </div>
-                  <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '4px 6px', borderRadius: '4px', textAlign: 'center' }}>
-                    ρ₁₁ = {stateData.density_matrix.real[1][1].toFixed(3)}
-                  </div>
+                <div style={{ background: 'var(--surface-inset)', borderRadius: '6px', padding: '0.5rem', display: 'flex', justifyContent: 'center' }}>
+                  <MathBlock math={`\\rho = \\begin{pmatrix} ${stateData.density_matrix.real[0][0].toFixed(3)} & ${(stateData.density_matrix.real[0][1]).toFixed(3)}${stateData.density_matrix.imag[0][1] >= 0 ? '+' : ''}${stateData.density_matrix.imag[0][1].toFixed(3)}i \\\\[4pt] ${(stateData.density_matrix.real[1][0]).toFixed(3)}${stateData.density_matrix.imag[1][0] >= 0 ? '+' : ''}${stateData.density_matrix.imag[1][0].toFixed(3)}i & ${stateData.density_matrix.real[1][1].toFixed(3)} \\end{pmatrix}`} />
                 </div>
               </div>
             )}
@@ -1095,7 +1085,7 @@ export const ExperimentsLab: React.FC = () => {
           {experimentResult && (
             <div className="glass-panel" style={{ padding: '1.25rem', opacity: isSimStale ? 0.75 : 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Actual Qiskit Simulation Results
                 </h4>
                 <div
@@ -1110,7 +1100,7 @@ export const ExperimentsLab: React.FC = () => {
                     background: experimentResult.metrics.has_quantum_advantage
                       ? 'rgba(16, 185, 129, 0.15)'
                       : 'rgba(239, 68, 68, 0.15)',
-                    color: experimentResult.metrics.has_quantum_advantage ? '#10b981' : '#f87171',
+                    color: experimentResult.metrics.has_quantum_advantage ? 'var(--color-success)' : 'var(--color-danger)',
                     border: experimentResult.metrics.has_quantum_advantage
                       ? '1px solid rgba(16, 185, 129, 0.35)'
                       : '1px solid rgba(239, 68, 68, 0.35)',
@@ -1132,9 +1122,9 @@ export const ExperimentsLab: React.FC = () => {
 
               {/* Metrics Grid */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.65rem', marginBottom: '0.85rem' }}>
-                <div style={{ background: 'rgba(15, 23, 42, 0.5)', border: '1px solid var(--border-subtle)', borderRadius: '6px', padding: '0.65rem' }}>
+                <div style={{ background: 'var(--surface-inset)', border: '1px solid var(--border-subtle)', borderRadius: '6px', padding: '0.65rem' }}>
                   <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Simulated State Fidelity</div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#c084fc', fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--accent-violet)', fontFamily: 'monospace' }}>
                     {experimentResult.metrics.state_fidelity.toFixed(4)}
                   </div>
                   <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '2px' }}>
@@ -1142,9 +1132,9 @@ export const ExperimentsLab: React.FC = () => {
                   </div>
                 </div>
 
-                <div style={{ background: 'rgba(15, 23, 42, 0.5)', border: '1px solid var(--border-subtle)', borderRadius: '6px', padding: '0.65rem' }}>
+                <div style={{ background: 'var(--surface-inset)', border: '1px solid var(--border-subtle)', borderRadius: '6px', padding: '0.65rem' }}>
                   <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Bob's State Purity (γ)</div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#38bdf8', fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--color-info)', fontFamily: 'monospace' }}>
                     {experimentResult.output_state.purity.toFixed(4)}
                   </div>
                   <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '2px' }}>
@@ -1155,21 +1145,21 @@ export const ExperimentsLab: React.FC = () => {
 
               {/* Finite-Shot Tomography Breakdown if enabled */}
               {experimentResult.tomography && (
-                <div 
-                  style={{ 
-                    background: 'rgba(192, 38, 211, 0.08)', 
-                    border: '1px solid rgba(192, 38, 211, 0.25)', 
-                    borderRadius: '6px', 
-                    padding: '0.65rem 0.85rem', 
+                <div
+                  style={{
+                    background: 'rgba(192, 38, 211, 0.08)',
+                    border: '1px solid rgba(192, 38, 211, 0.25)',
+                    borderRadius: '6px',
+                    padding: '0.65rem 0.85rem',
                     marginBottom: '0.85rem',
-                    fontSize: '0.74rem' 
+                    fontSize: '0.74rem'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ fontWeight: 700, color: '#d946ef' }}>
+                    <span style={{ fontWeight: 700, color: 'var(--accent-magenta)' }}>
                       Finite-Shot Pauli Tomography ({experimentResult.tomography.shots} shots):
                     </span>
-                    <span style={{ color: '#e2e8f0', fontFamily: 'monospace', fontWeight: 700 }}>
+                    <span style={{ color: 'var(--text-primary)', fontFamily: 'monospace', fontWeight: 700 }}>
                       F_emp = {experimentResult.tomography.empirical_fidelity?.toFixed(4) ?? 'N/A'}
                     </span>
                   </div>
@@ -1191,11 +1181,11 @@ export const ExperimentsLab: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '4px',
-                    background: 'rgba(255, 255, 255, 0.04)',
+                    background: 'var(--surface-1)',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: '6px',
                     padding: '0.25rem 0.55rem',
-                    color: '#38bdf8',
+                    color: 'var(--color-info)',
                     fontSize: '0.72rem',
                     cursor: 'pointer',
                   }}
@@ -1213,7 +1203,7 @@ export const ExperimentsLab: React.FC = () => {
       <div className="glass-panel" style={{ padding: '1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
           <div>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
               Guided Teleportation Protocol Workflow
             </h3>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
@@ -1228,7 +1218,7 @@ export const ExperimentsLab: React.FC = () => {
               gap: '4px',
               background: 'transparent',
               border: 'none',
-              color: '#38bdf8',
+              color: 'var(--color-info)',
               fontSize: '0.74rem',
               fontWeight: 600,
               cursor: 'pointer',
@@ -1246,14 +1236,22 @@ export const ExperimentsLab: React.FC = () => {
               num: 1,
               title: 'State Prep',
               qubits: 'q₀ (Alice)',
-              desc: `Prepare message state |ψ⟩ with θ=${theta.toFixed(2)} rad, φ=${phi.toFixed(2)} rad [X=${cartX.toFixed(2)}, Y=${cartY.toFixed(2)}, Z=${cartZ.toFixed(2)}].`,
+              desc: (
+                <span>
+                  Prepare message state <MathInline math={`|\\psi\\rangle`} /> with <MathInline math={`\\theta = ${theta.toFixed(2)}\\ \\text{rad}`} />, <MathInline math={`\\phi = ${phi.toFixed(2)}\\ \\text{rad}`} /> [<MathInline math={`X=${cartX.toFixed(2)},\\ Y=${cartY.toFixed(2)},\\ Z=${cartZ.toFixed(2)}`} />].
+                </span>
+              ),
               tag: 'Alice',
             },
             {
               num: 2,
               title: 'Bell Resource',
               qubits: 'q₁ (Alice) & q₂ (Bob)',
-              desc: `Generate |Φ+⟩ = (|00⟩+|11⟩)/√2 via H(q₁) + CX(q₁, q₂). Noise p=${noiseP.toFixed(2)} degrades Werner parameter w=${(1-noiseP).toFixed(2)}.`,
+              desc: (
+                <span>
+                  Generate <MathInline math={`|\\Phi^+\\rangle = \\frac{|00\\rangle + |11\\rangle}{\\sqrt{2}}`} /> via H(q₁) + CX(q₁, q₂). Noise <MathInline math={`p=${noiseP.toFixed(2)}`} /> degrades Werner parameter <MathInline math={`w=${(1 - noiseP).toFixed(2)}`} />.
+                </span>
+              ),
               tag: 'EPR Link',
             },
             {
@@ -1274,14 +1272,18 @@ export const ExperimentsLab: React.FC = () => {
               num: 5,
               title: 'Verification',
               qubits: 'q₂ (Bob)',
-              desc: `Trace out Alice's qubits (q₀, q₁). Bob’s reduced state matches |ψ⟩ with fidelity F = ${(1 - noiseP / 2).toFixed(3)}.`,
+              desc: (
+                <span>
+                  Trace out Alice's qubits (q₀, q₁). Bob’s reduced state matches <MathInline math={`|\\psi\\rangle`} /> with fidelity <MathInline math={`F = ${(1 - noiseP / 2).toFixed(3)}`} />.
+                </span>
+              ),
               tag: 'Target ρ',
             },
           ].map((st) => (
             <div
               key={st.num}
               style={{
-                background: 'rgba(15, 23, 42, 0.55)',
+                background: 'var(--surface-inset)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: '8px',
                 padding: '0.85rem',
@@ -1297,7 +1299,7 @@ export const ExperimentsLab: React.FC = () => {
                     height: '20px',
                     borderRadius: '50%',
                     background: 'var(--accent-purple)',
-                    color: '#fff',
+                    color: 'var(--text-primary)',
                     fontSize: '0.72rem',
                     fontWeight: 800,
                     display: 'flex',
@@ -1313,17 +1315,17 @@ export const ExperimentsLab: React.FC = () => {
                     fontWeight: 700,
                     padding: '1px 5px',
                     borderRadius: '4px',
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    background: 'var(--surface-1)',
                     color: 'var(--text-muted)',
                   }}
                 >
                   {st.tag}
                 </span>
               </div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#e2e8f0' }}>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {st.title}
               </div>
-              <div style={{ fontSize: '0.68rem', color: '#38bdf8', fontWeight: 600 }}>
+              <div style={{ fontSize: '0.68rem', color: 'var(--color-info)', fontWeight: 600 }}>
                 {st.qubits}
               </div>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
@@ -1335,19 +1337,19 @@ export const ExperimentsLab: React.FC = () => {
 
         {/* Expandable Technical Deep Dive (Coherent vs Measurement) */}
         {showTechnicalDetails && (
-          <div 
-            style={{ 
-              marginTop: '1rem', 
-              background: 'rgba(30, 41, 59, 0.35)', 
-              border: '1px solid var(--border-subtle)', 
-              borderRadius: '8px', 
+          <div
+            style={{
+              marginTop: '1rem',
+              background: 'rgba(30, 41, 59, 0.35)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: '8px',
               padding: '0.95rem 1.15rem',
               fontSize: '0.76rem',
               color: 'var(--text-secondary)',
               lineHeight: 1.5,
             }}
           >
-            <div style={{ fontWeight: 700, color: '#38bdf8', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <div style={{ fontWeight: 700, color: 'var(--color-info)', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <Info size={14} />
               <span>Coherent Feedforward vs Physical Classical Communication (ADR-002)</span>
             </div>
@@ -1366,7 +1368,7 @@ export const ExperimentsLab: React.FC = () => {
         <div className="glass-panel" style={{ padding: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
             <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                 Depolarizing Noise Parameter Sweep
               </h3>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
@@ -1384,7 +1386,7 @@ export const ExperimentsLab: React.FC = () => {
                 border: 'none',
                 borderRadius: '8px',
                 padding: '0.5rem 1rem',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 fontSize: '0.78rem',
                 fontWeight: 700,
                 cursor: isSweeping ? 'not-allowed' : 'pointer',
@@ -1393,12 +1395,12 @@ export const ExperimentsLab: React.FC = () => {
             >
               {isSweeping ? (
                 <>
-                  <div className="spinner" style={{ width: '12px', height: '12px', borderTopColor: '#fff' }} />
+                  <div className="spinner" style={{ width: '12px', height: '12px', borderTopColor: 'var(--text-primary)' }} />
                   <span>Computing Parameter Sweep...</span>
                 </>
               ) : (
                 <>
-                  <Play size={13} fill="#fff" />
+                  <Play size={13} fill="currentColor" />
                   <span>Run Parameter Sweep</span>
                 </>
               )}
@@ -1406,15 +1408,15 @@ export const ExperimentsLab: React.FC = () => {
           </div>
 
           {sweepError && (
-            <div 
-              style={{ 
-                marginBottom: '1rem', 
-                padding: '0.65rem', 
-                background: 'rgba(239, 68, 68, 0.15)', 
-                border: '1px solid rgba(239, 68, 68, 0.35)', 
-                borderRadius: '6px', 
-                color: '#f87171', 
-                fontSize: '0.74rem' 
+            <div
+              style={{
+                marginBottom: '1rem',
+                padding: '0.65rem',
+                background: 'rgba(239, 68, 68, 0.15)',
+                border: '1px solid rgba(239, 68, 68, 0.35)',
+                borderRadius: '6px',
+                color: 'var(--color-danger)',
+                fontSize: '0.74rem'
               }}
             >
               {sweepError}
@@ -1430,19 +1432,19 @@ export const ExperimentsLab: React.FC = () => {
                 height={260}
               />
 
-              <div 
-                style={{ 
-                  marginTop: '1rem', 
-                  background: 'rgba(15, 23, 42, 0.4)', 
-                  border: '1px solid var(--border-subtle)', 
-                  borderRadius: '8px', 
+              <div
+                style={{
+                  marginTop: '1rem',
+                  background: 'var(--surface-inset)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '8px',
                   padding: '0.85rem 1rem',
                   fontSize: '0.76rem',
                   color: 'var(--text-secondary)',
                   lineHeight: 1.5,
                 }}
               >
-                <div style={{ fontWeight: 700, color: '#e2e8f0', marginBottom: '0.25rem' }}>
+                <div style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
                   Scientific Trend Analysis:
                 </div>
                 {sweepResult.explanation}
@@ -1454,7 +1456,7 @@ export const ExperimentsLab: React.FC = () => {
 
       {/* QASM Modal */}
       {showQasmModal && experimentResult && (
-        <div 
+        <div
           style={{
             position: 'fixed',
             inset: 0,
@@ -1481,8 +1483,8 @@ export const ExperimentsLab: React.FC = () => {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Code size={18} color="#38bdf8" />
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+                <Code size={18} color="var(--color-info)" />
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Teleportation Circuit QASM
                 </h3>
               </div>
@@ -1507,7 +1509,7 @@ export const ExperimentsLab: React.FC = () => {
                 borderRadius: '6px',
                 padding: '1rem',
                 fontSize: '0.75rem',
-                color: '#38bdf8',
+                color: 'var(--color-info)',
                 fontFamily: 'monospace',
                 overflowX: 'auto',
                 margin: 0,
