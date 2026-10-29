@@ -69,7 +69,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
   };
 
   return (
-    <div 
+    <div
       style={{
         position: 'fixed',
         top: 0,
@@ -86,12 +86,12 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
       }}
       onClick={onClose}
     >
-      <div 
+      <div
         className="glass-panel"
         style={{
           width: '100%',
           maxWidth: '560px',
-          background: 'rgba(18, 11, 36, 0.96)',
+          background: 'var(--surface-inset)',
           border: '1px solid var(--accent-fuchsia)',
           boxShadow: '0 0 50px rgba(192, 38, 211, 0.35)',
           padding: '1.75rem',
@@ -100,15 +100,15 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
-        <button 
+        <button
           onClick={onClose}
           style={{
             position: 'absolute',
             top: '18px',
             right: '18px',
-            background: 'rgba(255, 255, 255, 0.08)',
+            background: 'var(--surface-2)',
             border: 'none',
-            color: '#fff',
+            color: 'var(--text-primary)',
             borderRadius: '50%',
             width: '32px',
             height: '32px',
@@ -123,27 +123,27 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
 
         {/* Modal Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem' }}>
-          <div 
-            style={{ 
-              width: '36px', 
-              height: '36px', 
-              borderRadius: '8px', 
-              background: 'var(--gradient-primary)', 
-              display: 'flex', 
-              alignItems: 'center', 
+          <div
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '8px',
+              background: 'var(--gradient-primary)',
+              display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
               boxShadow: '0 0 12px rgba(192, 38, 211, 0.5)'
             }}
           >
-            <Sliders size={18} color="#fff" />
+            <Sliders size={18} color="var(--text-primary)" />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <span style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>
+              <span style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                 Edit Network Link
               </span>
               {isModifiedFromDefault && (
-                <span 
+                <span
                   style={{
                     fontSize: '0.65rem',
                     fontWeight: 700,
@@ -151,7 +151,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
                     borderRadius: '10px',
                     background: 'rgba(234, 179, 8, 0.15)',
                     border: '1px solid rgba(234, 179, 8, 0.4)',
-                    color: '#facc15'
+                    color: 'var(--color-warning)'
                   }}
                 >
                   Customized
@@ -165,7 +165,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
         </div>
 
         {validationError && (
-          <div 
+          <div
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -174,7 +174,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
               background: 'rgba(239, 68, 68, 0.15)',
               border: '1px solid rgba(239, 68, 68, 0.4)',
               borderRadius: '8px',
-              color: '#f87171',
+              color: 'var(--color-danger)',
               fontSize: '0.8rem',
               marginBottom: '1.0rem'
             }}
@@ -186,15 +186,15 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
 
         {/* Form Controls */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem', marginBottom: '1.5rem' }}>
-          
+
           {/* Parameter 1: Distance (km) */}
           <div style={{ background: 'var(--bg-card-alt)', padding: '1.0rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
-              <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fff' }}>
+              <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 Link Distance
               </label>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <input 
+                <input
                   type="number"
                   min="1"
                   max="5000"
@@ -202,11 +202,11 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
                   value={distance}
                   onChange={(e) => setDistance(parseFloat(e.target.value) || 0)}
                   style={{
-                    background: 'rgba(0, 0, 0, 0.4)',
+                    background: 'var(--surface-inset)',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: '6px',
                     padding: '0.35rem 0.55rem',
-                    color: '#fff',
+                    color: 'var(--text-primary)',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.9rem',
                     width: '85px',
@@ -217,7 +217,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
               </div>
             </div>
 
-            <input 
+            <input
               type="range"
               min="10"
               max="1000"
@@ -228,7 +228,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
             />
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-              <span>Estimated Propagation Delay: <b style={{ color: '#fff' }}>{estimatedDelayMs.toFixed(2)} ms</b></span>
+              <span>Estimated Propagation Delay: <b style={{ color: 'var(--text-primary)' }}>{estimatedDelayMs.toFixed(2)} ms</b></span>
               <span>Model: 5.0 µs/km</span>
             </div>
           </div>
@@ -237,7 +237,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
           <div style={{ background: 'var(--bg-card-alt)', padding: '1.0rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
               <div>
-                <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fff', display: 'block' }}>
+                <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)', display: 'block' }}>
                   Werner Quality Parameter (w<sub>e</sub>)
                 </label>
                 <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
@@ -245,7 +245,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
                 </span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <input 
+                <input
                   type="number"
                   min="0"
                   max="1"
@@ -253,11 +253,11 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
                   value={w}
                   onChange={(e) => setW(parseFloat(e.target.value))}
                   style={{
-                    background: 'rgba(0, 0, 0, 0.4)',
+                    background: 'var(--surface-inset)',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: '6px',
                     padding: '0.35rem 0.55rem',
-                    color: '#34d399',
+                    color: 'var(--color-success)',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.9rem',
                     fontWeight: 700,
@@ -268,14 +268,14 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
               </div>
             </div>
 
-            <input 
+            <input
               type="range"
               min="0.0"
               max="1.0"
               step="0.01"
               value={w}
               onChange={(e) => setW(parseFloat(e.target.value))}
-              style={{ width: '100%', accentColor: '#34d399', margin: '0.4rem 0' }}
+              style={{ width: '100%', accentColor: 'var(--color-success)', margin: '0.4rem 0' }}
             />
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '0.45rem' }}>
@@ -288,13 +288,13 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
             </div>
 
             {/* Beginner-friendly explanation */}
-            <div 
-              style={{ 
-                background: 'rgba(147, 51, 234, 0.1)', 
-                border: '1px solid rgba(168, 85, 247, 0.2)', 
-                borderRadius: '6px', 
-                padding: '0.55rem 0.75rem', 
-                fontSize: '0.74rem', 
+            <div
+              style={{
+                background: 'rgba(147, 51, 234, 0.1)',
+                border: '1px solid rgba(168, 85, 247, 0.2)',
+                borderRadius: '6px',
+                padding: '0.55rem 0.75rem',
+                fontSize: '0.74rem',
                 color: 'var(--text-secondary)',
                 lineHeight: 1.4,
                 display: 'flex',
@@ -315,7 +315,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
           <div>
             {defaultEdge && (
-              <button 
+              <button
                 onClick={handleResetToDefault}
                 style={{
                   display: 'flex',
@@ -339,10 +339,10 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <button 
+            <button
               onClick={onClose}
               style={{
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'var(--surface-1)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: '8px',
                 padding: '0.6rem 1.0rem',
@@ -355,7 +355,7 @@ export const LinkEditorModal: React.FC<LinkEditorModalProps> = ({
               Cancel
             </button>
 
-            <button 
+            <button
               onClick={handleSave}
               className="btn-primary"
               style={{

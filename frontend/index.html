@@ -1,12 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png" />
     <link rel="apple-touch-icon" href="/assets/quantumroute-symbol.png" />
-    <meta name="theme-color" content="#070512" />
+    <meta name="theme-color" content="#020202" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Theme bootstrap: runs before first paint to prevent a flash of the wrong scheme.
+      (function () {
+        try {
+          var stored = localStorage.getItem('qr-color-scheme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored === 'light' || stored === 'dark' ? stored : prefersDark ? 'dark' : 'light';
+          var root = document.documentElement;
+          root.dataset.theme = theme;
+          var meta = document.querySelector('meta[name="color-scheme"]');
+          if (meta) meta.setAttribute('content', theme);
+          var themeColor = document.querySelector('meta[name="theme-color"]');
+          if (themeColor) themeColor.setAttribute('content', theme === 'dark' ? '#020202' : '#f5f4f9');
+        } catch (error) {
+          /* Storage can be blocked; CSS defaults keep the page usable. */
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <meta name="description" content="QuantumRoute V2 is an interactive quantum network simulation and research platform powered by Qiskit Aer 0.18." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QuantumRoute V2 — Quantum Network Simulator</title>

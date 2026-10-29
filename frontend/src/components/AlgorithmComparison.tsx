@@ -41,19 +41,19 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
 
   return (
     <div style={{ marginTop: '1.25rem' }}>
-      <div 
-        style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between', 
-          flexWrap: 'wrap', 
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
           gap: '0.5rem',
-          marginBottom: '0.75rem' 
+          marginBottom: '0.75rem'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Scale size={18} color="var(--accent-fuchsia)" />
-          <span style={{ fontSize: '1.0rem', fontWeight: 700, color: '#fff' }}>
+          <span style={{ fontSize: '1.0rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             Routing Algorithm Comparison
           </span>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -66,18 +66,18 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
-        
+
         {/* 1. Shortest-Hop (BFS) */}
         {bfsRoute ? (
-          <div 
+          <div
             onClick={() => onStrategySelect('shortest_hop')}
-            className="glass-panel" 
-            style={{ 
+            className="glass-panel"
+            style={{
               padding: '1.0rem',
               cursor: 'pointer',
               border: currentStrategy === 'shortest_hop' ? '1px solid var(--color-bfs-red)' : '1px solid var(--border-subtle)',
-              background: currentStrategy === 'shortest_hop' 
-                ? 'linear-gradient(180deg, rgba(244, 63, 94, 0.12) 0%, rgba(20, 13, 40, 0.9) 100%)' 
+              background: currentStrategy === 'shortest_hop'
+                ? 'linear-gradient(180deg, rgba(244, 63, 94, 0.12) 0%, var(--surface-inset) 100%)'
                 : 'var(--bg-card)',
               boxShadow: currentStrategy === 'shortest_hop' ? '0 0 20px rgba(244, 63, 94, 0.2)' : 'none',
               transform: currentStrategy === 'shortest_hop' ? 'translateY(-2px)' : 'none',
@@ -88,11 +88,11 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
                 <Zap size={15} />
                 Shortest-Hop (BFS)
               </div>
-              <span 
+              <span
                 style={{
                   background: 'rgba(244, 63, 94, 0.15)',
                   border: '1px solid rgba(244, 63, 94, 0.4)',
-                  color: '#fda4af',
+                  color: 'var(--color-danger)',
                   fontSize: '0.68rem',
                   fontWeight: 600,
                   padding: '0.15rem 0.5rem',
@@ -103,17 +103,17 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
               </span>
             </div>
 
-            <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: '0.65rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-primary)', marginBottom: '0.65rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               Path: <b>{bfsRoute.path.join(' ➔ ')}</b>
             </div>
 
-            <div 
-              style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(4, 1fr)', 
-                gap: '0.35rem', 
-                background: 'rgba(10, 6, 22, 0.7)', 
-                padding: '0.5rem 0.4rem', 
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '0.35rem',
+                background: 'var(--surface-inset)',
+                padding: '0.5rem 0.4rem',
                 borderRadius: '6px',
                 textAlign: 'center',
                 marginBottom: '0.65rem'
@@ -121,19 +121,19 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
             >
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Hops</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{bfsRoute.num_hops}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{bfsRoute.num_hops}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Werner w</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{bfsRoute.werner_parameter.toFixed(4)}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{bfsRoute.werner_parameter.toFixed(4)}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Bell F<sub>e</sub></div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{bfsRoute.bell_fidelity.toFixed(4)}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{bfsRoute.bell_fidelity.toFixed(4)}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Avg Tel</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{bfsRoute.average_teleportation_fidelity.toFixed(4)}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{bfsRoute.average_teleportation_fidelity.toFixed(4)}</div>
               </div>
             </div>
 
@@ -148,15 +148,15 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
 
         {/* 2. Quality-Aware (Dijkstra) */}
         {dijkstraRoute ? (
-          <div 
+          <div
             onClick={() => onStrategySelect('quality_aware')}
-            className="glass-panel" 
-            style={{ 
+            className="glass-panel"
+            style={{
               padding: '1.0rem',
               cursor: 'pointer',
               border: currentStrategy === 'quality_aware' ? '1px solid var(--accent-fuchsia)' : '1px solid var(--border-subtle)',
-              background: currentStrategy === 'quality_aware' 
-                ? 'linear-gradient(180deg, rgba(192, 38, 211, 0.15) 0%, rgba(20, 13, 40, 0.9) 100%)' 
+              background: currentStrategy === 'quality_aware'
+                ? 'linear-gradient(180deg, rgba(192, 38, 211, 0.15) 0%, var(--surface-inset) 100%)'
                 : 'var(--bg-card)',
               boxShadow: currentStrategy === 'quality_aware' ? '0 0 25px rgba(217, 70, 239, 0.25)' : 'none',
               transform: currentStrategy === 'quality_aware' ? 'translateY(-2px)' : 'none',
@@ -167,11 +167,11 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
                 <Star size={15} />
                 Quality-Aware (Dijkstra)
               </div>
-              <span 
+              <span
                 style={{
                   background: 'rgba(56, 189, 248, 0.15)',
                   border: '1px solid rgba(56, 189, 248, 0.4)',
-                  color: '#7dd3fc',
+                  color: 'var(--color-info)',
                   fontSize: '0.68rem',
                   fontWeight: 600,
                   padding: '0.15rem 0.5rem',
@@ -182,17 +182,17 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
               </span>
             </div>
 
-            <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: '0.65rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-primary)', marginBottom: '0.65rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               Path: <b>{dijkstraRoute.path.join(' ➔ ')}</b>
             </div>
 
-            <div 
-              style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(4, 1fr)', 
-                gap: '0.35rem', 
-                background: 'rgba(10, 6, 22, 0.7)', 
-                padding: '0.5rem 0.4rem', 
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '0.35rem',
+                background: 'var(--surface-inset)',
+                padding: '0.5rem 0.4rem',
                 borderRadius: '6px',
                 textAlign: 'center',
                 marginBottom: '0.65rem'
@@ -200,25 +200,25 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
             >
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Hops</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{dijkstraRoute.num_hops}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{dijkstraRoute.num_hops}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Werner w</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{dijkstraRoute.werner_parameter.toFixed(4)}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{dijkstraRoute.werner_parameter.toFixed(4)}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Bell F<sub>e</sub></div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{dijkstraRoute.bell_fidelity.toFixed(4)}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{dijkstraRoute.bell_fidelity.toFixed(4)}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Avg Tel</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{dijkstraRoute.average_teleportation_fidelity.toFixed(4)}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{dijkstraRoute.average_teleportation_fidelity.toFixed(4)}</div>
               </div>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
               <span>Dist: <b>{dijkstraRoute.total_distance_km.toFixed(0)} km</b> | Delay: <b>{dijkstraRoute.total_delay_ms.toFixed(2)} ms</b></span>
-              {renderSparkline([0.7, 0.8, 0.8574], '#38bdf8')}
+              {renderSparkline([0.7, 0.8, 0.8574], 'var(--color-info)')}
             </div>
           </div>
         ) : (
@@ -227,15 +227,15 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
 
         {/* 3. Multi-Metric (α) */}
         {multiRoute ? (
-          <div 
+          <div
             onClick={() => onStrategySelect('multi_metric')}
-            className="glass-panel" 
-            style={{ 
+            className="glass-panel"
+            style={{
               padding: '1.0rem',
               cursor: 'pointer',
               border: currentStrategy === 'multi_metric' ? '1px solid var(--accent-fuchsia)' : '1px solid var(--border-subtle)',
-              background: currentStrategy === 'multi_metric' 
-                ? 'linear-gradient(180deg, rgba(168, 85, 247, 0.15) 0%, rgba(20, 13, 40, 0.9) 100%)' 
+              background: currentStrategy === 'multi_metric'
+                ? 'linear-gradient(180deg, rgba(168, 85, 247, 0.15) 0%, var(--surface-inset) 100%)'
                 : 'var(--bg-card)',
               boxShadow: currentStrategy === 'multi_metric' ? '0 0 20px rgba(168, 85, 247, 0.2)' : 'none',
               transform: currentStrategy === 'multi_metric' ? 'translateY(-2px)' : 'none',
@@ -246,11 +246,11 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
                 <Sliders size={15} />
                 Multi-Metric (α = {alpha.toFixed(2)})
               </div>
-              <span 
+              <span
                 style={{
                   background: 'rgba(168, 85, 247, 0.15)',
                   border: '1px solid rgba(168, 85, 247, 0.4)',
-                  color: '#d8b4fe',
+                  color: 'var(--accent-violet)',
                   fontSize: '0.68rem',
                   fontWeight: 600,
                   padding: '0.15rem 0.5rem',
@@ -261,17 +261,17 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
               </span>
             </div>
 
-            <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: '0.65rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-primary)', marginBottom: '0.65rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               Path: <b>{multiRoute.path.join(' ➔ ')}</b>
             </div>
 
-            <div 
-              style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(4, 1fr)', 
-                gap: '0.35rem', 
-                background: 'rgba(10, 6, 22, 0.7)', 
-                padding: '0.5rem 0.4rem', 
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '0.35rem',
+                background: 'var(--surface-inset)',
+                padding: '0.5rem 0.4rem',
                 borderRadius: '6px',
                 textAlign: 'center',
                 marginBottom: '0.65rem'
@@ -279,19 +279,19 @@ export const AlgorithmComparison: React.FC<AlgorithmComparisonProps> = ({
             >
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Hops</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{multiRoute.num_hops}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{multiRoute.num_hops}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Werner w</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{multiRoute.werner_parameter.toFixed(4)}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{multiRoute.werner_parameter.toFixed(4)}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Bell F<sub>e</sub></div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{multiRoute.bell_fidelity.toFixed(4)}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{multiRoute.bell_fidelity.toFixed(4)}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Avg Tel</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{multiRoute.average_teleportation_fidelity.toFixed(4)}</div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{multiRoute.average_teleportation_fidelity.toFixed(4)}</div>
               </div>
             </div>
 
