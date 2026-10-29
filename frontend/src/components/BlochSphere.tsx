@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as THREE from 'three';
-import { 
-  RotateCcw, 
-  Grid, 
-  Compass, 
-  Tag 
+import {
+  RotateCcw,
+  Grid,
+  Compass,
+  Tag
 } from 'lucide-react';
 
 interface BlochSphereProps {
@@ -64,7 +64,7 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
   const updateCameraPosition = useCallback(() => {
     if (!cameraRef.current) return;
     const { distance, theta, phi } = orbitRef.current;
-    
+
     // In our coordinate system where Z is UP:
     // x = r * sin(phi) * cos(theta)
     // y = r * sin(phi) * sin(theta)
@@ -141,7 +141,7 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
     }
 
     const dir = new THREE.Vector3(tx, ty, tz).normalize();
-    
+
     // Default cylinder points along +Y in Three.js
     // Align vector group to target direction
     const defaultAxis = new THREE.Vector3(0, 1, 0);
@@ -298,12 +298,12 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
     scene.add(axesGroup);
 
     // 8. State Vector Meshes
-    // Input Vector (Cyan #38bdf8)
+    // Input Vector (cyan)
     const inGroup = createVectorGroup(0x38bdf8);
     inputArrowRef.current = inGroup;
     scene.add(inGroup);
 
-    // Output Vector (Rose/Magenta #f43f5e)
+    // Output Vector (rose / magenta)
     const outGroup = createVectorGroup(0xf43f5e);
     outputArrowRef.current = outGroup;
     scene.add(outGroup);
@@ -318,12 +318,12 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
 
     // 9. Animation & Projection Render Loop
     const poleDefinitions = [
-      { text: '+Z', symbol: '|0⟩', pos: new THREE.Vector3(0, 0, 1.25), color: '#38bdf8' },
-      { text: '-Z', symbol: '|1⟩', pos: new THREE.Vector3(0, 0, -1.25), color: '#94a3b8' },
-      { text: '+X', symbol: '|+⟩', pos: new THREE.Vector3(1.25, 0, 0), color: '#f43f5e' },
-      { text: '-X', symbol: '|-⟩', pos: new THREE.Vector3(-1.25, 0, 0), color: '#fb7185' },
-      { text: '+Y', symbol: '|+i⟩', pos: new THREE.Vector3(0, 1.25, 0), color: '#10b981' },
-      { text: '-Y', symbol: '|-i⟩', pos: new THREE.Vector3(0, -1.25, 0), color: '#34d399' },
+      { text: '+Z', symbol: '|0⟩', pos: new THREE.Vector3(0, 0, 1.25), color: 'var(--color-info)' },
+      { text: '-Z', symbol: '|1⟩', pos: new THREE.Vector3(0, 0, -1.25), color: 'var(--text-secondary)' },
+      { text: '+X', symbol: '|+⟩', pos: new THREE.Vector3(1.25, 0, 0), color: 'var(--color-danger)' },
+      { text: '-X', symbol: '|-⟩', pos: new THREE.Vector3(-1.25, 0, 0), color: 'var(--color-danger)' },
+      { text: '+Y', symbol: '|+i⟩', pos: new THREE.Vector3(0, 1.25, 0), color: 'var(--color-success)' },
+      { text: '-Y', symbol: '|-i⟩', pos: new THREE.Vector3(0, -1.25, 0), color: 'var(--color-success)' },
     ];
 
     const animate = () => {
@@ -446,10 +446,11 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-      
+
       {/* 3D WebGL Canvas Container */}
       <div
         ref={mountRef}
+        className="qr-dark-surface"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -506,7 +507,7 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
                 style={{
                   fontSize: '0.62rem',
                   fontWeight: 600,
-                  color: '#94a3b8',
+                  color: 'var(--text-secondary)',
                 }}
               >
                 {lbl.text}
@@ -530,11 +531,11 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
             onClick={handleResetCamera}
             title="Reset Camera Viewing Angle"
             style={{
-              background: 'rgba(15, 23, 42, 0.85)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
+              background: 'var(--surface-inset)',
+              border: '1px solid var(--border-subtle)',
               borderRadius: '6px',
               padding: '4px 6px',
-              color: '#38bdf8',
+              color: 'var(--color-info)',
               fontSize: '0.68rem',
               cursor: 'pointer',
               display: 'flex',
@@ -552,11 +553,11 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
             onClick={() => setShowGrid(!showGrid)}
             title="Toggle Wireframe Grid"
             style={{
-              background: showGrid ? 'rgba(56, 189, 248, 0.2)' : 'rgba(15, 23, 42, 0.85)',
-              border: showGrid ? '1px solid #38bdf8' : '1px solid rgba(255, 255, 255, 0.12)',
+              background: showGrid ? 'rgba(56, 189, 248, 0.2)' : 'var(--surface-inset)',
+              border: showGrid ? '1px solid var(--color-info)' : '1px solid rgba(255, 255, 255, 0.12)',
               borderRadius: '6px',
               padding: '4px 6px',
-              color: showGrid ? '#38bdf8' : '#94a3b8',
+              color: showGrid ? 'var(--color-info)' : 'var(--text-secondary)',
               cursor: 'pointer',
               backdropFilter: 'blur(4px)',
             }}
@@ -569,11 +570,11 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
             onClick={() => setShowAxes(!showAxes)}
             title="Toggle Coordinate Axes"
             style={{
-              background: showAxes ? 'rgba(192, 38, 211, 0.2)' : 'rgba(15, 23, 42, 0.85)',
-              border: showAxes ? '1px solid #d946ef' : '1px solid rgba(255, 255, 255, 0.12)',
+              background: showAxes ? 'rgba(192, 38, 211, 0.2)' : 'var(--surface-inset)',
+              border: showAxes ? '1px solid var(--accent-magenta)' : '1px solid rgba(255, 255, 255, 0.12)',
               borderRadius: '6px',
               padding: '4px 6px',
-              color: showAxes ? '#d946ef' : '#94a3b8',
+              color: showAxes ? 'var(--accent-magenta)' : 'var(--text-secondary)',
               cursor: 'pointer',
               backdropFilter: 'blur(4px)',
             }}
@@ -586,11 +587,11 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
             onClick={() => setShowLabels(!showLabels)}
             title="Toggle Pole Labels"
             style={{
-              background: showLabels ? 'rgba(16, 185, 129, 0.2)' : 'rgba(15, 23, 42, 0.85)',
-              border: showLabels ? '1px solid #10b981' : '1px solid rgba(255, 255, 255, 0.12)',
+              background: showLabels ? 'rgba(16, 185, 129, 0.2)' : 'var(--surface-inset)',
+              border: showLabels ? '1px solid var(--color-success)' : '1px solid rgba(255, 255, 255, 0.12)',
               borderRadius: '6px',
               padding: '4px 6px',
-              color: showLabels ? '#10b981' : '#94a3b8',
+              color: showLabels ? 'var(--color-success)' : 'var(--text-secondary)',
               cursor: 'pointer',
               backdropFilter: 'blur(4px)',
             }}
@@ -631,13 +632,13 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
               width: '10px',
               height: '10px',
               borderRadius: '50%',
-              background: '#38bdf8',
+              background: 'var(--color-info)',
               display: 'inline-block',
-              boxShadow: '0 0 6px #38bdf8',
+              boxShadow: '0 0 6px var(--color-info)',
             }}
           />
-          <span style={{ color: '#e2e8f0', fontWeight: 600 }}>{inputLabel}</span>
-          <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>
+          <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{inputLabel}</span>
+          <span style={{ color: 'var(--text-secondary)', fontFamily: 'monospace' }}>
             ({inputVector[0].toFixed(2)}, {inputVector[1].toFixed(2)}, {inputVector[2].toFixed(2)})
           </span>
         </div>
@@ -649,13 +650,13 @@ export const BlochSphere: React.FC<BlochSphereProps> = ({
                 width: '10px',
                 height: '10px',
                 borderRadius: '50%',
-                background: '#f43f5e',
+                background: 'var(--color-danger)',
                 display: 'inline-block',
-                boxShadow: '0 0 6px #f43f5e',
+                boxShadow: '0 0 6px var(--color-danger)',
               }}
             />
-            <span style={{ color: '#f43f5e', fontWeight: 600 }}>{outputLabel}</span>
-            <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>
+            <span style={{ color: 'var(--color-danger)', fontWeight: 600 }}>{outputLabel}</span>
+            <span style={{ color: 'var(--text-secondary)', fontFamily: 'monospace' }}>
               ({outputVector[0].toFixed(2)}, {outputVector[1].toFixed(2)}, {outputVector[2].toFixed(2)})
             </span>
           </div>

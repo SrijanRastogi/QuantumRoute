@@ -24,7 +24,7 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#94a3b8',
+          color: 'var(--text-secondary)',
           fontSize: '0.85rem',
           border: '1px dashed var(--border-subtle)',
           borderRadius: '8px',
@@ -72,13 +72,13 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
       >
         <defs>
           <linearGradient id="quantumZoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#10b981" stopOpacity="0.12" />
-            <stop offset="100%" stopColor="#10b981" stopOpacity="0.02" />
+            <stop offset="0%" stopColor="var(--color-success)" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="var(--color-success)" stopOpacity="0.02" />
           </linearGradient>
 
           <linearGradient id="classicalZoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#ef4444" stopOpacity="0.02" />
-            <stop offset="100%" stopColor="#ef4444" stopOpacity="0.10" />
+            <stop offset="0%" stopColor="var(--color-danger)" stopOpacity="0.02" />
+            <stop offset="100%" stopColor="var(--color-danger)" stopOpacity="0.10" />
           </linearGradient>
         </defs>
 
@@ -116,7 +116,7 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
               <text
                 x={margin.left - 8}
                 y={y + 3.5}
-                fill="#64748b"
+                fill="currentColor"
                 fontSize="10"
                 textAnchor="end"
                 fontFamily="monospace"
@@ -143,7 +143,7 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
               <text
                 x={x}
                 y={margin.top + plotH + 16}
-                fill="#64748b"
+                fill="currentColor"
                 fontSize="10"
                 textAnchor="middle"
                 fontFamily="monospace"
@@ -160,14 +160,14 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
           y1={threshY}
           x2={margin.left + plotW}
           y2={threshY}
-          stroke="#eab308"
+          stroke="var(--color-warning)"
           strokeWidth="1.5"
           strokeDasharray="4 3"
         />
         <text
           x={margin.left + plotW - 4}
           y={threshY - 5}
-          fill="#eab308"
+          fill="var(--color-warning)"
           fontSize="9.5"
           fontWeight="bold"
           textAnchor="end"
@@ -179,7 +179,7 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
         <path
           d={theoreticalPath}
           fill="none"
-          stroke="#38bdf8"
+          stroke="var(--color-info)"
           strokeWidth="2"
           strokeDasharray="3 3"
         />
@@ -188,7 +188,7 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
         <path
           d={simulatedPath}
           fill="none"
-          stroke="#a855f7"
+          stroke="var(--accent-purple)"
           strokeWidth="2.5"
         />
 
@@ -209,8 +209,8 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
                 cx={cx}
                 cy={cy}
                 r={isHovered ? 6 : 4}
-                fill={pt.has_quantum_advantage ? '#10b981' : '#f43f5e'}
-                stroke="#fff"
+                fill={pt.has_quantum_advantage ? 'var(--color-success)' : 'var(--color-danger)'}
+                stroke="currentColor"
                 strokeWidth={isHovered ? 2 : 1}
               />
             </g>
@@ -221,7 +221,7 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
         <text
           x={margin.left + plotW / 2}
           y={height - 4}
-          fill="#94a3b8"
+          fill="var(--text-secondary)"
           fontSize="11"
           fontWeight="600"
           textAnchor="middle"
@@ -231,7 +231,7 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
         <text
           x={14}
           y={margin.top + plotH / 2}
-          fill="#94a3b8"
+          fill="var(--text-secondary)"
           fontSize="11"
           fontWeight="600"
           textAnchor="middle"
@@ -248,32 +248,32 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
             position: 'absolute',
             top: '8px',
             right: '12px',
-            background: 'rgba(15, 23, 42, 0.95)',
+            background: 'var(--surface-inset)',
             border: '1px solid var(--border-subtle)',
             borderRadius: '6px',
             padding: '6px 10px',
             fontSize: '0.72rem',
-            color: '#e2e8f0',
+            color: 'var(--text-primary)',
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
             pointerEvents: 'none',
           }}
         >
           <div>
-            <span style={{ color: '#94a3b8' }}>Noise p: </span>
+            <span style={{ color: 'var(--text-secondary)' }}>Noise p: </span>
             <span style={{ fontWeight: 600 }}>{points[hoveredIndex].noise_p.toFixed(3)}</span>
-            <span style={{ color: '#94a3b8', marginLeft: '8px' }}>Werner w: </span>
+            <span style={{ color: 'var(--text-secondary)', marginLeft: '8px' }}>Werner w: </span>
             <span style={{ fontWeight: 600 }}>{points[hoveredIndex].werner_w.toFixed(3)}</span>
           </div>
           <div style={{ marginTop: '2px' }}>
-            <span style={{ color: '#a855f7' }}>Simulated F: </span>
+            <span style={{ color: 'var(--accent-purple)' }}>Simulated F: </span>
             <span style={{ fontWeight: 700 }}>{points[hoveredIndex].state_fidelity.toFixed(4)}</span>
-            <span style={{ color: '#38bdf8', marginLeft: '8px' }}>Theory F: </span>
+            <span style={{ color: 'var(--color-info)', marginLeft: '8px' }}>Theory F: </span>
             <span>{points[hoveredIndex].theoretical_fidelity.toFixed(4)}</span>
           </div>
           <div style={{ marginTop: '2px' }}>
             <span
               style={{
-                color: points[hoveredIndex].has_quantum_advantage ? '#34d399' : '#f87171',
+                color: points[hoveredIndex].has_quantum_advantage ? 'var(--color-success)' : 'var(--color-danger)',
                 fontWeight: 600,
               }}
             >
@@ -300,34 +300,34 @@ export const NoiseSweepChart: React.FC<NoiseSweepChartProps> = ({
             style={{
               width: '16px',
               height: '3px',
-              background: '#a855f7',
+              background: 'var(--accent-purple)',
               borderRadius: '2px',
               display: 'inline-block',
             }}
           />
-          <span style={{ color: '#e2e8f0' }}>Qiskit Aer Simulated</span>
+          <span style={{ color: 'var(--text-primary)' }}>Qiskit Aer Simulated</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
           <span
             style={{
               width: '16px',
               height: '2px',
-              borderTop: '2px dashed #38bdf8',
+              borderTop: '2px dashed var(--color-info)',
               display: 'inline-block',
             }}
           />
-          <span style={{ color: '#94a3b8' }}>Theoretical F = 1 - p/2</span>
+          <span style={{ color: 'var(--text-secondary)' }}>Theoretical F = 1 - p/2</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
           <span
             style={{
               width: '16px',
               height: '2px',
-              borderTop: '2px dashed #eab308',
+              borderTop: '2px dashed var(--color-warning)',
               display: 'inline-block',
             }}
           />
-          <span style={{ color: '#facc15' }}>Classical Limit (2/3)</span>
+          <span style={{ color: 'var(--color-warning)' }}>Classical Limit (2/3)</span>
         </div>
       </div>
     </div>

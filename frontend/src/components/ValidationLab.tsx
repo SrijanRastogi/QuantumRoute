@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  CheckCircle2, 
-  XCircle, 
-  Sliders, 
-  RefreshCw, 
-  ShieldCheck, 
-  Cpu, 
-  Sparkles, 
-  Loader2, 
-  Layers 
+import {
+  CheckCircle2,
+  XCircle,
+  Sliders,
+  RefreshCw,
+  ShieldCheck,
+  Cpu,
+  Sparkles,
+  Loader2,
+  Layers
 } from 'lucide-react';
+import { MathInline } from './MathView';
 import { fetchValidationBenchmarks, runCustomValidation } from '../api';
 import type { BenchmarkSuiteResponse, ValidationBenchmarkItem } from '../types';
 
@@ -78,13 +79,13 @@ export const ValidationLab: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.25rem' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CheckCircle2 size={18} color="#fff" />
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--gradient-info)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CheckCircle2 size={18} color="var(--text-primary)" />
               </div>
-              <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', margin: 0 }}>
+              <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', margin: 0 }}>
                 Analytical vs. Simulation Validation Suite
               </h1>
-              <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: 'rgba(59, 130, 246, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', color: '#60a5fa' }}>
+              <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: 'rgba(59, 130, 246, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', color: 'var(--color-info)' }}>
                 Continuous Invariant Verification (QR-006)
               </span>
             </div>
@@ -100,11 +101,11 @@ export const ValidationLab: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '0.45rem',
-              background: 'rgba(255, 255, 255, 0.04)',
+              background: 'var(--surface-1)',
               border: '1px solid var(--border-subtle)',
               borderRadius: '8px',
               padding: '0.5rem 0.95rem',
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: '0.78rem',
               fontWeight: 600,
               cursor: 'pointer',
@@ -119,8 +120,8 @@ export const ValidationLab: React.FC = () => {
 
       {/* Suite Status Summary Banner */}
       {suiteData && (
-        <div 
-          style={{ 
+        <div
+          style={{
             background: suiteData.overall_status === 'ALL_PASSED' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
             border: suiteData.overall_status === 'ALL_PASSED' ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(239, 68, 68, 0.4)',
             borderRadius: '10px',
@@ -135,31 +136,31 @@ export const ValidationLab: React.FC = () => {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             {suiteData.overall_status === 'ALL_PASSED' ? (
-              <CheckCircle2 size={24} color="#34d399" />
+              <CheckCircle2 size={24} color="var(--color-success)" />
             ) : (
-              <XCircle size={24} color="#f87171" />
+              <XCircle size={24} color="var(--color-danger)" />
             )}
             <div>
-              <div style={{ fontSize: '0.96rem', fontWeight: 800, color: suiteData.overall_status === 'ALL_PASSED' ? '#34d399' : '#f87171' }}>
+              <div style={{ fontSize: '0.96rem', fontWeight: 800, color: suiteData.overall_status === 'ALL_PASSED' ? 'var(--color-success)' : 'var(--color-danger)' }}>
                 {suiteData.overall_status === 'ALL_PASSED' ? 'All Mathematical Validation Tests Passed' : 'Discrepancy Detected in Benchmark Suite'}
               </div>
               <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                {suiteData.passed_tests} of {suiteData.total_tests} test cases strictly satisfy error residual tolerance |Δ| ≤ {suiteData.tolerance.toExponential(1)}
+                {suiteData.passed_tests} of {suiteData.total_tests} test cases strictly satisfy error residual tolerance <MathInline math={`|\\Delta| \\le ${suiteData.tolerance.toExponential(1)}`} />
               </div>
             </div>
           </div>
 
           <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
             <div>
-              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Maximum Observed |Δ|</div>
-              <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Maximum Observed <MathInline math={`|\\Delta|`} /></div>
+              <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--color-info)', fontFamily: 'var(--font-mono)' }}>
                 {suiteData.max_observed_residual.toExponential(2)}
               </div>
             </div>
 
             <div>
-              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Configured Tolerance (ε)</div>
-              <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#c084fc', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Configured Tolerance (<MathInline math={`\\varepsilon`} />)</div>
+              <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--accent-violet)', fontFamily: 'var(--font-mono)' }}>
                 {suiteData.tolerance.toExponential(1)}
               </div>
             </div>
@@ -168,7 +169,7 @@ export const ValidationLab: React.FC = () => {
       )}
 
       {error && (
-        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '8px', padding: '0.85rem', color: '#fca5a5', fontSize: '0.82rem', marginBottom: '1.0rem' }}>
+        <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid var(--color-danger)', borderRadius: '8px', padding: '0.85rem', color: 'var(--color-danger)', fontSize: '0.82rem', marginBottom: '1.0rem' }}>
           {error}
         </div>
       )}
@@ -177,8 +178,8 @@ export const ValidationLab: React.FC = () => {
       <div className="glass-panel" style={{ padding: '0.85rem 1.15rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Sliders size={16} color="var(--accent-fuchsia)" />
-          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#fff' }}>Residual Tolerance Threshold (ε):</span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: '#38bdf8', fontWeight: 700 }}>
+          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-primary)' }}>Residual Tolerance Threshold (<MathInline math={`\\varepsilon`} />):</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--color-info)', fontWeight: 700 }}>
             {tolerance.toExponential(1)}
           </span>
         </div>
@@ -190,16 +191,16 @@ export const ValidationLab: React.FC = () => {
               onClick={() => setTolerance(t)}
               style={{
                 background: tolerance === t ? 'rgba(56, 189, 248, 0.25)' : 'rgba(255, 255, 255, 0.04)',
-                border: tolerance === t ? '1px solid #38bdf8' : '1px solid var(--border-subtle)',
+                border: tolerance === t ? '1px solid var(--color-info)' : '1px solid var(--border-subtle)',
                 borderRadius: '4px',
                 padding: '3px 9px',
                 fontSize: '0.72rem',
                 fontWeight: 600,
-                color: tolerance === t ? '#38bdf8' : 'var(--text-secondary)',
+                color: tolerance === t ? 'var(--color-info)' : 'var(--text-secondary)',
                 cursor: 'pointer',
               }}
             >
-              10^{Math.round(Math.log10(t))}
+              <MathInline math={`10^{${Math.round(Math.log10(t))}}`} />
             </button>
           ))}
         </div>
@@ -209,8 +210,8 @@ export const ValidationLab: React.FC = () => {
       {suiteData && (
         <div className="glass-panel" style={{ padding: '1.15rem', marginBottom: '1.5rem', overflowX: 'auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.85rem' }}>
-            <Layers size={16} color="#38bdf8" />
-            <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+            <Layers size={16} color="var(--color-info)" />
+            <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
               Multi-Hop Werner Entanglement Swapping Benchmarks
             </h3>
           </div>
@@ -220,57 +221,57 @@ export const ValidationLab: React.FC = () => {
               <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
                 <th style={{ padding: '0.5rem' }}>Benchmark Test</th>
                 <th style={{ padding: '0.5rem' }}>Hops</th>
-                <th style={{ padding: '0.5rem' }}>Link Parameters (w_e)</th>
-                <th style={{ padding: '0.5rem' }}>Analytical F_bell</th>
-                <th style={{ padding: '0.5rem' }}>Qiskit Sim F_bell</th>
-                <th style={{ padding: '0.5rem' }}>Residual |Δ|</th>
+                <th style={{ padding: '0.5rem' }}>Link Weights (<MathInline math={`w_e`} />)</th>
+                <th style={{ padding: '0.5rem' }}>Analytical <MathInline math={`F_{\\text{bell}}`} /></th>
+                <th style={{ padding: '0.5rem' }}>Qiskit Sim <MathInline math={`F_{\\text{bell}}`} /></th>
+                <th style={{ padding: '0.5rem' }}>Residual <MathInline math={`|\\Delta|`} /></th>
                 <th style={{ padding: '0.5rem' }}>Classical Limit</th>
                 <th style={{ padding: '0.5rem', textAlign: 'right' }}>Status</th>
               </tr>
             </thead>
             <tbody>
               {suiteData.benchmarks.map((bm) => (
-                <tr key={bm.test_id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
+                <tr key={bm.test_id} style={{ borderBottom: '1px solid var(--border-faint)' }}>
                   <td style={{ padding: '0.65rem 0.5rem' }}>
-                    <div style={{ fontWeight: 700, color: '#fff' }}>{bm.name}</div>
+                    <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{bm.name}</div>
                     <div style={{ fontSize: '0.68rem', color: 'var(--text-dim)' }}>{bm.description}</div>
                   </td>
-                  <td style={{ padding: '0.65rem 0.5rem', fontFamily: 'var(--font-mono)', color: '#38bdf8' }}>
+                  <td style={{ padding: '0.65rem 0.5rem', fontFamily: 'var(--font-mono)', color: 'var(--color-info)' }}>
                     {bm.hop_count}
                   </td>
                   <td style={{ padding: '0.65rem 0.5rem', fontFamily: 'var(--font-mono)' }}>
                     [{bm.link_werner_parameters.map((w) => w.toFixed(2)).join(', ')}]
                   </td>
-                  <td style={{ padding: '0.65rem 0.5rem', fontFamily: 'var(--font-mono)', color: '#e2e8f0' }}>
+                  <td style={{ padding: '0.65rem 0.5rem', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>
                     {bm.f_bell_predicted.toFixed(6)}
                   </td>
-                  <td style={{ padding: '0.65rem 0.5rem', fontFamily: 'var(--font-mono)', color: '#c084fc' }}>
+                  <td style={{ padding: '0.65rem 0.5rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-violet)' }}>
                     {bm.f_bell_simulated.toFixed(6)}
                   </td>
-                  <td style={{ padding: '0.65rem 0.5rem', fontFamily: 'var(--font-mono)', color: bm.is_valid ? '#34d399' : '#f87171', fontWeight: 700 }}>
+                  <td style={{ padding: '0.65rem 0.5rem', fontFamily: 'var(--font-mono)', color: bm.is_valid ? 'var(--color-success)' : 'var(--color-danger)', fontWeight: 700 }}>
                     {bm.bell_delta.toExponential(2)}
                   </td>
                   <td style={{ padding: '0.65rem 0.5rem' }}>
                     {bm.beats_classical ? (
-                      <span style={{ color: '#34d399', fontSize: '0.7rem', background: 'rgba(16, 185, 129, 0.1)', padding: '2px 6px', borderRadius: '4px' }}>
+                      <span style={{ color: 'var(--color-success)', fontSize: '0.7rem', background: 'rgba(16, 185, 129, 0.1)', padding: '2px 6px', borderRadius: '4px' }}>
                         &gt; 2/3 Quantum
                       </span>
                     ) : (
-                      <span style={{ color: '#f59e0b', fontSize: '0.7rem', background: 'rgba(245, 158, 11, 0.1)', padding: '2px 6px', borderRadius: '4px' }}>
+                      <span style={{ color: 'var(--color-warning)', fontSize: '0.7rem', background: 'rgba(245, 158, 11, 0.1)', padding: '2px 6px', borderRadius: '4px' }}>
                         Classical Bound
                       </span>
                     )}
                   </td>
                   <td style={{ padding: '0.65rem 0.5rem', textAlign: 'right' }}>
-                    <span 
-                      style={{ 
-                        padding: '3px 8px', 
-                        borderRadius: '4px', 
-                        fontSize: '0.68rem', 
+                    <span
+                      style={{
+                        padding: '3px 8px',
+                        borderRadius: '4px',
+                        fontSize: '0.68rem',
                         fontWeight: 700,
                         background: bm.is_valid ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
                         border: bm.is_valid ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(239, 68, 68, 0.4)',
-                        color: bm.is_valid ? '#34d399' : '#f87171'
+                        color: bm.is_valid ? 'var(--color-success)' : 'var(--color-danger)'
                       }}
                     >
                       {bm.status}
@@ -287,7 +288,7 @@ export const ValidationLab: React.FC = () => {
       <div className="glass-panel" style={{ padding: '1.15rem', marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.85rem' }}>
           <Cpu size={16} color="var(--accent-fuchsia)" />
-          <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+          <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
             Interactive Custom Route Validator
           </h3>
         </div>
@@ -332,37 +333,37 @@ export const ValidationLab: React.FC = () => {
         </div>
 
         {customError && (
-          <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '6px', padding: '0.5rem 0.75rem', color: '#fca5a5', fontSize: '0.74rem' }}>
+          <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid var(--color-danger)', borderRadius: '6px', padding: '0.5rem 0.75rem', color: 'var(--color-danger)', fontSize: '0.74rem' }}>
             {customError}
           </div>
         )}
 
         {customResult && (
-          <div style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '0.85rem', marginTop: '0.75rem' }}>
+          <div style={{ background: 'var(--surface-inset)', border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '0.85rem', marginTop: '0.75rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
-              <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.82rem' }}>
+              <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.82rem' }}>
                 {customResult.name} ({customResult.hop_count} hops · {customResult.circuit_qubits} qubits)
               </span>
-              <span style={{ color: customResult.is_valid ? '#34d399' : '#f87171', fontWeight: 700, fontSize: '0.74rem' }}>
+              <span style={{ color: customResult.is_valid ? 'var(--color-success)' : 'var(--color-danger)', fontWeight: 700, fontSize: '0.74rem' }}>
                 {customResult.status} (Residual: {customResult.bell_delta.toExponential(2)})
               </span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', fontSize: '0.72rem' }}>
               <div>
-                <span style={{ color: 'var(--text-muted)' }}>w_path: </span>
-                <span style={{ fontFamily: 'var(--font-mono)', color: '#38bdf8' }}>{customResult.w_analytical.toFixed(4)}</span>
+                <span style={{ color: 'var(--text-muted)' }}><MathInline math="w_{\\text{path}}" />: </span>
+                <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-info)' }}>{customResult.w_analytical.toFixed(4)}</span>
               </div>
               <div>
-                <span style={{ color: 'var(--text-muted)' }}>Analytical Fe: </span>
-                <span style={{ fontFamily: 'var(--font-mono)', color: '#e2e8f0' }}>{customResult.f_bell_predicted.toFixed(6)}</span>
+                <span style={{ color: 'var(--text-muted)' }}><MathInline math="F_e^{\\text{analyt}}" />: </span>
+                <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>{customResult.f_bell_predicted.toFixed(6)}</span>
               </div>
               <div>
-                <span style={{ color: 'var(--text-muted)' }}>Simulated Fe: </span>
-                <span style={{ fontFamily: 'var(--font-mono)', color: '#c084fc' }}>{customResult.f_bell_simulated.toFixed(6)}</span>
+                <span style={{ color: 'var(--text-muted)' }}><MathInline math="F_e^{\\text{sim}}" />: </span>
+                <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-violet)' }}>{customResult.f_bell_simulated.toFixed(6)}</span>
               </div>
               <div>
-                <span style={{ color: 'var(--text-muted)' }}>F_tel,avg: </span>
-                <span style={{ fontFamily: 'var(--font-mono)', color: '#34d399' }}>{customResult.f_tel_simulated.toFixed(4)}</span>
+                <span style={{ color: 'var(--text-muted)' }}><MathInline math="F_{\\text{tel,avg}}" />: </span>
+                <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-success)' }}>{customResult.f_tel_simulated.toFixed(4)}</span>
               </div>
             </div>
           </div>
@@ -372,7 +373,7 @@ export const ValidationLab: React.FC = () => {
       {/* Scientific Invariants & Assumptions */}
       {suiteData && (
         <div style={{ background: 'rgba(56, 189, 248, 0.06)', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '8px', padding: '0.85rem 1.15rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#38bdf8', fontWeight: 700, fontSize: '0.8rem', marginBottom: '0.4rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: 'var(--color-info)', fontWeight: 700, fontSize: '0.8rem', marginBottom: '0.4rem' }}>
             <ShieldCheck size={16} />
             Verified Scientific Assumptions (PLAN.md §5 &amp; §18)
           </div>

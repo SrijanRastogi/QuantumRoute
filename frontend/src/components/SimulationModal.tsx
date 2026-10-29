@@ -29,7 +29,7 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
   const numRepeaters = Math.max(0, numHops - 1);
 
   return (
-    <div 
+    <div
       style={{
         position: 'fixed',
         top: 0,
@@ -46,14 +46,14 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
       }}
       onClick={onClose}
     >
-      <div 
+      <div
         className="glass-panel"
         style={{
           width: '100%',
           maxWidth: '700px',
           maxHeight: '90vh',
           overflowY: 'auto',
-          background: 'rgba(18, 11, 36, 0.95)',
+          background: 'var(--surface-inset)',
           border: error ? '1px solid rgba(239, 68, 68, 0.6)' : '1px solid var(--accent-fuchsia)',
           boxShadow: error ? '0 0 50px rgba(239, 68, 68, 0.3)' : '0 0 50px rgba(192, 38, 211, 0.35)',
           padding: '1.75rem',
@@ -62,7 +62,7 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
-        <button 
+        <button
           onClick={onClose}
           aria-label="Close modal"
           data-testid="close-sim-modal"
@@ -70,9 +70,9 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
             position: 'absolute',
             top: '18px',
             right: '18px',
-            background: 'rgba(255, 255, 255, 0.08)',
+            background: 'var(--surface-2)',
             border: 'none',
-            color: '#fff',
+            color: 'var(--text-primary)',
             borderRadius: '50%',
             width: '32px',
             height: '32px',
@@ -87,22 +87,22 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
 
         {/* Modal Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem' }}>
-          <div 
-            style={{ 
-              width: '36px', 
-              height: '36px', 
-              borderRadius: '8px', 
-              background: error ? 'rgba(239, 68, 68, 0.8)' : 'var(--gradient-primary)', 
-              display: 'flex', 
-              alignItems: 'center', 
+          <div
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '8px',
+              background: error ? 'rgba(239, 68, 68, 0.8)' : 'var(--gradient-primary)',
+              display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
               boxShadow: error ? '0 0 12px rgba(239, 68, 68, 0.5)' : '0 0 12px rgba(192, 38, 211, 0.5)'
             }}
           >
-            {error ? <AlertTriangle size={20} color="#fff" /> : <Cpu size={20} color="#fff" />}
+            {error ? <AlertTriangle size={20} color="var(--text-primary)" /> : <Cpu size={20} color="var(--text-primary)" />}
           </div>
           <div>
-            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>
+            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>
               {error ? 'Simulation Error' : 'Qiskit Circuit Simulation Results'}
             </div>
             <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -114,18 +114,18 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
         {isLoading ? (
           <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
             <div style={{ display: 'inline-block', width: '42px', height: '42px', border: '3px solid rgba(192, 38, 211, 0.2)', borderTopColor: 'var(--accent-fuchsia)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-            <div style={{ marginTop: '1.2rem', color: '#fff', fontWeight: 700, fontSize: '0.98rem' }}>Executing 2N-Qubit Quantum Circuit on Qiskit Aer...</div>
+            <div style={{ marginTop: '1.2rem', color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.98rem' }}>Executing 2N-Qubit Quantum Circuit on Qiskit Aer...</div>
             <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.4rem' }}>Evolving joint density matrix & applying coherent BSM corrections</div>
           </div>
         ) : error ? (
           <div>
-            <div 
+            <div
               style={{
                 background: 'rgba(239, 68, 68, 0.12)',
                 border: '1px solid rgba(239, 68, 68, 0.4)',
                 borderRadius: '8px',
                 padding: '1.0rem',
-                color: '#f87171',
+                color: 'var(--color-danger)',
                 fontSize: '0.86rem',
                 marginBottom: '1.25rem',
                 lineHeight: 1.5,
@@ -137,7 +137,7 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
               </div>
               <div>{error}</div>
             </div>
-            <button 
+            <button
               onClick={onClose}
               className="btn-primary"
               style={{ width: '100%', padding: '0.75rem' }}
@@ -148,7 +148,7 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
         ) : result ? (
           <div>
             {/* Success Banner */}
-            <div 
+            <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -158,7 +158,7 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
                 borderRadius: '8px',
                 padding: '0.75rem 1rem',
                 marginBottom: '1.15rem',
-                color: '#34d399',
+                color: 'var(--color-success)',
                 fontSize: '0.84rem',
                 fontWeight: 600,
               }}
@@ -169,11 +169,11 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
 
             {/* Link-by-Link Werner Configuration Verification */}
             {result.link_qualities && result.link_qualities.length > 0 && (
-              <div 
-                style={{ 
-                  background: 'rgba(255, 255, 255, 0.02)', 
-                  border: '1px solid var(--border-subtle)', 
-                  borderRadius: '8px', 
+              <div
+                style={{
+                  background: 'var(--surface-1)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '8px',
                   padding: '0.65rem 0.85rem',
                   fontSize: '0.76rem',
                   marginBottom: '1.15rem',
@@ -185,21 +185,21 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center', fontFamily: 'var(--font-mono)' }}>
                   {result.link_qualities.map((wVal, idx) => (
-                    <span 
+                    <span
                       key={idx}
-                      style={{ 
-                        background: 'rgba(147, 51, 234, 0.15)', 
-                        padding: '0.2rem 0.5rem', 
+                      style={{
+                        background: 'rgba(147, 51, 234, 0.15)',
+                        padding: '0.2rem 0.5rem',
                         borderRadius: '4px',
                         border: '1px solid rgba(168, 85, 247, 0.25)',
-                        color: '#d8b4fe'
+                        color: 'var(--accent-violet)'
                       }}
                     >
                       Hop {idx + 1}: w = {wVal.toFixed(4)}
                     </span>
                   ))}
                   <span style={{ color: 'var(--text-muted)' }}>➔</span>
-                  <span style={{ color: '#34d399', fontWeight: 700 }}>
+                  <span style={{ color: 'var(--color-success)', fontWeight: 700 }}>
                     w<sub>path</sub> = {result.theoretical.path_werner_w.toFixed(4)}
                   </span>
                 </div>
@@ -210,7 +210,7 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem', marginBottom: '1.15rem' }}>
               <div style={{ background: 'var(--bg-card-alt)', border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '0.85rem' }}>
                 <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>Analytical Werner Bell Fidelity (F<sub>e</sub>)</div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                   {result.theoretical.bell_fidelity.toFixed(4)}
                 </div>
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginTop: '0.2rem' }}>
@@ -220,10 +220,10 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
 
               <div style={{ background: 'var(--bg-card-alt)', border: '1px solid rgba(192, 38, 211, 0.4)', borderRadius: '8px', padding: '0.85rem' }}>
                 <div style={{ fontSize: '0.74rem', color: 'var(--accent-fuchsia)' }}>Simulated Circuit Bell Fidelity (F<sub>e</sub>)</div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f0abfc' }}>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent-magenta)' }}>
                   {result.circuit_simulation.simulated_bell_fidelity.toFixed(4)}
                 </div>
-                <div style={{ fontSize: '0.7rem', color: '#34d399', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--color-success)', marginTop: '0.2rem' }}>
                   Error Delta: {result.circuit_simulation.fidelity_error_delta.toExponential(2)} (Aer DM Exact)
                 </div>
               </div>
@@ -232,51 +232,51 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
             {/* Teleportation Fidelity Scientific Clarification */}
             <div style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '8px', padding: '0.75rem 0.9rem', marginBottom: '1.15rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <div style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 700 }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--color-info)', fontWeight: 700 }}>
                   Average Teleportation Fidelity: F<sub>tel,avg</sub> = {result.theoretical.average_teleportation_fidelity.toFixed(4)}
                 </div>
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginTop: '0.15rem' }}>
                   Derived invariant: F<sub>tel,avg</sub> = (1 + w<sub>path</sub>) / 2 = (2F<sub>e</sub> + 1) / 3
                 </div>
               </div>
-              <span style={{ fontSize: '0.68rem', color: '#7dd3fc', background: 'rgba(56, 189, 248, 0.15)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+              <span style={{ fontSize: '0.68rem', color: 'var(--color-info)', background: 'rgba(56, 189, 248, 0.15)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
                 Single-Qubit State
               </span>
             </div>
 
             {/* Simulation Specs */}
-            <div style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '0.85rem', fontSize: '0.78rem', marginBottom: '1.15rem' }}>
+            <div style={{ background: 'var(--surface-inset)', border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '0.85rem', fontSize: '0.78rem', marginBottom: '1.15rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Circuit Width:</span>
-                <span style={{ color: '#fff', fontWeight: 600 }}>{result.circuit_simulation.qubits_evolved} Qubits ({numHops} Bell pairs)</span>
+                <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{result.circuit_simulation.qubits_evolved} Qubits ({numHops} Bell pairs)</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Intermediate Repeaters Traced Out:</span>
-                <span style={{ color: '#fff', fontWeight: 600 }}>{numRepeaters} Relay Nodes</span>
+                <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{numRepeaters} Relay Nodes</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Simulation Engine:</span>
-                <span style={{ color: '#fff', fontWeight: 600 }}>{result.circuit_simulation.engine}</span>
+                <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{result.circuit_simulation.engine}</span>
               </div>
             </div>
 
             {/* Educational Explanation Box */}
             {explanation && (
               <div style={{ background: 'linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(192, 38, 211, 0.08) 100%)', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '8px', padding: '1.0rem', marginBottom: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.86rem', fontWeight: 700, color: '#f0abfc', marginBottom: '0.35rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.86rem', fontWeight: 700, color: 'var(--accent-magenta)', marginBottom: '0.35rem' }}>
                   <Sparkles size={16} />
                   {explanation.for_beginners.headline}
                 </div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.45, marginBottom: '0.5rem' }}>
                   {explanation.for_beginners.concept}
                 </div>
-                <div style={{ fontSize: '0.76rem', color: '#38bdf8', fontWeight: 600 }}>
+                <div style={{ fontSize: '0.76rem', color: 'var(--color-info)', fontWeight: 600 }}>
                   💡 {explanation.for_beginners.key_takeaway}
                 </div>
               </div>
             )}
 
-            <button 
+            <button
               onClick={onClose}
               className="btn-primary"
               style={{ width: '100%', padding: '0.75rem' }}

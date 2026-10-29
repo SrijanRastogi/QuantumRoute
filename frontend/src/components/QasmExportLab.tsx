@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Binary, 
-  Copy, 
-  Check, 
-  Download, 
-  Cpu, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Loader2, 
-  Code2 
+import {
+  Binary,
+  Copy,
+  Check,
+  Download,
+  Cpu,
+  CheckCircle2,
+  AlertTriangle,
+  Loader2,
+  Code2
 } from 'lucide-react';
 import { fetchSupportedCircuits, exportQasm } from '../api';
 import type { QasmCircuitOption, QasmExportResponse } from '../types';
@@ -16,7 +16,7 @@ import type { QasmCircuitOption, QasmExportResponse } from '../types';
 export const QasmExportLab: React.FC = () => {
   const [circuits, setCircuits] = useState<QasmCircuitOption[]>([]);
   const [selectedCircuit, setSelectedCircuit] = useState<string>('teleportation');
-  
+
   // Dynamic parameters
   const [theta, setTheta] = useState<number>(1.570796);
   const [phi, setPhi] = useState<number>(0.0);
@@ -89,13 +89,13 @@ export const QasmExportLab: React.FC = () => {
       {/* Header */}
       <div style={{ marginBottom: '1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.25rem' }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Binary size={18} color="#fff" />
+          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--gradient-success)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Binary size={18} color="var(--text-primary)" />
           </div>
-          <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', margin: 0 }}>
+          <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', margin: 0 }}>
             OpenQASM 3.0 Circuit Export
           </h1>
-          <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid rgba(16, 185, 129, 0.4)', color: '#34d399' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid rgba(16, 185, 129, 0.4)', color: 'var(--color-success)' }}>
             Qiskit 1.4 Native Synthesizer
           </span>
         </div>
@@ -106,12 +106,12 @@ export const QasmExportLab: React.FC = () => {
 
       {/* Main Grid: Controls on Left, Code Viewer on Right */}
       <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.25rem', alignItems: 'start' }}>
-        
+
         {/* Left Column: Circuit Selection & Parameters */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.0rem' }}>
           <div className="glass-panel" style={{ padding: '1.15rem' }}>
-            <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#fff', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-              <Cpu size={16} color="#34d399" />
+            <div style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+              <Cpu size={16} color="var(--color-success)" />
               Target Quantum Circuit
             </div>
 
@@ -124,9 +124,9 @@ export const QasmExportLab: React.FC = () => {
                     textAlign: 'left',
                     padding: '0.6rem 0.75rem',
                     borderRadius: '6px',
-                    border: selectedCircuit === c.id ? '1px solid #10b981' : '1px solid var(--border-subtle)',
+                    border: selectedCircuit === c.id ? '1px solid var(--color-success)' : '1px solid var(--border-subtle)',
                     background: selectedCircuit === c.id ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                    color: selectedCircuit === c.id ? '#fff' : 'var(--text-secondary)',
+                    color: selectedCircuit === c.id ? 'var(--text-primary)' : 'var(--text-secondary)',
                     fontSize: '0.76rem',
                     fontWeight: selectedCircuit === c.id ? 700 : 500,
                     cursor: 'pointer',
@@ -138,6 +138,32 @@ export const QasmExportLab: React.FC = () => {
               ))}
             </div>
 
+            {/* Werner note for protocol-only exports */}
+            {selectedCircuit !== 'purification_experiment' && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '0.45rem',
+                  marginBottom: '0.9rem',
+                  padding: '0.55rem 0.65rem',
+                  border: '1px solid var(--border-faint)',
+                  borderRadius: '6px',
+                  background: 'var(--surface-inset)',
+                  fontSize: '0.68rem',
+                  lineHeight: 1.45,
+                  color: 'var(--text-secondary)',
+                }}
+              >
+                <AlertTriangle size={13} style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+                <span>
+                  This export is the ideal protocol unitary, so it has no link-Werner input. Set
+                  <b> w </b> on the <b>Purification Experiment</b> circuit or in the Network Lab to model
+                  noisy links.
+                </span>
+              </div>
+            )}
+
             {/* Contextual Parameters */}
             {selectedCircuit === 'teleportation' && (
               <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '0.85rem' }}>
@@ -147,7 +173,7 @@ export const QasmExportLab: React.FC = () => {
                 <div style={{ marginBottom: '0.65rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '2px' }}>
                     <span>Polar θ (rad):</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', color: '#38bdf8' }}>{theta.toFixed(3)}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-info)' }}>{theta.toFixed(3)}</span>
                   </div>
                   <input
                     type="range"
@@ -156,13 +182,13 @@ export const QasmExportLab: React.FC = () => {
                     step="0.05"
                     value={theta}
                     onChange={(e) => setTheta(parseFloat(e.target.value))}
-                    style={{ width: '100%', accentColor: '#38bdf8' }}
+                    style={{ width: '100%', accentColor: 'var(--color-info)' }}
                   />
                 </div>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '2px' }}>
                     <span>Azimuth φ (rad):</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', color: '#c084fc' }}>{phi.toFixed(3)}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-violet)' }}>{phi.toFixed(3)}</span>
                   </div>
                   <input
                     type="range"
@@ -171,7 +197,7 @@ export const QasmExportLab: React.FC = () => {
                     step="0.05"
                     value={phi}
                     onChange={(e) => setPhi(parseFloat(e.target.value))}
-                    style={{ width: '100%', accentColor: '#c084fc' }}
+                    style={{ width: '100%', accentColor: 'var(--accent-violet)' }}
                   />
                 </div>
               </div>
@@ -181,7 +207,7 @@ export const QasmExportLab: React.FC = () => {
               <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '0.85rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '2px' }}>
                   <span>Input Werner w:</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: '#f59e0b' }}>{wernerW.toFixed(2)}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-warning)' }}>{wernerW.toFixed(2)}</span>
                 </div>
                 <input
                   type="range"
@@ -190,16 +216,16 @@ export const QasmExportLab: React.FC = () => {
                   step="0.05"
                   value={wernerW}
                   onChange={(e) => setWernerW(parseFloat(e.target.value))}
-                  style={{ width: '100%', accentColor: '#f59e0b' }}
+                  style={{ width: '100%', accentColor: 'var(--color-warning)' }}
                 />
 
-                <div style={{ marginTop: '0.65rem', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid var(--border-subtle)', borderRadius: '6px', padding: '0.55rem' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', color: '#e2e8f0', cursor: 'pointer' }}>
+                <div style={{ marginTop: '0.65rem', background: 'var(--surface-inset)', border: '1px solid var(--border-subtle)', borderRadius: '6px', padding: '0.55rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', color: 'var(--text-primary)', cursor: 'pointer' }}>
                     <input
                       type="checkbox"
                       checked={idealized}
                       onChange={(e) => setIdealized(e.target.checked)}
-                      style={{ accentColor: '#10b981' }}
+                      style={{ accentColor: 'var(--color-success)' }}
                     />
                     <span>Idealized Unitary Export (Omit Kraus noise)</span>
                   </label>
@@ -223,37 +249,37 @@ export const QasmExportLab: React.FC = () => {
 
           {/* Test Error Handling Section */}
           <div className="glass-panel" style={{ padding: '0.85rem', border: '1px dashed var(--border-subtle)' }}>
-            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-              Robustness & Error State Audit:
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginBottom: '0.4rem' }}>
+              Robustness audit · intentionally requests an unsupported circuit
             </div>
             <button
               onClick={() => handleExport('unsupported_exotic_circuit')}
               style={{
                 width: '100%',
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
+                background: 'transparent',
+                border: '1px solid var(--border-subtle)',
                 borderRadius: '6px',
                 padding: '0.4rem 0.6rem',
-                color: '#f87171',
-                fontSize: '0.72rem',
+                color: 'var(--text-secondary)',
+                fontSize: '0.7rem',
                 cursor: 'pointer',
               }}
             >
-              Request Unsupported Circuit (Trigger Guardrail)
+              Run guardrail test
             </button>
           </div>
         </div>
 
         {/* Right Column: Code Viewer & Validation Stats */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.0rem' }}>
-          
+
           {error && (
-            <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '8px', padding: '0.85rem', color: '#fca5a5', fontSize: '0.82rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '8px', padding: '0.85rem', color: 'var(--color-danger)', fontSize: '0.82rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <AlertTriangle size={18} color="#ef4444" />
+                <AlertTriangle size={18} color="var(--color-danger)" />
                 <span>{error}</span>
               </div>
-              <button onClick={() => handleExport('teleportation')} style={{ background: 'none', border: 'none', color: '#fff', textDecoration: 'underline', fontSize: '0.74rem', cursor: 'pointer' }}>
+              <button onClick={() => handleExport('teleportation')} style={{ background: 'none', border: 'none', color: 'var(--text-primary)', textDecoration: 'underline', fontSize: '0.74rem', cursor: 'pointer' }}>
                 Restore Valid Circuit
               </button>
             </div>
@@ -263,7 +289,7 @@ export const QasmExportLab: React.FC = () => {
             <>
               {/* Idealized Kraus Channel Disclosure Banner */}
               {exportData.is_idealized && (
-                <div style={{ background: 'rgba(245, 158, 11, 0.12)', border: '1px solid rgba(245, 158, 11, 0.4)', borderRadius: '8px', padding: '0.75rem 1rem', color: '#fbbf24', fontSize: '0.76rem', display: 'flex', gap: '0.65rem' }}>
+                <div style={{ background: 'rgba(245, 158, 11, 0.12)', border: '1px solid rgba(245, 158, 11, 0.4)', borderRadius: '8px', padding: '0.75rem 1rem', color: 'var(--color-warning)', fontSize: '0.76rem', display: 'flex', gap: '0.65rem' }}>
                   <AlertTriangle size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
                   <div>
                     <div style={{ fontWeight: 700, marginBottom: '2px' }}>
@@ -280,7 +306,7 @@ export const QasmExportLab: React.FC = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem' }}>
                 <div className="glass-panel" style={{ padding: '0.75rem' }}>
                   <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Qubit Register</div>
-                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-info)', fontFamily: 'var(--font-mono)' }}>
                     {exportData.qubit_count} Qubits
                   </div>
                   <div style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>
@@ -290,7 +316,7 @@ export const QasmExportLab: React.FC = () => {
 
                 <div className="glass-panel" style={{ padding: '0.75rem' }}>
                   <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Circuit Depth</div>
-                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#c084fc', fontFamily: 'var(--font-mono)' }}>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--accent-violet)', fontFamily: 'var(--font-mono)' }}>
                     {exportData.depth}
                   </div>
                   <div style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>
@@ -300,7 +326,7 @@ export const QasmExportLab: React.FC = () => {
 
                 <div className="glass-panel" style={{ padding: '0.75rem' }}>
                   <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Total Gate Operations</div>
-                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#34d399', fontFamily: 'var(--font-mono)' }}>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-success)', fontFamily: 'var(--font-mono)' }}>
                     {Object.values(exportData.gate_count).reduce((a, b) => a + b, 0)}
                   </div>
                   <div style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>
@@ -309,8 +335,8 @@ export const QasmExportLab: React.FC = () => {
                 </div>
 
                 <div className="glass-panel" style={{ padding: '0.75rem', border: '1px solid rgba(16, 185, 129, 0.4)' }}>
-                  <div style={{ fontSize: '0.68rem', color: '#34d399' }}>Standard Compliance</div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--color-success)' }}>Standard Compliance</div>
+                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--color-success)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                     <CheckCircle2 size={16} />
                     Valid OpenQASM 3
                   </div>
@@ -322,9 +348,9 @@ export const QasmExportLab: React.FC = () => {
 
               {/* Code Panel with Copy & Download */}
               <div className="glass-panel" style={{ padding: 0, overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
-                <div style={{ background: 'rgba(15, 23, 42, 0.8)', borderBottom: '1px solid var(--border-subtle)', padding: '0.6rem 1.0rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.78rem', color: '#fff', fontWeight: 600 }}>
-                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }} />
+                <div style={{ background: 'var(--surface-inset)', borderBottom: '1px solid var(--border-subtle)', padding: '0.6rem 1.0rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.78rem', color: 'var(--text-primary)', fontWeight: 600 }}>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-success)' }} />
                     <span>{exportData.circuit_name}.qasm</span>
                   </div>
 
@@ -336,10 +362,10 @@ export const QasmExportLab: React.FC = () => {
                         alignItems: 'center',
                         gap: '0.35rem',
                         background: copied ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.05)',
-                        border: copied ? '1px solid #10b981' : '1px solid var(--border-subtle)',
+                        border: copied ? '1px solid var(--color-success)' : '1px solid var(--border-subtle)',
                         borderRadius: '6px',
                         padding: '0.35rem 0.75rem',
-                        color: copied ? '#34d399' : '#fff',
+                        color: copied ? 'var(--color-success)' : 'var(--text-primary)',
                         fontSize: '0.74rem',
                         cursor: 'pointer',
                         transition: 'all 0.15s ease',
@@ -355,7 +381,7 @@ export const QasmExportLab: React.FC = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.35rem',
-                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                        background: 'var(--gradient-success)',
                         border: 'none',
                         borderRadius: '6px',
                         padding: '0.35rem 0.85rem',
@@ -374,11 +400,12 @@ export const QasmExportLab: React.FC = () => {
 
                 {/* Monospace Code Body */}
                 <pre
+                  className="qr-dark-surface"
                   style={{
                     margin: 0,
                     padding: '1.25rem',
                     background: 'rgba(5, 5, 10, 0.95)',
-                    color: '#e2e8f0',
+                    color: 'var(--text-primary)',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.82rem',
                     lineHeight: 1.6,
@@ -392,7 +419,7 @@ export const QasmExportLab: React.FC = () => {
               </div>
 
               {/* Validation Notes List */}
-              <div style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '0.75rem 1.0rem', fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
+              <div style={{ background: 'var(--surface-1)', border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '0.75rem 1.0rem', fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
                 <div style={{ color: 'var(--text-muted)', fontWeight: 600, marginBottom: '0.25rem' }}>
                   Verification Audit Log:
                 </div>

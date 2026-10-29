@@ -18,17 +18,17 @@ export const SelectedRoute: React.FC<SelectedRouteProps> = ({ route, hops }) => 
 
   return (
     <div className="glass-panel" style={{ padding: '1.15rem', marginTop: '1rem' }}>
-      <div 
-        style={{ 
-          fontSize: '0.92rem', 
-          fontWeight: 700, 
-          color: '#fff', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <div
+        style={{
+          fontSize: '0.92rem',
+          fontWeight: 700,
+          color: 'var(--text-primary)',
+          display: 'flex',
+          alignItems: 'center',
           gap: '0.45rem',
           marginBottom: '0.75rem',
           paddingBottom: '0.45rem',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.06)'
+          borderBottom: '1px solid var(--border-faint)'
         }}
       >
         <MapPin size={16} color="var(--accent-fuchsia)" />
@@ -36,7 +36,7 @@ export const SelectedRoute: React.FC<SelectedRouteProps> = ({ route, hops }) => 
       </div>
 
       {/* Path Breadcrumb */}
-      <div 
+      <div
         style={{
           display: 'flex',
           flexWrap: 'wrap',
@@ -48,15 +48,15 @@ export const SelectedRoute: React.FC<SelectedRouteProps> = ({ route, hops }) => 
           padding: '0.65rem 0.85rem',
           fontSize: '0.85rem',
           fontWeight: 700,
-          color: '#fff',
+          color: 'var(--text-primary)',
           marginBottom: '0.75rem',
         }}
       >
         {route.path.map((node, i) => (
           <React.Fragment key={node}>
-            <span 
+            <span
               style={{
-                color: i === 0 ? 'var(--color-alice)' : i === route.path.length - 1 ? 'var(--color-bob)' : '#fff',
+                color: i === 0 ? 'var(--color-alice)' : i === route.path.length - 1 ? 'var(--color-bob)' : 'var(--text-primary)',
               }}
             >
               {node}
@@ -71,26 +71,27 @@ export const SelectedRoute: React.FC<SelectedRouteProps> = ({ route, hops }) => 
       {/* Hop segments breakdown */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
         {hops.map((hop, idx) => (
-          <div 
+          <div
             key={`${hop.from}-${hop.to}-${idx}`}
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              fontSize: '0.75rem',
+              gap: '0.75rem',
+              fontSize: '0.82rem',
               color: 'var(--text-secondary)',
-              background: 'rgba(255, 255, 255, 0.02)',
-              padding: '0.35rem 0.65rem',
+              background: 'var(--surface-1)',
+              padding: '0.45rem 0.7rem',
               borderRadius: '6px',
               border: '1px solid rgba(255, 255, 255, 0.03)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-fuchsia)' }} />
-              <span>{hop.from} ➔ {hop.to}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', minWidth: 0 }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-fuchsia)', flexShrink: 0 }} />
+              <span style={{ fontWeight: 600 }}>{hop.from} ➔ {hop.to}</span>
             </div>
-            <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
-              {hop.distance_km} km · w={hop.w.toFixed(2)}
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-violet)', whiteSpace: 'nowrap' }}>
+              {hop.distance_km} km <span style={{ color: 'var(--text-muted)' }}>·</span> w={hop.w.toFixed(2)}
             </div>
           </div>
         ))}

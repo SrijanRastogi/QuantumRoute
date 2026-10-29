@@ -291,7 +291,7 @@ export const QuantumHeroCanvas: React.FC<QuantumHeroCanvasProps> = () => {
           display: 'flex',
           alignItems: 'center',
           gap: '6px',
-          background: 'rgba(10, 6, 22, 0.75)',
+          background: 'var(--surface-inset)',
           border: '1px solid rgba(147, 51, 234, 0.25)',
           borderRadius: '20px',
           padding: '4px 10px',
@@ -306,8 +306,8 @@ export const QuantumHeroCanvas: React.FC<QuantumHeroCanvasProps> = () => {
             width: '6px',
             height: '6px',
             borderRadius: '50%',
-            background: '#10b981',
-            boxShadow: '0 0 8px #10b981',
+            background: 'var(--color-success)',
+            boxShadow: '0 0 8px var(--color-success)',
           }}
         />
         Interactive 3D Quantum Topology

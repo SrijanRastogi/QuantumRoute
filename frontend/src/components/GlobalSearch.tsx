@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { 
-  Search, 
-  X, 
-  Network, 
-  FlaskConical, 
-  Activity, 
-  Radio, 
-  Sparkles, 
-  Binary, 
-  CheckCircle, 
-  BookOpen, 
-  CornerDownLeft, 
-  Sliders, 
-  Cpu 
+import {
+  Search,
+  X,
+  Network,
+  FlaskConical,
+  Activity,
+  Radio,
+  Sparkles,
+  Binary,
+  CheckCircle,
+  BookOpen,
+  CornerDownLeft,
+  Sliders,
+  Cpu
 } from 'lucide-react';
 
 export interface SearchResultItem {
@@ -37,7 +37,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Dijkstra quality-aware routing, BFS shortest hop, Pareto trade-offs, and multi-repeater topology builder.',
     keywords: ['network', 'routing', 'dijkstra', 'bfs', 'pareto', 'topology', 'mesh', 'star', 'ring', 'grid', 'repeaters', 'links', 'simulation'],
     icon: Network,
-    accent: '#38bdf8',
+    accent: 'var(--color-info)',
   },
   {
     id: 'mod-experiments',
@@ -47,7 +47,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Single-qubit quantum teleportation, interactive 3D Bloch sphere, depolarizing noise channel, and classical bound.',
     keywords: ['experiments', 'teleportation', 'bloch sphere', '3d', 'noise', 'depolarizing', 'cartesian', 'spherical', 'theta', 'phi', 'state preparation'],
     icon: FlaskConical,
-    accent: '#d946ef',
+    accent: 'var(--accent-magenta)',
   },
   {
     id: 'mod-analysis',
@@ -57,7 +57,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Stokes vector linear inversion, finite-shot Pauli tomography (X, Y, Z), density matrix reconstruction, and purity.',
     keywords: ['state analysis', 'tomography', 'density matrix', 'stokes', 'pauli', 'purity', 'hermitian', 'linear inversion', 'aer'],
     icon: Activity,
-    accent: '#a855f7',
+    accent: 'var(--accent-purple)',
   },
   {
     id: 'mod-channels',
@@ -67,7 +67,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Beer-Lambert optical fiber attenuation (0.20 dB/km @ 1550 nm), dark count noise, and yield vs quality trade-offs.',
     keywords: ['channels', 'fiber', 'loss', 'attenuation', 'beer lambert', 'telecom', '1550nm', 'dark count', 'detector', 'yield', 'tradeoff'],
     icon: Radio,
-    accent: '#10b981',
+    accent: 'var(--color-success)',
   },
   {
     id: 'mod-purification',
@@ -77,7 +77,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'BBPSSW two-pair recurrence protocol, bilateral CNOT distillation, threshold boundary (F=0.50), and finite-shot Aer trials.',
     keywords: ['purification', 'distillation', 'bbpssw', 'recurrence', 'cnot', 'threshold', 'werner', 'fidelity gain', 'twirling'],
     icon: Sparkles,
-    accent: '#c084fc',
+    accent: 'var(--accent-violet)',
   },
   {
     id: 'mod-qasm',
@@ -87,7 +87,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Synthesize and export verified multi-qubit Qiskit circuits directly to standard OpenQASM 3.0.',
     keywords: ['qasm', 'openqasm', 'export', 'code', 'download', 'circuit', 'swapping', 'teleportation', 'purification', 'ast'],
     icon: Binary,
-    accent: '#34d399',
+    accent: 'var(--color-success)',
   },
   {
     id: 'mod-validation',
@@ -97,7 +97,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Continuous residual tracking comparing analytical Werner calculations against Qiskit Aer simulations to < 10⁻⁶.',
     keywords: ['validation', 'residuals', 'benchmark', 'invariants', 'unit tests', 'numerical', 'tolerance', 'aer verification'],
     icon: CheckCircle,
-    accent: '#38bdf8',
+    accent: 'var(--color-info)',
   },
   {
     id: 'mod-docs',
@@ -107,7 +107,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Scientific specifications, Architecture Decision Records (ADR-001 through ADR-005), and REST API directory.',
     keywords: ['docs', 'documentation', 'adr', 'architecture', 'api', 'swagger', 'specifications', 'formulas', 'literature'],
     icon: BookOpen,
-    accent: '#f59e0b',
+    accent: 'var(--color-warning)',
   },
 
   // 2. Key Actions & Deep Protocols
@@ -119,7 +119,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Execute optimal multi-hop route finding with link cost c_e = -ln(w_e) maximizing end-to-end entanglement.',
     keywords: ['dijkstra', 'cost', 'routing', 'path', 'quality', 'logarithm', 'optimal'],
     icon: Network,
-    accent: '#38bdf8',
+    accent: 'var(--color-info)',
   },
   {
     id: 'act-edit-links',
@@ -129,7 +129,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Customize individual repeater edge lengths (km) and initial Werner fidelity parameters in real time.',
     keywords: ['edit link', 'distance', 'werner parameter', 'link override', 'fidelity', 'custom edge'],
     icon: Sliders,
-    accent: '#facc15',
+    accent: 'var(--color-warning)',
   },
   {
     id: 'act-bloch-sphere',
@@ -139,7 +139,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Inspect single-qubit quantum states with dual spherical (θ, φ) and Cartesian (X,Y,Z) interactive controls.',
     keywords: ['bloch sphere', 'qubit', 'polar angle', 'azimuth', 'vector', 'threejs'],
     icon: FlaskConical,
-    accent: '#d946ef',
+    accent: 'var(--accent-magenta)',
   },
   {
     id: 'act-depol-noise',
@@ -149,7 +149,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Simulate Kraus depolarizing channel noise and observe the teleportation fidelity crossing below 2/3.',
     keywords: ['depolarizing noise', 'classical limit', 'kraus', 'threshold', 'noise sweep'],
     icon: Cpu,
-    accent: '#f43f5e',
+    accent: 'var(--color-danger)',
   },
   {
     id: 'act-bbpssw-protocol',
@@ -159,7 +159,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Evaluate two-pair distillation with parity coincidence condition (mA = mB) and measure fidelity gain.',
     keywords: ['bbpssw', 'bilateral cnot', 'parity coincidence', 'purify', 'werner distillation'],
     icon: Sparkles,
-    accent: '#c084fc',
+    accent: 'var(--accent-violet)',
   },
   {
     id: 'act-fiber-attenuation',
@@ -169,7 +169,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Compute photon survival probability η(L) = 10^(-αL/10) over telecom fiber links up to 200 km.',
     keywords: ['fiber loss', 'attenuation', 'beer lambert', 'transmissivity', '1550 nm'],
     icon: Radio,
-    accent: '#10b981',
+    accent: 'var(--color-success)',
   },
   {
     id: 'act-aer-tomography',
@@ -179,7 +179,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Run 4096-shot Pauli measurement circuit in X, Y, Z bases and reconstruct full density matrix ρ.',
     keywords: ['tomography', 'pauli', 'density matrix', 'aer', 'shots', 'stokes'],
     icon: Activity,
-    accent: '#a855f7',
+    accent: 'var(--accent-purple)',
   },
   {
     id: 'act-openqasm-download',
@@ -189,7 +189,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Compile verified multi-qubit repeater circuits and download clean .qasm code for hardware runners.',
     keywords: ['download qasm', 'openqasm 3', 'hardware export', 'code file'],
     icon: Binary,
-    accent: '#34d399',
+    accent: 'var(--color-success)',
   },
   {
     id: 'act-adr-records',
@@ -199,7 +199,7 @@ export const SEARCH_INDEX: SearchResultItem[] = [
     description: 'Review formal decisions on Werner modeling, Dijkstra formulation, Qiskit Aer simulation, and API boundaries.',
     keywords: ['adr', 'architecture decision records', 'decisions', 'governance', 'plan'],
     icon: BookOpen,
-    accent: '#f59e0b',
+    accent: 'var(--color-warning)',
   },
 ];
 
@@ -313,7 +313,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
           display: 'flex',
           alignItems: 'center',
           gap: '0.65rem',
-          background: 'rgba(12, 8, 26, 0.75)',
+          background: 'var(--surface-inset)',
           border: '1px solid rgba(147, 51, 234, 0.25)',
           borderRadius: '24px',
           padding: '0.45rem 1.15rem',
@@ -326,11 +326,11 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.borderColor = 'rgba(168, 85, 247, 0.5)';
-          e.currentTarget.style.background = 'rgba(20, 13, 40, 0.9)';
+          e.currentTarget.style.background = 'var(--surface-inset)';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.borderColor = 'rgba(147, 51, 234, 0.25)';
-          e.currentTarget.style.background = 'rgba(12, 8, 26, 0.75)';
+          e.currentTarget.style.background = 'var(--surface-inset)';
         }}
         title="Search modules, protocols, algorithms, or actions (Ctrl + K)"
       >
@@ -342,8 +342,8 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
           style={{
             fontSize: '0.68rem',
             fontWeight: 700,
-            background: 'rgba(255, 255, 255, 0.08)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
+            background: 'var(--surface-2)',
+            border: '1px solid var(--border-subtle)',
             padding: '0.15rem 0.45rem',
             borderRadius: '5px',
             fontFamily: 'var(--font-mono)',
@@ -378,7 +378,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
             style={{
               width: '100%',
               maxWidth: '620px',
-              background: 'linear-gradient(180deg, rgba(22, 14, 46, 0.96) 0%, rgba(10, 6, 22, 0.98) 100%)',
+              background: 'linear-gradient(180deg, rgba(22, 14, 46, 0.96) 0%, var(--surface-inset) 100%)',
               border: '1px solid rgba(168, 85, 247, 0.4)',
               borderRadius: '16px',
               boxShadow: '0 25px 70px rgba(0, 0, 0, 0.8), 0 0 35px rgba(147, 51, 234, 0.3)',
@@ -396,10 +396,10 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
                 gap: '0.75rem',
                 padding: '1.0rem 1.25rem',
                 borderBottom: '1px solid rgba(147, 51, 234, 0.25)',
-                background: 'rgba(12, 8, 26, 0.85)',
+                background: 'var(--surface-inset)',
               }}
             >
-              <Search size={18} color="#c084fc" />
+              <Search size={18} color="var(--accent-violet)" />
               <input
                 ref={inputRef}
                 type="text"
@@ -415,7 +415,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
                   background: 'transparent',
                   border: 'none',
                   outline: 'none',
-                  color: '#fff',
+                  color: 'var(--text-primary)',
                   fontSize: '0.95rem',
                   fontFamily: 'var(--font-sans)',
                 }}
@@ -441,7 +441,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
               <button
                 onClick={handleClose}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
+                  background: 'var(--surface-1)',
                   border: '1px solid var(--border-subtle)',
                   borderRadius: '6px',
                   padding: '0.25rem 0.5rem',
@@ -472,7 +472,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
                   }}
                 >
                   <Search size={28} color="rgba(147, 51, 234, 0.4)" style={{ margin: '0 auto 0.75rem' }} />
-                  <div style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600, marginBottom: '0.25rem' }}>
+                  <div style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 600, marginBottom: '0.25rem' }}>
                     No results found for "{query}"
                   </div>
                   <div style={{ fontSize: '0.78rem' }}>
@@ -523,7 +523,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
 
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2px' }}>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff' }}>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                               {item.title}
                             </span>
                             <span
@@ -562,7 +562,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
                             alignItems: 'center',
                             gap: '4px',
                             fontSize: '0.7rem',
-                            color: '#c084fc',
+                            color: 'var(--accent-violet)',
                             fontWeight: 600,
                             flexShrink: 0,
                           }}
@@ -582,7 +582,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
               style={{
                 borderTop: '1px solid rgba(147, 51, 234, 0.18)',
                 padding: '0.6rem 1.0rem',
-                background: 'rgba(8, 4, 18, 0.95)',
+                background: 'var(--surface-inset)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -592,20 +592,20 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ onNavigate }) => {
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.0rem' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <kbd style={{ background: 'rgba(255,255,255,0.08)', padding: '1px 4px', borderRadius: '3px' }}>↑</kbd>
-                  <kbd style={{ background: 'rgba(255,255,255,0.08)', padding: '1px 4px', borderRadius: '3px' }}>↓</kbd>
+                  <kbd style={{ background: 'var(--surface-2)', padding: '1px 4px', borderRadius: '3px' }}>↑</kbd>
+                  <kbd style={{ background: 'var(--surface-2)', padding: '1px 4px', borderRadius: '3px' }}>↓</kbd>
                   Navigate
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <kbd style={{ background: 'rgba(255,255,255,0.08)', padding: '1px 4px', borderRadius: '3px' }}>↵</kbd>
+                  <kbd style={{ background: 'var(--surface-2)', padding: '1px 4px', borderRadius: '3px' }}>↵</kbd>
                   Open
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <kbd style={{ background: 'rgba(255,255,255,0.08)', padding: '1px 4px', borderRadius: '3px' }}>esc</kbd>
+                  <kbd style={{ background: 'var(--surface-2)', padding: '1px 4px', borderRadius: '3px' }}>esc</kbd>
                   Close
                 </span>
               </div>
-              <span style={{ color: '#a855f7', fontWeight: 600 }}>QuantumRoute V2 Engine</span>
+              <span style={{ color: 'var(--accent-purple)', fontWeight: 600 }}>QuantumRoute V2 Engine</span>
             </div>
           </div>
         </div>,

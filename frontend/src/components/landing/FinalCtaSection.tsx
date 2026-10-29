@@ -1,5 +1,6 @@
 import React from 'react';
-import { ArrowRight, BookOpen, Sparkles } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
+import { Reveal } from '../Reveal';
 
 interface FinalCtaSectionProps {
   onLaunchSimulator: () => void;
@@ -11,116 +12,86 @@ export const FinalCtaSection: React.FC<FinalCtaSectionProps> = ({
   onOpenDocs,
 }) => {
   return (
-    <section style={{ padding: '4.0rem 1.75rem 6.0rem', maxWidth: '1280px', margin: '0 auto' }}>
+    <section
+      style={{
+        maxWidth: 'var(--page-max)',
+        margin: '0 auto',
+        padding: '0 var(--page-gutter) clamp(4rem, 8vw, 7rem)',
+      }}
+    >
       <div
-        className="glass-panel"
         style={{
-          padding: '4.5rem 2.5rem',
-          borderRadius: '24px',
-          background: 'linear-gradient(135deg, rgba(28, 16, 56, 0.95) 0%, rgba(13, 8, 28, 0.98) 100%)',
-          border: '1px solid rgba(168, 85, 247, 0.35)',
           position: 'relative',
           overflow: 'hidden',
+          padding: 'clamp(2.5rem, 6vw, 5.5rem) clamp(1.5rem, 4vw, 4rem)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-md)',
+          background: 'var(--bg-canvas)',
           textAlign: 'center',
-          boxShadow: '0 20px 60px rgba(147, 51, 234, 0.25)',
         }}
       >
-        {/* Layered Background Glows */}
         <div
+          aria-hidden="true"
+          className="qr-glow"
           style={{
-            position: 'absolute',
+            width: 620,
+            height: 320,
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '600px',
-            height: '350px',
-            background: 'radial-gradient(circle, rgba(192, 38, 211, 0.25) 0%, rgba(147, 51, 234, 0.12) 50%, transparent 70%)',
-            filter: 'blur(50px)',
-            pointerEvents: 'none',
+            opacity: 0.16,
           }}
         />
+        <div className="qr-noise" aria-hidden="true" />
 
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '780px', margin: '0 auto' }}>
-          {/* Status Pill */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              background: 'rgba(192, 38, 211, 0.18)',
-              border: '1px solid rgba(217, 70, 239, 0.45)',
-              color: '#f0abfc',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              padding: '0.35rem 0.95rem',
-              borderRadius: '20px',
-              marginBottom: '1.5rem',
-              letterSpacing: '0.03em',
-            }}
-          >
-            <Sparkles size={14} color="#f0abfc" />
-            Ready for Live Exploration
-          </div>
+        <Reveal style={{ position: 'relative' }}>
+          <span className="qr-eyebrow">Ready when you are</span>
 
-          {/* Headline */}
           <h2
-            style={{
-              fontSize: 'clamp(2.2rem, 5vw, 3.6rem)',
-              fontWeight: 900,
-              color: '#fff',
-              letterSpacing: '-0.035em',
-              lineHeight: 1.15,
-              marginBottom: '1.25rem',
-            }}
+            className="qr-section-title"
+            style={{ margin: '1.25rem auto 1.1rem', maxWidth: '18ch' }}
           >
-            Your next quantum network experiment starts here.
+            Run your first quantum network.
           </h2>
 
-          {/* Subtitle */}
           <p
-            style={{
-              fontSize: '1.05rem',
-              color: 'var(--text-secondary)',
-              lineHeight: 1.6,
-              marginBottom: '2.5rem',
-              maxWidth: '620px',
-              margin: '0 auto 2.5rem',
-            }}
+            className="qr-lead"
+            style={{ maxWidth: '56ch', margin: '0 auto 2.25rem' }}
           >
-            Launch the interactive workspace to evaluate multi-hop entanglement swapping routes, simulate single-qubit teleportation, and export compliant OpenQASM 3.0 circuits.
+            Open the workspace to evaluate multi-hop swapping routes, simulate single-qubit
+            teleportation, and export compliant OpenQASM 3.0 circuits.
           </p>
 
-          {/* CTA Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.0rem', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.9rem',
+              flexWrap: 'wrap',
+            }}
+          >
             <button
+              type="button"
               onClick={onLaunchSimulator}
               className="btn-primary"
-              style={{
-                padding: '0.85rem 1.85rem',
-                fontSize: '0.98rem',
-                fontWeight: 800,
-                borderRadius: '12px',
-                boxShadow: '0 0 30px rgba(192, 38, 211, 0.55)',
-              }}
+              style={{ padding: '0.8rem 1.5rem', fontSize: '0.9rem' }}
             >
-              <span>Launch Simulator</span>
-              <ArrowRight size={18} />
+              Launch simulator
+              <ArrowRight size={16} aria-hidden="true" />
             </button>
 
             <button
+              type="button"
               onClick={onOpenDocs}
               className="btn-secondary"
-              style={{
-                padding: '0.85rem 1.65rem',
-                fontSize: '0.95rem',
-                borderRadius: '12px',
-              }}
+              style={{ padding: '0.8rem 1.35rem', fontSize: '0.9rem' }}
             >
-              <BookOpen size={16} />
-              <span>Technical Documentation</span>
+              <BookOpen size={15} aria-hidden="true" />
+              Technical documentation
             </button>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
